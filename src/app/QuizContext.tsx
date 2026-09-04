@@ -32,7 +32,7 @@
 // permanece intacto en memoria y `saveError` queda con el motivo, para que
 // la UI pueda mostrarlo y ofrecer reintentar sin perder la sesión.
 
-import { createContext, useCallback, useContext, useMemo, useReducer, type ReactNode } from 'react';
+import { createContext, useCallback, useContext, useMemo, useReducer, useRef, type ReactNode } from 'react';
 import { getQuizBankByTopic } from '../data/index';
 import type { AnswerKey, QuestionRef } from '../types/quiz';
 import type { TemaId } from '../types/content';
@@ -214,6 +214,20 @@ export function QuizProvider({ children }: { children: ReactNode }) {
   );
   const selectAnswer = useCallback((letter: AnswerKey) => dispatch({ type: 'SELECT', letter }), []);
 
+  // Fase 3C, punto 6 (DOUBLE CLICK SAVE LOCK, opcional): `state.saving` ya
+  // evita un doble guardado en el caso normal, pero es estado de React —
+  // publicado en el siguiente render, no inmediatamente. Dos llamadas a
+  // goNext() disparadas en el mismo tick (antes de que React re-renderice
+  // con `saving: true`) verían ambas `state.saving === false` y ambas
+  // podrían arrancar un guardado. recordQuizSession ya es idempotente por
+  // sessionId (Fase 3B, punto 4), así que esto NUNCA corrompía datos — era
+  // como mucho una escritura duplicada innecesaria, no un bug funcional.
+  // Un `useRef` se lee/escribe de forma síncrona e inmediata (no espera a
+  // un render), así que sirve como candado real dentro del mismo tick,
+  // sin añadir ninguna otra complejidad. `state.saving` se conserva tal
+  // cual para pintar la UI (botón "Guardando…"/"Reintentar").
+  const savingRef = useRef(false);
+
   const goNext = useCallback(() => {
     const isLast = state.index + 1 >= state.questions.length;
     if (!isLast) {
@@ -222,10 +236,11 @@ export function QuizProvider({ children }: { children: ReactNode }) {
     }
     // Última pregunta: no avanzar el índice (no hay pregunta "siguiente")
     // — en su lugar, intentar persistir la sesión y solo entonces marcar
-    // `completed`. Si ya está completada (no debería poder llamarse dos
-    // veces desde la UI, pero por si acaso) o ya hay un guardado en curso,
-    // no hacer nada — evita un guardado duplicado por un doble click.
-    if (state.completed || state.saving) return;
+    // `completed`. Si ya está completada, o ya hay un guardado en curso
+    // (comprobado primero por el ref síncrono, luego por el estado — ver
+    // el comentario de savingRef arriba), no hacer nada.
+    if (state.completed || savingRef.current || state.saving) return;
+    savingRef.current = true;
     dispatch({ type: 'SAVE_START' });
     void (async () => {
       try {
@@ -245,6 +260,10 @@ export function QuizProvider({ children }: { children: ReactNode }) {
         // guardado con los mismos datos.
         console.error('[QuizContext] no se pudo guardar la sesión de test; se puede reintentar sin perder los datos.', e);
         dispatch({ type: 'SAVE_ERROR', message: e instanceof Error ? e.message : String(e) });
+      } finally {
+        // Libera el candado tanto en éxito como en fallo: un reintento tras
+        // SAVE_ERROR debe poder volver a entrar.
+        savingRef.current = false;
       }
     })();
   }, [

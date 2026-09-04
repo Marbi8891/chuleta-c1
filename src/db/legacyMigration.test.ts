@@ -204,6 +204,79 @@ describe('runLegacyMigration — STORAGE UNAVAILABLE (Fase 3B, obligatorio)', ()
   });
 });
 
+describe('runLegacyMigration — DEFERRED MIGRATION CONFLICT (Fase 3C, obligatorio)', () => {
+  it('EXISTING INDEXEDDB DATA WINS: progreso nuevo generado durante un storage-unavailable no se sobrescribe; legacy solo rellena huecos', async () => {
+    const [topicY, topicZ] = getTopics();
+    const [cardX, cardZ] = getFlashcards();
+    if (!topicY || !topicZ || !cardX || !cardZ) {
+      throw new Error('fixture necesita al menos 2 temas y 2 flashcards en el contenido real');
+    }
+
+    // ARRANQUE 1: localStorage inaccesible — la migración queda diferida.
+    const spy = vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
+      throw new Error('storage inaccesible');
+    });
+    const firstAttempt = await runLegacyMigration(testDb);
+    spy.mockRestore();
+    expect(firstAttempt.status).toBe('storage-unavailable');
+    expect(await testDb.appMeta.get(APP_META_KEYS.legacyMigrationVersion)).toBeUndefined();
+
+    // El usuario sigue usando la app (Dexie funciona con normalidad aunque
+    // localStorage no) y genera progreso NUEVO mientras la migración sigue
+    // diferida — esto es lo que un reintento posterior de la migración NO
+    // debe pisar.
+    await testDb.flashcardProgress.put({ flashcardId: cardX.id, known: false, updatedAt: '2026-01-01T00:00:00.000Z' });
+    await testDb.appMeta.put({ key: APP_META_KEYS.studyFsIndex, value: 4 });
+    await testDb.topicProgress.put({ topicId: topicY.id, studied: true, updatedAt: '2026-01-01T00:00:00.000Z' });
+
+    // ARRANQUE 2: localStorage ya responde, con datos legacy que entran en
+    // conflicto directo con lo que el usuario ya generó en Dexie.
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({
+        known: { [cardX.id]: true, [cardZ.id]: true }, // cX en conflicto, cZ nuevo
+        studied: { [topicY.id]: true, [topicZ.id]: true }, // Y en conflicto (mismo valor, pero NO debe reescribirse), Z nuevo
+        studyFsIndex: 0, // en conflicto con el 4 que ya hay en Dexie
+      }),
+    );
+
+    const second = await runLegacyMigration(testDb);
+    expect(second.status).toBe('migrated');
+    if (second.status !== 'migrated') throw new Error('unreachable');
+
+    // cX: Dexie ya tenía known:false — legacy (true) NO lo sobrescribe.
+    const rowX = await testDb.flashcardProgress.get(cardX.id);
+    expect(rowX?.known).toBe(false);
+    expect(second.summary.flashcardsSkippedExisting).toEqual([cardX.id]);
+
+    // studyFsIndex: Dexie ya tenía 4 — legacy (0) NO lo sobrescribe.
+    const fsIndex = await testDb.appMeta.get(APP_META_KEYS.studyFsIndex);
+    expect(fsIndex?.value).toBe(4);
+    expect(second.summary.studyFsIndexSkippedExisting).toBe(true);
+
+    // topic Y: Dexie ya tenía studied:true — se conserva (la fila no se
+    // vuelve a escribir, aunque el valor "ganador" coincida con legacy).
+    const rowY = await testDb.topicProgress.get(topicY.id);
+    expect(rowY?.studied).toBe(true);
+    expect(second.summary.topicsSkippedExisting).toEqual([topicY.id]);
+
+    // topic Z y flashcard cZ: no había fila previa — se importan de legacy
+    // con normalidad (legacy solo rellena huecos).
+    const rowZ = await testDb.topicProgress.get(topicZ.id);
+    expect(rowZ?.studied).toBe(true);
+    const rowCZ = await testDb.flashcardProgress.get(cardZ.id);
+    expect(rowCZ?.known).toBe(true);
+    expect(second.summary.topicsMigrated).toBe(1); // solo Z
+    expect(second.summary.flashcardsMigrated).toBe(1); // solo cZ
+
+    // La migración queda marcada como completada de todos modos — el
+    // "existing wins" afecta solo a qué filas concretas se escriben, no a
+    // si la migración en su conjunto se considera terminada.
+    const version = await testDb.appMeta.get(APP_META_KEYS.legacyMigrationVersion);
+    expect(version?.value).toBe(LEGACY_MIGRATION_VERSION);
+  });
+});
+
 describe('runLegacyMigration — orphan references (CONTENT VALIDATION)', () => {
   it('studied/known que referencian temas o flashcards inexistentes se omiten y se cuentan, no se inventan', async () => {
     localStorage.setItem(

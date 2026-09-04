@@ -21,11 +21,23 @@ import type { TemaId } from '../types/content';
 export interface MigrationSummary {
   topicsMigrated: number;
   topicsSkippedOrphan: TemaId[];
+  /**
+   * Fase 3C, DEFERRED MIGRATION CONFLICT POLICY: topics con fila ya
+   * existente en topicProgress ANTES de leer legacy — se omiten sin
+   * sobrescribir (EXISTING INDEXEDDB DATA WINS). Solo puede pasar si el
+   * usuario generó progreso nuevo mientras la migración estaba diferida
+   * (p. ej. arrancó una vez con localStorage inaccesible).
+   */
+  topicsSkippedExisting: TemaId[];
   flashcardsMigrated: number;
   flashcardsSkippedOrphan: string[];
+  /** Igual que topicsSkippedExisting, para flashcardProgress. */
+  flashcardsSkippedExisting: string[];
   quizSessionsMigrated: number;
   quizHistoryEntriesSkipped: number;
   studyFsIndexMigrated: boolean;
+  /** true si studyFsIndex NO se migró porque appMeta ya tenía un valor (EXISTING WINS). */
+  studyFsIndexSkippedExisting: boolean;
 }
 
 export type LegacyMigrationResult =
@@ -162,11 +174,14 @@ export async function runLegacyMigration(database: ChuletaC1DB = defaultDb): Pro
   const summary: MigrationSummary = {
     topicsMigrated: 0,
     topicsSkippedOrphan: [],
+    topicsSkippedExisting: [],
     flashcardsMigrated: 0,
     flashcardsSkippedOrphan: [],
+    flashcardsSkippedExisting: [],
     quizSessionsMigrated: 0,
     quizHistoryEntriesSkipped: 0,
     studyFsIndexMigrated: false,
+    studyFsIndexSkippedExisting: false,
   };
 
   // Ganada la carrera dentro de la transacción de abajo (ver CONCURRENCIA):
@@ -195,8 +210,18 @@ export async function runLegacyMigration(database: ChuletaC1DB = defaultDb): Pro
 
         // studied → topicProgress. Solo true: en legacy `false`/ausente son
         // equivalentes (Record<string,boolean> leído por verdad), y el
-        // modelo nuevo tampoco distingue "false" de "sin fila". `put` sobre
-        // la PK natural (topicId) ya es idempotente por construcción.
+        // modelo nuevo tampoco distingue "false" de "sin fila".
+        //
+        // DEFERRED MIGRATION CONFLICT POLICY (Fase 3C, punto 4): EXISTING
+        // INDEXEDDB DATA WINS. Antes esto era un `put` incondicional
+        // (idempotente frente a SU PROPIA migración anterior, pero no
+        // frente a progreso NUEVO generado por el usuario mientras la
+        // migración estaba diferida — p. ej. primer arranque con
+        // localStorage inaccesible, el usuario estudia varios temas, luego
+        // localStorage vuelve y se reintenta la migración). Ahora se
+        // comprueba primero si ya hay fila: si la hay, se respeta tal cual
+        // (legacy solo rellena huecos, nunca sobrescribe); si no la hay, se
+        // importa desde legacy como antes.
         for (const [topicId, value] of Object.entries(legacy.studied ?? {})) {
           if (value !== true) continue;
           if (!getTopicById(topicId)) {
@@ -204,11 +229,22 @@ export async function runLegacyMigration(database: ChuletaC1DB = defaultDb): Pro
             console.warn(`[legacyMigration] studied["${topicId}"] no corresponde a ningún tema actual; se omite.`);
             continue;
           }
+          const existing = await database.topicProgress.get(topicId);
+          if (existing) {
+            summary.topicsSkippedExisting.push(topicId);
+            continue;
+          }
           await database.topicProgress.put({ topicId, studied: true, updatedAt: nowIso });
           summary.topicsMigrated++;
         }
 
-        // known → flashcardProgress. Mismo criterio "solo true" que arriba.
+        // known → flashcardProgress. Mismo criterio "solo true" que arriba,
+        // y la MISMA política EXISTING WINS — especialmente importante
+        // aquí: Dexie puede tener `known: false` (el usuario marcó "a
+        // repasar" tras la fecha de export de legacy) mientras legacy dice
+        // `known: true` para esa misma flashcard. Sobrescribir revertiría
+        // una decisión más reciente del usuario — no se hace bajo ninguna
+        // circunstancia, exista la fila con el valor que exista.
         for (const [flashcardId, value] of Object.entries(legacy.known ?? {})) {
           if (value !== true) continue;
           if (!flashcardIds.has(flashcardId)) {
@@ -216,15 +252,28 @@ export async function runLegacyMigration(database: ChuletaC1DB = defaultDb): Pro
             console.warn(`[legacyMigration] known["${flashcardId}"] no corresponde a ninguna flashcard actual; se omite.`);
             continue;
           }
+          const existing = await database.flashcardProgress.get(flashcardId);
+          if (existing) {
+            summary.flashcardsSkippedExisting.push(flashcardId);
+            continue;
+          }
           await database.flashcardProgress.put({ flashcardId, known: true, updatedAt: nowIso });
           summary.flashcardsMigrated++;
         }
 
-        // studyFsIndex → appMeta (preferencia GLOBAL, no por tema — ver schema.ts).
+        // studyFsIndex → appMeta (preferencia GLOBAL, no por tema — ver
+        // schema.ts). Misma política: si el usuario ya fijó una preferencia
+        // de tamaño de letra en Dexie mientras la migración estaba
+        // diferida, esa elección reciente gana y legacy no la pisa.
         if (typeof legacy.studyFsIndex === 'number' && Number.isInteger(legacy.studyFsIndex)) {
-          const clamped = Math.min(Math.max(legacy.studyFsIndex, 0), STUDY_FS_STEPS_LENGTH - 1);
-          await database.appMeta.put({ key: APP_META_KEYS.studyFsIndex, value: clamped });
-          summary.studyFsIndexMigrated = true;
+          const existingFsIndex = await database.appMeta.get(APP_META_KEYS.studyFsIndex);
+          if (existingFsIndex) {
+            summary.studyFsIndexSkippedExisting = true;
+          } else {
+            const clamped = Math.min(Math.max(legacy.studyFsIndex, 0), STUDY_FS_STEPS_LENGTH - 1);
+            await database.appMeta.put({ key: APP_META_KEYS.studyFsIndex, value: clamped });
+            summary.studyFsIndexMigrated = true;
+          }
         }
 
         // quizHistory → quizSessions (sin quizAnswers: legacy no registraba

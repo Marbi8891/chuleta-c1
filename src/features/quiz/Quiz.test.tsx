@@ -6,6 +6,7 @@
 // pulsada, y se compara ese recuento con el marcador final — así se
 // verifica la LÓGICA de puntuación, no un dato de contenido concreto.
 
+import { useEffect, useRef } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { screen, fireEvent } from '@testing-library/react';
 import { Routes, Route } from 'react-router-dom';
@@ -14,6 +15,8 @@ import { QuizSetupPage } from './QuizSetupPage';
 import { QuizRunPage } from './QuizRunPage';
 import { QuizResultsPage } from './QuizResultsPage';
 import { recordQuizSession } from '../../db/quiz';
+import { useQuiz } from '../../app/QuizContext';
+import { getQuestions } from '../../data/index';
 
 // Fase 3B, SAFE QUIZ COMPLETION: se mockea recordQuizSession (envolviendo
 // la implementación real) para poder forzar un fallo de guardado en un
@@ -47,6 +50,41 @@ function startTenQuestionQuiz() {
   renderWithProviders(<QuizRoutes />, { route: '/quiz' });
   fireEvent.click(screen.getByRole('button', { name: '10' }));
   fireEvent.click(screen.getByRole('button', { name: 'Empezar test' }));
+}
+
+// Fase 3C, punto 6 (DOUBLE CLICK SAVE LOCK): arranca un test de UNA sola
+// pregunta (así el índice 0 ya es "la última") y expone un botón que llama
+// a goNext() DOS VECES seguidas dentro del mismo manejador síncrono — esto
+// reproduce exactamente la condición de carrera descrita en la especifi-
+// cación (dos llamadas en el mismo tick, antes de que React publique
+// `saving: true`), cosa que dos fireEvent.click() por separado NO pueden
+// reproducir (React/Testing Library ya habría re-renderizado —y deshabili-
+// tado el botón— entre uno y otro).
+function DoubleGoNextHarness() {
+  const { state, startQuiz, goNext } = useQuiz();
+  const startedRef = useRef(false);
+
+  useEffect(() => {
+    if (startedRef.current) return;
+    startedRef.current = true;
+    const q = getQuestions()[0]!;
+    startQuiz([q], [q.topicId]);
+  }, [startQuiz]);
+
+  return (
+    <div>
+      <button
+        type="button"
+        onClick={() => {
+          goNext();
+          goNext();
+        }}
+      >
+        doble-siguiente
+      </button>
+      {state.completed && <p>guardado</p>}
+    </div>
+  );
 }
 
 describe('Test', () => {
@@ -115,5 +153,15 @@ describe('Test', () => {
     const [firstCallArgs] = vi.mocked(recordQuizSession).mock.calls[0]!;
     const [secondCallArgs] = vi.mocked(recordQuizSession).mock.calls[1]!;
     expect(secondCallArgs.id).toBe(firstCallArgs.id);
+  });
+
+  it('DOUBLE CLICK SAVE LOCK (Fase 3C, punto 6, opcional): dos llamadas a goNext() en el mismo tick solo guardan una vez', async () => {
+    renderWithProviders(<DoubleGoNextHarness />);
+
+    const btn = await screen.findByRole('button', { name: 'doble-siguiente' });
+    fireEvent.click(btn); // dispara goNext() + goNext() síncronamente, dentro del mismo manejador
+
+    await screen.findByText('guardado');
+    expect(recordQuizSession).toHaveBeenCalledTimes(1);
   });
 });
