@@ -27,19 +27,7 @@ export function ScopePanel({ hidden }: { hidden: boolean }) {
 
   return (
     <section className={'scope' + (collapsed ? ' collapsed' : '')} id="scopeBox">
-      <div
-        className="scope-head"
-        role="button"
-        tabIndex={0}
-        onClick={() => setCollapsed((c) => !c)}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            setCollapsed((c) => !c);
-          }
-        }}
-        aria-expanded={!collapsed}
-      >
+      <button type="button" className="scope-head" onClick={() => setCollapsed((c) => !c)} aria-expanded={!collapsed}>
         <div className="scope-head-left">
           <span className="scope-title">Alcance</span>
           <span className="scope-count">
@@ -47,7 +35,7 @@ export function ScopePanel({ hidden }: { hidden: boolean }) {
           </span>
         </div>
         <ChevronIcon />
-      </div>
+      </button>
       <div className="scope-body">
         <div className="scope-global-actions">
           <button type="button" className="btn-ghost" onClick={selectAll}>

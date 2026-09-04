@@ -60,7 +60,12 @@ button{font-family:inherit;}
 
 /* ---------- Scope selector ---------- */
 .scope{background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:16px 18px; margin-bottom:22px;}
-.scope-head{display:flex; align-items:center; justify-content:space-between; cursor:pointer; user-select:none;}
+.scope-head{
+  display:flex; align-items:center; justify-content:space-between; cursor:pointer; user-select:none;
+  /* Fase 2B punto 4: <button> nativo en vez de div role="button" — reset de
+     estilos por defecto del user-agent para que se vea igual que el div de antes. */
+  width:100%; background:none; border:none; margin:0; padding:0; font:inherit; color:inherit; text-align:left; appearance:none;
+}
 .scope-head-left{display:flex; align-items:center; gap:9px;}
 .scope-title{font-size:13px; font-weight:600; text-transform:uppercase; letter-spacing:.06em; color:var(--text-secondary);}
 .scope-count{font-family:"IBM Plex Mono", monospace; font-size:12.5px; color:var(--accent-ink); background:var(--accent-soft); padding:2px 9px; border-radius:999px; font-weight:600;}
@@ -103,6 +108,9 @@ button{font-family:inherit;}
 .flip-card{
   position:relative; width:100%; min-height:280px; cursor:pointer;
   transform-style:preserve-3d; transition:transform .5s cubic-bezier(.2,.8,.2,1);
+  /* Fase 2B punto 4: <button> nativo en vez de div role="button" — reset de
+     estilos por defecto del user-agent para que se vea igual que el div de antes. */
+  display:block; background:none; border:none; margin:0; padding:0; font:inherit; color:inherit; text-align:inherit; appearance:none;
 }
 .flip-card.flipped{transform:rotateY(180deg);}
 .flip-face{
