@@ -11,19 +11,31 @@
 // "Mezclar de nuevo" / llega al final y pulsa "Volver a empezar" — igual
 // que en legacy, donde marcar una tarjeta como sabida/a repasar solo avanza
 // el índice (advanceFlash) sin reconstruir la cola.
+//
+// Fase 2B punto 3: `buildQueue` lee `known` con `getState()` (lectura
+// directa del store, no reactiva) en vez de con el hook `useAppState()`.
+// Con el hook, `buildQueue` (memoizada con `useCallback`) capturaba en su
+// cierre el `known` del último render en el que se había recalculado —
+// que, tras `resetKnownFor()` seguido síncronamente de `restart()` en
+// `handleResetKnown()`, todavía era el snapshot ANTERIOR al reset (React
+// no ha vuelto a renderizar todavía en ese punto). Resultado: "Reiniciar
+// dominadas" no siempre devolvía las tarjetas recién reiniciadas a la cola
+// cuando "ocultar dominadas" estaba activo. `getState()` siempre devuelve
+// el estado actual del store en el momento de la llamada, sin ese desfase.
+// No se usa `useAppState()` en ningún otro punto de este componente, así
+// que se elimina del todo (evita además una suscripción/rerender que no
+// hacía falta).
 
 import { useCallback, useEffect, useState } from 'react';
 import { getFlashcards } from '../../data/index';
 import type { Flashcard } from '../../types/flashcard';
 import { useScope } from '../../app/ScopeContext';
 import { shuffle } from '../../app/QuizContext';
-import { resetKnownFor, setKnown } from '../../state/appState';
-import { useAppState } from '../../state/useAppState';
+import { getState, resetKnownFor, setKnown } from '../../state/appState';
 import { renderBold, renderCloze } from './textFormat';
 
 export function FlashcardsPage() {
   const { scope } = useScope();
-  const appState = useAppState();
   const [hideKnown, setHideKnown] = useState(false);
   const [queue, setQueue] = useState<Flashcard[]>([]);
   const [index, setIndex] = useState(0);
@@ -31,9 +43,11 @@ export function FlashcardsPage() {
 
   const buildQueue = useCallback((): Flashcard[] => {
     let pool = getFlashcards().filter((c) => scope.has(c.id_tema));
-    if (hideKnown) pool = pool.filter((c) => !appState.known[c.id]);
+    if (hideKnown) {
+      const known = getState().known;
+      pool = pool.filter((c) => !known[c.id]);
+    }
     return shuffle(pool);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [scope, hideKnown]);
 
   const restart = useCallback(() => {
@@ -113,18 +127,11 @@ export function FlashcardsPage() {
         <div className="progress-fill" style={{ width: `${pct}%` }} />
       </div>
       <div className="card-scene">
-        <div
+        <button
+          type="button"
           className={'flip-card' + (flipped ? ' flipped' : '')}
-          role="button"
-          tabIndex={0}
           aria-label={flipped ? 'Mostrando respuesta, toca para volver a la pregunta' : 'Toca para revelar la respuesta'}
           onClick={() => setFlipped((f) => !f)}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault();
-              setFlipped((f) => !f);
-            }
-          }}
         >
           <div className="flip-face front">
             <span className="punch" />
@@ -148,7 +155,7 @@ export function FlashcardsPage() {
             </div>
             <div className="face-tema-title">{card.temaTitle}</div>
           </div>
-        </div>
+        </button>
       </div>
       <div className="flash-actions">
         <button type="button" className="act-btn review" onClick={handleReview}>
