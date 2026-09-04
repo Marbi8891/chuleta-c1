@@ -129,6 +129,62 @@ dentro de una misma migración. Las sesiones NUEVAS (creadas desde la app,
 no migradas) siguen usando `crypto.randomUUID()` — ver `QuizContext.tsx` —
 así que no hay riesgo de colisión entre ambos espacios de nombres.
 
+### Política de conflicto en migración diferida (Fase 3C)
+
+Los dos apartados anteriores cubren dos migraciones que se disputan el
+mismo dato legacy al mismo tiempo. Existe un tercer escenario, distinto:
+una **migración diferida** que se reintenta después de que el usuario ya
+haya generado progreso nuevo directamente en IndexedDB.
+
+Ejemplo real: en el primer arranque, `localStorage` no está disponible
+(ver "STORAGE UNAVAILABLE" arriba) — la migración se aplaza,
+`legacyMigrationVersion` NO se marca. El usuario sigue usando la app con
+total normalidad: estudia temas, repasa flashcards, hace tests — todo se
+guarda directamente en IndexedDB (Dexie), sin pasar por la migración. Más
+tarde, en un arranque posterior, `localStorage` vuelve a estar disponible
+y `runLegacyMigration()` se ejecuta de verdad, encontrando el
+`chuletaC1_v1` legacy original (que no sabe nada del progreso nuevo hecho
+mientras tanto).
+
+**Política: EXISTING INDEXEDDB DATA WINS.** Si ya existe una fila/valor en
+IndexedDB para un dato que la migración también querría escribir, la
+migración NO la toca — se salta ese campo y sigue con el resto. Legacy
+solo rellena huecos genuinamente vacíos, nunca sobrescribe algo que el
+usuario ya generó con la app nueva. Aplica a tres sitios, todos dentro de
+la misma transacción de migración:
+
+| Campo | Comprobación | Contador si ya existía |
+|---|---|---|
+| `topicProgress[topicId]` | `database.topicProgress.get(topicId)` | `summary.topicsSkippedExisting` |
+| `flashcardProgress[flashcardId]` | `database.flashcardProgress.get(flashcardId)` | `summary.flashcardsSkippedExisting` |
+| `appMeta.studyFsIndex` | `database.appMeta.get('studyFsIndex')` | `summary.studyFsIndexSkippedExisting = true` |
+
+El caso crítico es `flashcardProgress`: si el usuario ya marcó una
+flashcard como "no dominada" (`known: false`) con la app nueva, y legacy
+tiene esa misma flashcard como `known: true` (estado antiguo, anterior a
+que el usuario decidiera repasarla de nuevo), la migración NUNCA debe
+revertir ese `false` a `true` — sería deshacer silenciosamente una
+decisión que el usuario tomó después. Lo mismo aplica a `topicProgress` y
+a `studyFsIndex` (si el usuario ya cambió el tamaño de letra con la app
+nueva, legacy no lo pisa). `databaseCreatedAt` en `appMeta` seguía sin
+sobrescribirse si ya existía desde antes de la Fase 3C — este
+comportamiento no cambia.
+
+Las entradas de `quizHistory` migradas (`quizSessions` con id
+`legacy-{índice}`) no entran en este conflicto: como ya usan un espacio de
+ids determinista y disjunto de los UUID de sesiones nuevas (ver arriba),
+"migrar de más" nunca puede pisar una sesión nueva — como mucho
+reescribiría su propia fila `legacy-N` con el mismo contenido (`put` es
+idempotente por diseño desde la Fase 3B).
+
+Ver el bloque "DEFERRED MIGRATION CONFLICT" en
+`src/db/legacyMigration.test.ts`: reproduce el escenario completo de dos
+arranques (storage inaccesible → progreso nuevo en Dexie → storage
+disponible con datos legacy en conflicto → segunda ejecución de la
+migración) y comprueba que el dato de IndexedDB generado en el primer
+arranque sobrevive intacto, mientras que los huecos que legacy sí puede
+rellenar (un tema o flashcard sin fila previa) se migran con normalidad.
+
 ## Fuente legacy: nunca se borra
 
 `src/db/legacyMigration.ts` solo LEE `localStorage["chuletaC1_v1"]`

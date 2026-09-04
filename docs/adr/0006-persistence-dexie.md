@@ -173,6 +173,49 @@ paralelo — todo eso queda aprobado tal cual):
    inconsistentes, no solo una escritura de bajo riesgo perdida — ver el
    comentario en `FlashcardsPage.tsx`.
 
+## Fase 3C — GIT RECONCILIATION + DEFERRED MIGRATION SAFETY
+
+1. **Política de conflicto en migración diferida: EXISTING INDEXEDDB DATA
+   WINS**. La Fase 3B ya resolvía la concurrencia (dos migraciones a la
+   vez) y el storage inaccesible (aplazar, no perder). Quedaba un tercer
+   escenario: una migración APLAZADA que se reintenta después de que el
+   usuario ya generó progreso nuevo directamente en IndexedDB durante el
+   tiempo en que estuvo aplazada. Antes de la Fase 3C, `runLegacyMigration`
+   sobrescribía sin comprobar — un `known: false` nuevo en Dexie podía
+   volver a `known: true` si legacy tenía esa flashcard marcada desde
+   antes. Ahora `topicProgress`, `flashcardProgress` y
+   `appMeta.studyFsIndex` comprueban si la fila/valor ya existe antes de
+   escribir, dentro de la misma transacción; si existe, se salta ese campo
+   (contadores nuevos en `MigrationSummary`:
+   `topicsSkippedExisting`/`flashcardsSkippedExisting`/
+   `studyFsIndexSkippedExisting`). Ver la sección "Política de conflicto en
+   migración diferida" de `docs/LEGACY_MIGRATION.md` y el bloque "DEFERRED
+   MIGRATION CONFLICT" en `src/db/legacyMigration.test.ts`.
+2. **Bloqueo síncrono de guardado doble en `QuizContext.goNext`
+   (opcional, implementado)**: `state.saving` es estado de React —
+   solo se "publica" para los closures en el siguiente render, así que dos
+   llamadas a `goNext()` dentro del mismo manejador de evento síncrono
+   (antes de que React reconcilie) podían pasar ambas la comprobación
+   `if (state.saving) return`. Como `recordQuizSession` ya es idempotente
+   por `sessionId` (Fase 3B, punto 4), esto nunca podía corromper datos —
+   era, como mucho, una llamada duplicada innecesaria. Se añadió un
+   `useRef(false)` (`savingRef`) como cerrojo síncrono adicional: se lee y
+   escribe inmediatamente, sin esperar al render, cerrando esa ventana
+   teórica. Ver el test "DOUBLE CLICK SAVE LOCK" en
+   `src/features/quiz/Quiz.test.tsx`, que llama a `goNext()` dos veces
+   seguidas en el mismo manejador y comprueba que `recordQuizSession` se
+   invoca una sola vez.
+3. **Reconciliación de historial git** (fuera del código de la app):
+   la rama local `feat/react-capacitor-foundation` no compartía ningún
+   ancestro común con `origin/main` (historiales no relacionados). Se creó
+   una rama de respaldo, se hizo `fetch` y se re-verificó el SHA remoto
+   antes de reescribir el historial local con un rebase sobre
+   `origin/main`, resolviendo el conflicto esperado en el `index.html` de
+   la raíz a favor del punto de entrada Vite/React — la fuente académica
+   canónica (`legacy/index.original.html`) no se tocó, verificado por
+   SHA-256 antes y después. Ver el informe de checkpoint de la Fase 3C
+   para el detalle exacto de los SHA y comandos usados.
+
 ## Consecuencias / deuda explícita para fases futuras
 
 - SM-2/ease factor/intervals para flashcards: fuera de alcance a
