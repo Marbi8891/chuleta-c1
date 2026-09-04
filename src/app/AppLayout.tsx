@@ -13,6 +13,8 @@ import { Outlet, useLocation } from 'react-router-dom';
 import { BottomNav } from './BottomNav';
 import { ScopePanel } from './ScopePanel';
 import { StatsStrip } from './StatsStrip';
+import { OfflineIndicator } from '../pwa/OfflineIndicator';
+import { UpdateBanner } from '../pwa/UpdateBanner';
 
 function BrandMark() {
   return (
@@ -40,8 +42,10 @@ export function AppLayout() {
             <p className="subtitle">Cuerpo General Administrativo del Estado</p>
           </div>
         </div>
+        <OfflineIndicator />
       </header>
 
+      <UpdateBanner />
       <StatsStrip />
       <ScopePanel hidden={hideScope} />
 
