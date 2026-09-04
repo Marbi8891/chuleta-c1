@@ -57,6 +57,26 @@ del array, ni siquiera dentro de un único array ya mezclado.
 **Sin Capacitor/Android todavía** — fuera de alcance de esta fase (Fase
 3: persistencia; Fases 4-5: Capacitor/Android).
 
+## Deuda conocida: fuentes no empaquetadas offline (Fase 2B punto 6)
+
+`index.html` sigue cargando "Fraunces"/"IBM Plex Sans"/"IBM Plex Mono"
+desde Google Fonts vía `<link rel="stylesheet" href="https://fonts.googleapis.com/...">`
+(migración literal de legacy, mismo mecanismo). Esto es aceptable
+mientras la app se sirve como sitio web normal (dev, GitHub Pages): con
+red disponible, no hay diferencia perceptible.
+
+**No se resuelve en Fase 2B a propósito** — deliberadamente fuera de
+alcance de esta fase (ver la especificación de Fase 2B, punto 6). Queda
+documentado aquí como deuda explícita de **Fase 4 (PWA)**: para que el
+runtime funcione completamente offline (requisito de una PWA instalable,
+y más adelante de un build de Capacitor sin red) las fuentes tendrán que
+o bien empaquetarse localmente (`@font-face` con ficheros servidos desde
+`public/` o importados como asset de Vite, con `font-display: swap`) o
+sustituirse por alternativas sin dependencia de red. Cualquiera de las
+dos opciones implica también revisar el `Content-Security-Policy` (si se
+introduce uno) y el manifest de service worker de la Fase 4 para que las
+fuentes queden cacheadas/empaquetadas en la instalación.
+
 ## Limitación conocida del historial de commits
 
 El código de esta fase se construyó de una sola vez en un workspace
