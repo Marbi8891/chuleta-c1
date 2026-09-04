@@ -1,0 +1,1652 @@
+[
+  {
+    "id": "c1",
+    "bloque": "I",
+    "tema": "T01",
+    "id_tema": "I-T01",
+    "temaTitle": "La Constitución Española de 1978: estructura y contenido",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "Estado de alarma ______ derechos, solo los restringe; excepción y sitio sí suspenden.",
+    "back": "Estado de alarma no suspende derechos, solo los restringe; excepción y sitio sí suspenden."
+  },
+  {
+    "id": "c2",
+    "bloque": "I",
+    "tema": "T01",
+    "id_tema": "I-T01",
+    "temaTitle": "La Constitución Española de 1978: estructura y contenido",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "TC: 2+2+4+4 = 12, pero cuidado con quién propone a quién (Gobierno y CGPJ propon...",
+    "back": "TC: 2+2+4+4 = 12, pero cuidado con quién propone a quién (Gobierno y CGPJ proponen 2 cada uno, no 4)."
+  },
+  {
+    "id": "c3",
+    "bloque": "I",
+    "tema": "T01",
+    "id_tema": "I-T01",
+    "temaTitle": "La Constitución Española de 1978: estructura y contenido",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "Reforma agravada exige ______, no solo mayoría reforzada.",
+    "back": "Reforma agravada exige disolución de las Cortes, no solo mayoría reforzada."
+  },
+  {
+    "id": "c4",
+    "bloque": "I",
+    "tema": "T01",
+    "id_tema": "I-T01",
+    "temaTitle": "La Constitución Española de 1978: estructura y contenido",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "Los derechos de los arts. 30 (defensa) y 31 (tributario) son ______, no derechos, aunque estén numerados entre los arts. 14-38.",
+    "back": "Los derechos de los arts. 30 (defensa) y 31 (tributario) son deberes, no derechos, aunque estén numerados entre los arts. 14-38."
+  },
+  {
+    "id": "c5",
+    "bloque": "I",
+    "tema": "T02",
+    "id_tema": "I-T02",
+    "temaTitle": "La Corona",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "No confundir tutela (institución civil, art. 60) con regencia (institución política, art. 59)",
+    "back": "No confundir tutela (institución civil, art. 60) con regencia (institución política, art. 59) — tienen requisitos y órdenes de designación distintos."
+  },
+  {
+    "id": "c6",
+    "bloque": "I",
+    "tema": "T02",
+    "id_tema": "I-T02",
+    "temaTitle": "La Corona",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "El Rey NO puede autorizar indultos generales (solo el derecho de gracia individu...",
+    "back": "El Rey NO puede autorizar indultos generales (solo el derecho de gracia individual, con arreglo a la ley)."
+  },
+  {
+    "id": "c7",
+    "bloque": "I",
+    "tema": "T02",
+    "id_tema": "I-T02",
+    "temaTitle": "La Corona",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "Refrendo del art. 99 (disolución) y de la propuesta/nombramiento del Presidente...",
+    "back": "Refrendo del art. 99 (disolución) y de la propuesta/nombramiento del Presidente del Gobierno: corresponde al Presidente del Congreso, no al Presidente del Gobierno."
+  },
+  {
+    "id": "c8",
+    "bloque": "I",
+    "tema": "T02",
+    "id_tema": "I-T02",
+    "temaTitle": "La Corona",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "El orden de sucesión prefiere varón sobre mujer en igual grado",
+    "back": "El orden de sucesión prefiere varón sobre mujer en igual grado — es una excepción expresa al art. 14 CE, muy citada en examen."
+  },
+  {
+    "id": "c9",
+    "bloque": "I",
+    "tema": "T03",
+    "id_tema": "I-T03",
+    "temaTitle": "Las Cortes Generales. Congreso y Senado",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "Congreso: 300-400 diputados (actualmente 350) — ¿por qué se diferencian?",
+    "back": "Congreso: 300-400 diputados (actualmente 350) — Senado: representación territorial (4 por provincia + islas + CC.AA.), no un número fijo cerrado en la CE."
+  },
+  {
+    "id": "c10",
+    "bloque": "I",
+    "tema": "T03",
+    "id_tema": "I-T03",
+    "temaTitle": "Las Cortes Generales. Congreso y Senado",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "Inviolabilidad (opiniones) vs. inmunidad (detención solo en flagrante delito + suplicatorio) — ¿por qué se diferencian?",
+    "back": "Inviolabilidad (opiniones) vs. inmunidad (detención solo en flagrante delito + suplicatorio) — no confundir los dos conceptos del art. 71."
+  },
+  {
+    "id": "c11",
+    "bloque": "I",
+    "tema": "T03",
+    "id_tema": "I-T03",
+    "temaTitle": "Las Cortes Generales. Congreso y Senado",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "Cuestión de confianza vs. moción de censura — ¿cuál es la diferencia clave?",
+    "back": "Cuestión de confianza (mayoría simple, la plantea el Gobierno) vs. moción de censura (mayoría absoluta, la plantea el Congreso, es \"constructiva\" porque incluye candidato alternativo)."
+  },
+  {
+    "id": "c12",
+    "bloque": "I",
+    "tema": "T03",
+    "id_tema": "I-T03",
+    "temaTitle": "Las Cortes Generales. Congreso y Senado",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "3% vs. 5% — ¿cuál es la diferencia clave?",
+    "back": "Umbral electoral: 3% general, 5% en municipales."
+  },
+  {
+    "id": "c13",
+    "bloque": "I",
+    "tema": "T03",
+    "id_tema": "I-T03",
+    "temaTitle": "Las Cortes Generales. Congreso y Senado",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "Firmas iniciativa popular: ______.",
+    "back": "Firmas iniciativa popular: 500.000."
+  },
+  {
+    "id": "c14",
+    "bloque": "I",
+    "tema": "T03",
+    "id_tema": "I-T03",
+    "temaTitle": "Las Cortes Generales. Congreso y Senado",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "Plazo del Senado para vetar/enmendar: ______ (20 días si urgente).",
+    "back": "Plazo del Senado para vetar/enmendar: 2 meses (20 días si urgente)."
+  },
+  {
+    "id": "c15",
+    "bloque": "I",
+    "tema": "T03",
+    "id_tema": "I-T03",
+    "temaTitle": "Las Cortes Generales. Congreso y Senado",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "Plazo de sanción real de las leyes: ______.",
+    "back": "Plazo de sanción real de las leyes: 15 días."
+  },
+  {
+    "id": "c16",
+    "bloque": "I",
+    "tema": "T03",
+    "id_tema": "I-T03",
+    "temaTitle": "Las Cortes Generales. Congreso y Senado",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "Diputación Permanente: mínimo ______.",
+    "back": "Diputación Permanente: mínimo 21 miembros."
+  },
+  {
+    "id": "c17",
+    "bloque": "I",
+    "tema": "T03",
+    "id_tema": "I-T03",
+    "temaTitle": "Las Cortes Generales. Congreso y Senado",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "septiembre-diciembre vs. febrero-junio — ¿cuál es la diferencia clave?",
+    "back": "Periodos ordinarios de sesiones: septiembre-diciembre y febrero-junio."
+  },
+  {
+    "id": "c18",
+    "bloque": "I",
+    "tema": "T04",
+    "id_tema": "I-T04",
+    "temaTitle": "El Poder Judicial. CGPJ. Tribunal Supremo. Organización judicial",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "20 vocales + Presidente del TS vs. 5 años — ¿cuál es la diferencia clave?",
+    "back": "El CGPJ tiene 20 vocales + Presidente del TS (21 total); 12 de origen judicial, 4 Congreso, 4 Senado (mayoría 3/5), mandato 5 años."
+  },
+  {
+    "id": "c19",
+    "bloque": "I",
+    "tema": "T04",
+    "id_tema": "I-T04",
+    "temaTitle": "El Poder Judicial. CGPJ. Tribunal Supremo. Organización judicial",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "La Audiencia Nacional ______ (solo Apelación, Penal, Contencioso-Administrativo y Social).",
+    "back": "La Audiencia Nacional NO tiene competencia civil (solo Apelación, Penal, Contencioso-Administrativo y Social)."
+  },
+  {
+    "id": "c20",
+    "bloque": "I",
+    "tema": "T04",
+    "id_tema": "I-T04",
+    "temaTitle": "El Poder Judicial. CGPJ. Tribunal Supremo. Organización judicial",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "El TS tiene ______ + la Sala Especial del art. 61 (no permanente).",
+    "back": "El TS tiene 5 Salas ordinarias + la Sala Especial del art. 61 (no permanente)."
+  },
+  {
+    "id": "c21",
+    "bloque": "I",
+    "tema": "T04",
+    "id_tema": "I-T04",
+    "temaTitle": "El Poder Judicial. CGPJ. Tribunal Supremo. Organización judicial",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "Comisión Permanente del CGPJ: 7 vocales (elección anual) — ¿por qué se diferencian?",
+    "back": "Comisión Permanente del CGPJ: 7 vocales (elección anual) — Comisión Disciplinaria: 7 vocales (mandato 5 años) — no confundirlas."
+  },
+  {
+    "id": "c22",
+    "bloque": "I",
+    "tema": "T04",
+    "id_tema": "I-T04",
+    "temaTitle": "El Poder Judicial. CGPJ. Tribunal Supremo. Organización judicial",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "90 euros vs. 4 años — ¿cuál es la diferencia clave?",
+    "back": "Juzgados de Paz: competencia civil hasta 90 euros, nombrados por 4 años."
+  },
+  {
+    "id": "c23",
+    "bloque": "I",
+    "tema": "T04",
+    "id_tema": "I-T04",
+    "temaTitle": "El Poder Judicial. CGPJ. Tribunal Supremo. Organización judicial",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "Rey vs. Gobierno — ¿cuál es la diferencia clave?",
+    "back": "Fiscal General del Estado: nombrado por el Rey, a propuesta del Gobierno, oído el CGPJ (no lo nombra directamente el CGPJ)."
+  },
+  {
+    "id": "c24",
+    "bloque": "I",
+    "tema": "T04",
+    "id_tema": "I-T04",
+    "temaTitle": "El Poder Judicial. CGPJ. Tribunal Supremo. Organización judicial",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "El TSJ ______ un \"poder judicial autonómico\": el Poder Judicial es único para todo el Estado.",
+    "back": "El TSJ no es un \"poder judicial autonómico\": el Poder Judicial es único para todo el Estado."
+  },
+  {
+    "id": "c25",
+    "bloque": "I",
+    "tema": "T04",
+    "id_tema": "I-T04",
+    "temaTitle": "El Poder Judicial. CGPJ. Tribunal Supremo. Organización judicial",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "Cuestión de inconstitucionalidad (norma con rango de ley posterior a la CE) vs....",
+    "back": "Cuestión de inconstitucionalidad (norma con rango de ley posterior a la CE) vs. inaplicación directa (rango inferior a ley, o norma anterior a la CE)."
+  },
+  {
+    "id": "c26",
+    "bloque": "I",
+    "tema": "T05",
+    "id_tema": "I-T05",
+    "temaTitle": "El Gobierno y la Administración",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "Gobierno (político, temporal) vs. Administración (gestora, permanente) — ¿por qué se diferencian?",
+    "back": "Gobierno (político, temporal) vs. Administración (gestora, permanente) — el Gobierno dirige la Administración (art. 97 CE)."
+  },
+  {
+    "id": "c27",
+    "bloque": "I",
+    "tema": "T05",
+    "id_tema": "I-T05",
+    "temaTitle": "El Gobierno y la Administración",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "mayoría absoluta vs. mayoría simple — ¿cuál es la diferencia clave?",
+    "back": "Investidura: mayoría absoluta en 1ª votación, mayoría simple en 2ª votación (48h después)."
+  },
+  {
+    "id": "c28",
+    "bloque": "I",
+    "tema": "T05",
+    "id_tema": "I-T05",
+    "temaTitle": "El Gobierno y la Administración",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "El acta del Consejo de Ministros recoge circunstancias, asistentes, acuerdos e informes — ______.",
+    "back": "El acta del Consejo de Ministros recoge circunstancias, asistentes, acuerdos e informes — no el contenido de las deliberaciones."
+  },
+  {
+    "id": "c29",
+    "bloque": "I",
+    "tema": "T05",
+    "id_tema": "I-T05",
+    "temaTitle": "El Gobierno y la Administración",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "______ (no el Presidente del Gobierno, que preside pero no es el secretario).",
+    "back": "Secretario del Consejo de Ministros = Ministro de la Presidencia (no el Presidente del Gobierno, que preside pero no es el secretario)."
+  },
+  {
+    "id": "c30",
+    "bloque": "I",
+    "tema": "T05",
+    "id_tema": "I-T05",
+    "temaTitle": "El Gobierno y la Administración",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "Reales Decretos-leyes (potestad legislativa de urgencia) vs. Reales Decretos Legislativos (desarrollo de delegación legislativa) — ¿por qué se diferencian?",
+    "back": "Reales Decretos-leyes (potestad legislativa de urgencia) vs. Reales Decretos Legislativos (desarrollo de delegación legislativa) — ambos los aprueba el Gobierno."
+  },
+  {
+    "id": "c31",
+    "bloque": "I",
+    "tema": "T05",
+    "id_tema": "I-T05",
+    "temaTitle": "El Gobierno y la Administración",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "ordinario vs. extraordinario — ¿cuál es la diferencia clave?",
+    "back": "Control ordinario (ambas Cámaras, sin responsabilidad política) vs. extraordinario (solo Congreso, con responsabilidad política: moción de censura y cuestión de confianza)."
+  },
+  {
+    "id": "c32",
+    "bloque": "I",
+    "tema": "T05",
+    "id_tema": "I-T05",
+    "temaTitle": "El Gobierno y la Administración",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "Igual que en el Tema 3: cuestión de confianza = mayoría simple, la plantea el Go...",
+    "back": "Igual que en el Tema 3: cuestión de confianza = mayoría simple, la plantea el Gobierno; moción de censura = mayoría absoluta, la plantea el Congreso (1/10 de Diputados) e incluye candidato alternativo."
+  },
+  {
+    "id": "c33",
+    "bloque": "I",
+    "tema": "T05",
+    "id_tema": "I-T05",
+    "temaTitle": "El Gobierno y la Administración",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "Vía extraordinaria de investidura = aprobación de una moción de censura con cand...",
+    "back": "Vía extraordinaria de investidura = aprobación de una moción de censura con candidato alternativo (el candidato queda investido automáticamente)."
+  },
+  {
+    "id": "c34",
+    "bloque": "I",
+    "tema": "T06",
+    "id_tema": "I-T06",
+    "temaTitle": "Gobierno Abierto y Agenda 2030",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "3 vs. 4 — ¿cuál es la diferencia clave?",
+    "back": "Pilares del Gobierno Abierto (3: Transparencia, Colaboración, Participación) vs. principios informadores enumerados (4, añadiendo Rendición de cuentas)."
+  },
+  {
+    "id": "c35",
+    "bloque": "I",
+    "tema": "T06",
+    "id_tema": "I-T06",
+    "temaTitle": "Gobierno Abierto y Agenda 2030",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "España se adhiere a la OGP en ______ (no confundir con la fecha de creación de la propia OGP).",
+    "back": "España se adhiere a la OGP en abril de 2011 (no confundir con la fecha de creación de la propia OGP)."
+  },
+  {
+    "id": "c36",
+    "bloque": "I",
+    "tema": "T06",
+    "id_tema": "I-T06",
+    "temaTitle": "Gobierno Abierto y Agenda 2030",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "III Plan de Acción: 2017-2019, 5 ejes, 20 medidas — ¿por qué se diferencian?",
+    "back": "III Plan de Acción: 2017-2019, 5 ejes, 20 medidas — IV Plan de Acción: 2020-2024 (acordado 29/10/2020), 4 objetivos, 10 compromisos."
+  },
+  {
+    "id": "c37",
+    "bloque": "I",
+    "tema": "T06",
+    "id_tema": "I-T06",
+    "temaTitle": "Gobierno Abierto y Agenda 2030",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "Foro de Gobierno Abierto: ______ (32 AAPP + 32 sociedad civil) — no confundir con la Comisión Sectorial (sin número fijo de vocales, es cooperación interadministrativa) ni con el Consejo de Desarrollo Sostenible (60 vocalías, distinto ámbito — Agenda 2030, no Gobierno Abierto en general).",
+    "back": "Foro de Gobierno Abierto: 64 vocales (32 AAPP + 32 sociedad civil) — no confundir con la Comisión Sectorial (sin número fijo de vocales, es cooperación interadministrativa) ni con el Consejo de Desarrollo Sostenible (60 vocalías, distinto ámbito — Agenda 2030, no Gobierno Abierto en general)."
+  },
+  {
+    "id": "c38",
+    "bloque": "I",
+    "tema": "T06",
+    "id_tema": "I-T06",
+    "temaTitle": "Gobierno Abierto y Agenda 2030",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "25 de septiembre de 2015 vs. 193 países — ¿cuál es la diferencia clave?",
+    "back": "Agenda 2030: 25 de septiembre de 2015, 193 países, 70ª Asamblea de la ONU, 17 ODS y 169 metas, 5 ejes (Planeta, Personas, Prosperidad, Paz, Alianzas)."
+  },
+  {
+    "id": "c39",
+    "bloque": "I",
+    "tema": "T06",
+    "id_tema": "I-T06",
+    "temaTitle": "Gobierno Abierto y Agenda 2030",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "Metas numéricas (hitos) vs. metas con letras (medios de implementación)....",
+    "back": "Metas numéricas (hitos) vs. metas con letras (medios de implementación)."
+  },
+  {
+    "id": "c40",
+    "bloque": "I",
+    "tema": "T06",
+    "id_tema": "I-T06",
+    "temaTitle": "Gobierno Abierto y Agenda 2030",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "ODM (Objetivos del Milenio, 8 objetivos, vigentes hasta 2015) fueron sustituidos...",
+    "back": "ODM (Objetivos del Milenio, 8 objetivos, vigentes hasta 2015) fueron sustituidos por los ODS (17 objetivos, Agenda 2030)."
+  },
+  {
+    "id": "c41",
+    "bloque": "I",
+    "tema": "T06",
+    "id_tema": "I-T06",
+    "temaTitle": "Gobierno Abierto y Agenda 2030",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "Consejo de Desarrollo Sostenible: Pleno ordinario ______.",
+    "back": "Consejo de Desarrollo Sostenible: Pleno ordinario 2 veces al año."
+  },
+  {
+    "id": "c42",
+    "bloque": "I",
+    "tema": "T07",
+    "id_tema": "I-T07",
+    "temaTitle": "Ley 19/2013 de transparencia. Consejo de Transparencia y Buen Gobierno",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "El Consejo tiene ______: Presidente y Comisión de Transparencia y Buen Gobierno (no confundir \"el Consejo\" con solo la Comisión).",
+    "back": "El Consejo tiene dos órganos: Presidente y Comisión de Transparencia y Buen Gobierno (no confundir \"el Consejo\" con solo la Comisión)."
+  },
+  {
+    "id": "c43",
+    "bloque": "I",
+    "tema": "T07",
+    "id_tema": "I-T07",
+    "temaTitle": "Ley 19/2013 de transparencia. Consejo de Transparencia y Buen Gobierno",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "La Comisión tiene ______ (Presidente + Diputado + Senador + representantes de Tribunal de Cuentas, Defensor del Pueblo, AEPD, Secretaría de Estado de AAPP y AIReF).",
+    "back": "La Comisión tiene 8 miembros (Presidente + Diputado + Senador + representantes de Tribunal de Cuentas, Defensor del Pueblo, AEPD, Secretaría de Estado de AAPP y AIReF)."
+  },
+  {
+    "id": "c44",
+    "bloque": "I",
+    "tema": "T07",
+    "id_tema": "I-T07",
+    "temaTitle": "Ley 19/2013 de transparencia. Consejo de Transparencia y Buen Gobierno",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "5 años, no renovable vs. mayoría absoluta — ¿cuál es la diferencia clave?",
+    "back": "Mandato del Presidente: 5 años, no renovable; refrendo del Congreso por mayoría absoluta en 1 mes."
+  },
+  {
+    "id": "c45",
+    "bloque": "I",
+    "tema": "T07",
+    "id_tema": "I-T07",
+    "temaTitle": "Ley 19/2013 de transparencia. Consejo de Transparencia y Buen Gobierno",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "Plazo de resolución de solicitudes de acceso: 1 mes (ampliable otro mes) — ¿por qué se diferencian?",
+    "back": "Plazo de resolución de solicitudes de acceso: 1 mes (ampliable otro mes) — plazo de reclamación ante el Consejo: 1 mes para interponerla, 3 meses para resolverla."
+  },
+  {
+    "id": "c46",
+    "bloque": "I",
+    "tema": "T07",
+    "id_tema": "I-T07",
+    "temaTitle": "Ley 19/2013 de transparencia. Consejo de Transparencia y Buen Gobierno",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "Excepción a la reclamación ante el Consejo: los sujetos del ______ (Casa del Rey, Congreso, Senado, TC, CGPJ...) van directos a la vía contencioso-administrativa.",
+    "back": "Excepción a la reclamación ante el Consejo: los sujetos del art. 2.1.f) (Casa del Rey, Congreso, Senado, TC, CGPJ...) van directos a la vía contencioso-administrativa."
+  },
+  {
+    "id": "c47",
+    "bloque": "I",
+    "tema": "T07",
+    "id_tema": "I-T07",
+    "temaTitle": "Ley 19/2013 de transparencia. Consejo de Transparencia y Buen Gobierno",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "Contratos menores: publicidad ______ (no mensual).",
+    "back": "Contratos menores: publicidad trimestral (no mensual)."
+  },
+  {
+    "id": "c48",
+    "bloque": "I",
+    "tema": "T07",
+    "id_tema": "I-T07",
+    "temaTitle": "Ley 19/2013 de transparencia. Consejo de Transparencia y Buen Gobierno",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": ">100.000€/año vs. ≥40% de ingresos — ¿cuál es la diferencia clave?",
+    "back": "Umbral de subvenciones para entidades privadas obligadas: >100.000€/año, o ≥40% de ingresos si alcanzan al menos 5.000€."
+  },
+  {
+    "id": "c49",
+    "bloque": "I",
+    "tema": "T07",
+    "id_tema": "I-T07",
+    "temaTitle": "Ley 19/2013 de transparencia. Consejo de Transparencia y Buen Gobierno",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "Sanciones: leves = amonestación; muy graves = destitución + inhabilitación ______.",
+    "back": "Sanciones: leves = amonestación; muy graves = destitución + inhabilitación 5-10 años."
+  },
+  {
+    "id": "c50",
+    "bloque": "I",
+    "tema": "T07",
+    "id_tema": "I-T07",
+    "temaTitle": "Ley 19/2013 de transparencia. Consejo de Transparencia y Buen Gobierno",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "El Consejo está adscrito actualmente al ______ (cambio respecto a la redacción original de la Ley, que lo adscribía a Hacienda y AAPP) — dato susceptible de actualización normativa, verificar vigencia si el examen es posterior a 2024.",
+    "back": "El Consejo está adscrito actualmente al Ministerio para la Transformación Digital y de la Función Pública (cambio respecto a la redacción original de la Ley, que lo adscribía a Hacienda y AAPP) — dato susceptible de actualización normativa, verificar vigencia si el examen es posterior a 2024."
+  },
+  {
+    "id": "c51",
+    "bloque": "I",
+    "tema": "T08",
+    "id_tema": "I-T08",
+    "temaTitle": "AGE. Ministros, Secretarios de Estado, Subsecretarios. Administración periférica",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "Subdirectores generales vs. no — ¿cuál es la diferencia clave?",
+    "back": "Los Subdirectores generales son el único nivel directivo que no tiene la consideración de alto cargo."
+  },
+  {
+    "id": "c52",
+    "bloque": "I",
+    "tema": "T08",
+    "id_tema": "I-T08",
+    "temaTitle": "AGE. Ministros, Secretarios de Estado, Subsecretarios. Administración periférica",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "Nombramiento del Ministro: por el Jefe del Estado (Rey), a propuesta del Presidente del Gobierno — ¿por qué se diferencian?",
+    "back": "Nombramiento del Ministro: por el Jefe del Estado (Rey), a propuesta del Presidente del Gobierno — no requiere Real Decreto de creación previa del órgano."
+  },
+  {
+    "id": "c53",
+    "bloque": "I",
+    "tema": "T08",
+    "id_tema": "I-T08",
+    "temaTitle": "AGE. Ministros, Secretarios de Estado, Subsecretarios. Administración periférica",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "Delegado del Gobierno: nombrado por RD del Consejo de Ministros a propuesta del Presidente del Gobierno — Subdelegado: ______ (no requiere RD del Consejo de Ministros).",
+    "back": "Delegado del Gobierno: nombrado por RD del Consejo de Ministros a propuesta del Presidente del Gobierno — Subdelegado: libre designación entre funcionarios A1 (no requiere RD del Consejo de Ministros)."
+  },
+  {
+    "id": "c54",
+    "bloque": "I",
+    "tema": "T08",
+    "id_tema": "I-T08",
+    "temaTitle": "AGE. Ministros, Secretarios de Estado, Subsecretarios. Administración periférica",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "Sede de la Delegación del Gobierno = capital autonómica (regla general) — sede de la Subdelegación = ______.",
+    "back": "Sede de la Delegación del Gobierno = capital autonómica (regla general) — sede de la Subdelegación = provincia."
+  },
+  {
+    "id": "c55",
+    "bloque": "I",
+    "tema": "T08",
+    "id_tema": "I-T08",
+    "temaTitle": "AGE. Ministros, Secretarios de Estado, Subsecretarios. Administración periférica",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "La jefatura de las FCSE en la CC.AA. corresponde al ______ (no al Subdelegado, que las dirige a nivel provincial).",
+    "back": "La jefatura de las FCSE en la CC.AA. corresponde al Delegado del Gobierno (no al Subdelegado, que las dirige a nivel provincial)."
+  },
+  {
+    "id": "c56",
+    "bloque": "I",
+    "tema": "T08",
+    "id_tema": "I-T08",
+    "temaTitle": "AGE. Ministros, Secretarios de Estado, Subsecretarios. Administración periférica",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "CICAPE: Pleno se reúne ______ como mínimo — no confundir su Presidencia (titular del Ministerio de Política Territorial y Función Pública en el Pleno; titular de la Secretaría General de Coordinación Territorial en la Comisión Permanente).",
+    "back": "CICAPE: Pleno se reúne 1 vez al año como mínimo — no confundir su Presidencia (titular del Ministerio de Política Territorial y Función Pública en el Pleno; titular de la Secretaría General de Coordinación Territorial en la Comisión Permanente)."
+  },
+  {
+    "id": "c57",
+    "bloque": "I",
+    "tema": "T08",
+    "id_tema": "I-T08",
+    "temaTitle": "AGE. Ministros, Secretarios de Estado, Subsecretarios. Administración periférica",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "OOAA vs. EPEs — ¿cuál es la diferencia clave?",
+    "back": "OOAA vs. EPEs: la diferencia clave hoy es el régimen de financiación (EPEs = mayoritariamente ingresos de mercado); ambos pueden producir bienes de interés público con contraprestación tras la Ley 40/2015 (antes solo las EPEs)."
+  },
+  {
+    "id": "c58",
+    "bloque": "I",
+    "tema": "T08",
+    "id_tema": "I-T08",
+    "temaTitle": "AGE. Ministros, Secretarios de Estado, Subsecretarios. Administración periférica",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "Participación pública para que una sociedad mercantil sea \"estatal\": ______.",
+    "back": "Participación pública para que una sociedad mercantil sea \"estatal\": superior al 50%."
+  },
+  {
+    "id": "c59",
+    "bloque": "I",
+    "tema": "T08",
+    "id_tema": "I-T08",
+    "temaTitle": "AGE. Ministros, Secretarios de Estado, Subsecretarios. Administración periférica",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "Causa de disolución de un organismo público por desequilibrio financiero: ______.",
+    "back": "Causa de disolución de un organismo público por desequilibrio financiero: 2 ejercicios presupuestarios consecutivos."
+  },
+  {
+    "id": "c60",
+    "bloque": "I",
+    "tema": "T08",
+    "id_tema": "I-T08",
+    "temaTitle": "AGE. Ministros, Secretarios de Estado, Subsecretarios. Administración periférica",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "Ley 40/2015: ______ (Preliminar no cuenta como título numerado en algunos esquemas, pero conviene recordar que el Título I regula la AGE y el Título II el sector público institucional).",
+    "back": "Ley 40/2015: 158 artículos, 3 Títulos (Preliminar no cuenta como título numerado en algunos esquemas, pero conviene recordar que el Título I regula la AGE y el Título II el sector público institucional)."
+  },
+  {
+    "id": "c61",
+    "bloque": "I",
+    "tema": "T09",
+    "id_tema": "I-T09",
+    "temaTitle": "Organización territorial. Comunidades Autónomas. Estatutos de Autonomía",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "legislativa vs. administrativa — ¿cuál es la diferencia clave?",
+    "back": "CC.AA. tienen potestad legislativa; provincias y municipios solo potestad administrativa."
+  },
+  {
+    "id": "c62",
+    "bloque": "I",
+    "tema": "T09",
+    "id_tema": "I-T09",
+    "temaTitle": "Organización territorial. Comunidades Autónomas. Estatutos de Autonomía",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "cooperación vs. coordinación — ¿cuál es la diferencia clave?",
+    "back": "Solo la cooperación es voluntaria (dimensión negativa: lealtad institucional; positiva: auxilio interadministrativo); la coordinación requiere título competencial y cierto poder de dirección."
+  },
+  {
+    "id": "c63",
+    "bloque": "I",
+    "tema": "T09",
+    "id_tema": "I-T09",
+    "temaTitle": "Organización territorial. Comunidades Autónomas. Estatutos de Autonomía",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "El ______, es órgano del Estado (Poder Judicial único).",
+    "back": "El TSJ no es órgano propio de la CC.AA., es órgano del Estado (Poder Judicial único)."
+  },
+  {
+    "id": "c64",
+    "bloque": "I",
+    "tema": "T09",
+    "id_tema": "I-T09",
+    "temaTitle": "Organización territorial. Comunidades Autónomas. Estatutos de Autonomía",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "Vía normal (art. 143, espera 5 años, competencias solo art. 148 al inicio) vs. vía especial (art. 151, con referéndum, competencias art. 148+149 desde el inicio) vs. vía excepcional (art. 144, Ley Orgánica — ¿por qué se diferencian?",
+    "back": "Vía normal (art. 143, espera 5 años, competencias solo art. 148 al inicio) vs. vía especial (art. 151, con referéndum, competencias art. 148+149 desde el inicio) vs. vía excepcional (art. 144, Ley Orgánica — casos de Madrid, Ceuta y Melilla)."
+  },
+  {
+    "id": "c65",
+    "bloque": "I",
+    "tema": "T09",
+    "id_tema": "I-T09",
+    "temaTitle": "Organización territorial. Comunidades Autónomas. Estatutos de Autonomía",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "Refrendo del Presidente autonómico: corresponde al ______, no al Presidente del Parlamento autonómico (declarado inconstitucional en el caso vasco).",
+    "back": "Refrendo del Presidente autonómico: corresponde al Presidente del Gobierno de la Nación, no al Presidente del Parlamento autonómico (declarado inconstitucional en el caso vasco)."
+  },
+  {
+    "id": "c66",
+    "bloque": "I",
+    "tema": "T09",
+    "id_tema": "I-T09",
+    "temaTitle": "Organización territorial. Comunidades Autónomas. Estatutos de Autonomía",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "Leyes marco (delegan la facultad de legislar dentro de un marco fijado por el Estado, con control de las Cortes) vs. leyes de transferencia/delegación (Ley Orgánica, transfieren facultades de titularidad estatal con medios financieros) — ¿por qué se diferencian?",
+    "back": "Leyes marco (delegan la facultad de legislar dentro de un marco fijado por el Estado, con control de las Cortes) vs. leyes de transferencia/delegación (Ley Orgánica, transfieren facultades de titularidad estatal con medios financieros) — no confundir ambas figuras del art. 150."
+  },
+  {
+    "id": "c67",
+    "bloque": "I",
+    "tema": "T09",
+    "id_tema": "I-T09",
+    "temaTitle": "Organización territorial. Comunidades Autónomas. Estatutos de Autonomía",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "Art. 155 vs. mayoría absoluta del Senado — ¿cuál es la diferencia clave?",
+    "back": "Art. 155 (coerción estatal): requiere requerimiento previo al Presidente autonómico y mayoría absoluta del Senado."
+  },
+  {
+    "id": "c68",
+    "bloque": "I",
+    "tema": "T09",
+    "id_tema": "I-T09",
+    "temaTitle": "Organización territorial. Comunidades Autónomas. Estatutos de Autonomía",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "Cláusula de prevalencia (conflicto entre normas) vs. cláusula de supletoriedad (el derecho estatal suple lagunas del autonómico, no atribuye competencias nuevas al Estado — ¿por qué se diferencian?",
+    "back": "Cláusula de prevalencia (conflicto entre normas) vs. cláusula de supletoriedad (el derecho estatal suple lagunas del autonómico, no atribuye competencias nuevas al Estado — doctrina del TC)."
+  },
+  {
+    "id": "c69",
+    "bloque": "I",
+    "tema": "T09",
+    "id_tema": "I-T09",
+    "temaTitle": "Organización territorial. Comunidades Autónomas. Estatutos de Autonomía",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "El Estatuto de Autonomía es ______ (art. 81 CE) — su reforma siempre pasa por las Cortes Generales, y en la vía del art. 151 además requiere referéndum.",
+    "back": "El Estatuto de Autonomía es Ley Orgánica (art. 81 CE) — su reforma siempre pasa por las Cortes Generales, y en la vía del art. 151 además requiere referéndum."
+  },
+  {
+    "id": "c70",
+    "bloque": "I",
+    "tema": "T10",
+    "id_tema": "I-T10",
+    "temaTitle": "Administración Local — La Provincia, el Municipio y la Isla",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "Diputados Provinciales vs. indirecta — ¿cuál es la diferencia clave?",
+    "back": "Diputados Provinciales se eligen de forma indirecta (entre concejales), circunscripción = Partido Judicial; no confundir con la elección directa de Concejales (sufragio universal)."
+  },
+  {
+    "id": "c71",
+    "bloque": "I",
+    "tema": "T10",
+    "id_tema": "I-T10",
+    "temaTitle": "Administración Local — La Provincia, el Municipio y la Isla",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "El baremo de Diputados Provinciales (25/27/31/51) ______ que el de Concejales (tabla de 3 a 25+, según art. 179 LOREG) — son tablas distintas para órganos distintos.",
+    "back": "El baremo de Diputados Provinciales (25/27/31/51) no es el mismo que el de Concejales (tabla de 3 a 25+, según art. 179 LOREG) — son tablas distintas para órganos distintos."
+  },
+  {
+    "id": "c72",
+    "bloque": "I",
+    "tema": "T10",
+    "id_tema": "I-T10",
+    "temaTitle": "Administración Local — La Provincia, el Municipio y la Isla",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "______; no confundir con el umbral de servicios mínimos adicionales (que también usa 5.000, pero para otra cosa) ni con el umbral de Gran Población (75.000/175.000/250.000).",
+    "back": "Junta de Gobierno Local obligatoria a partir de >5.000 habitantes; no confundir con el umbral de servicios mínimos adicionales (que también usa 5.000, pero para otra cosa) ni con el umbral de Gran Población (75.000/175.000/250.000)."
+  },
+  {
+    "id": "c73",
+    "bloque": "I",
+    "tema": "T10",
+    "id_tema": "I-T10",
+    "temaTitle": "Administración Local — La Provincia, el Municipio y la Isla",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "En Régimen Común el Alcalde no puede delegar la convocatoria/presidencia del Pleno; en Régimen de Gran Población sí puede delegarla en un concejal — ¿por qué se diferencian?",
+    "back": "En Régimen Común el Alcalde no puede delegar la convocatoria/presidencia del Pleno; en Régimen de Gran Población sí puede delegarla en un concejal — es una de las diferencias clave que se pregunta."
+  },
+  {
+    "id": "c74",
+    "bloque": "I",
+    "tema": "T10",
+    "id_tema": "I-T10",
+    "temaTitle": "Administración Local — La Provincia, el Municipio y la Isla",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "Comisión Especial de Cuentas vs. preceptiva en todos los municipios y provincias — ¿cuál es la diferencia clave?",
+    "back": "La Comisión Especial de Cuentas es de existencia preceptiva en todos los municipios y provincias (no es potestativa, a diferencia de otros órganos complementarios)."
+  },
+  {
+    "id": "c75",
+    "bloque": "I",
+    "tema": "T10",
+    "id_tema": "I-T10",
+    "temaTitle": "Administración Local — La Provincia, el Municipio y la Isla",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "CC.AA. uniprovinciales (Asturias, Cantabria, Murcia, La Rioja, Madrid, Navarra, Baleares): asumen las competencias de las Diputaciones — ¿por qué se diferencian?",
+    "back": "CC.AA. uniprovinciales (Asturias, Cantabria, Murcia, La Rioja, Madrid, Navarra, Baleares): asumen las competencias de las Diputaciones — pero Baleares tiene régimen especial (Consejos Insulares) y Ceuta/Melilla no son CC.AA., son Ciudades Autónomas."
+  },
+  {
+    "id": "c76",
+    "bloque": "I",
+    "tema": "T10",
+    "id_tema": "I-T10",
+    "temaTitle": "Administración Local — La Provincia, el Municipio y la Isla",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "______ la cifra de \"menos de 100 residentes\" es la que permite al Alcalde convocarlo *ad hoc*; no confundir con el procedimiento general de constitución en Concejo Abierto (mayoría de vecinos + 2/3 del Ayuntamiento + aprobación CCAA), que no tiene ese límite poblacional fijo.",
+    "back": "Concejo Abierto: la cifra de \"menos de 100 residentes\" es la que permite al Alcalde convocarlo *ad hoc*; no confundir con el procedimiento general de constitución en Concejo Abierto (mayoría de vecinos + 2/3 del Ayuntamiento + aprobación CCAA), que no tiene ese límite poblacional fijo."
+  },
+  {
+    "id": "c77",
+    "bloque": "I",
+    "tema": "T10",
+    "id_tema": "I-T10",
+    "temaTitle": "Administración Local — La Provincia, el Municipio y la Isla",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "______ memorizar bien los 4 supuestos y sus umbrales — >250.000 (directo); capital de provincia >175.000 (directo); capital de provincia/autonómica o sede de instituciones autonómicas (potestativo); >75.000 con circunstancias especiales (potestativo).",
+    "back": "Municipios de Gran Población: memorizar bien los 4 supuestos y sus umbrales — >250.000 (directo); capital de provincia >175.000 (directo); capital de provincia/autonómica o sede de instituciones autonómicas (potestativo); >75.000 con circunstancias especiales (potestativo)."
+  },
+  {
+    "id": "c78",
+    "bloque": "I",
+    "tema": "T10",
+    "id_tema": "I-T10",
+    "temaTitle": "Administración Local — La Provincia, el Municipio y la Isla",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "La fusión voluntaria de municipios (art. 13 LRBRL, introducida por Ley 27/2013) no puede segregarse hasta pasados 10 años — ¿por qué se diferencian?",
+    "back": "La fusión voluntaria de municipios (art. 13 LRBRL, introducida por Ley 27/2013) no puede segregarse hasta pasados 10 años — distinto del requisito de 5.000 habitantes para crear un municipio nuevo."
+  },
+  {
+    "id": "c79",
+    "bloque": "I",
+    "tema": "T10",
+    "id_tema": "I-T10",
+    "temaTitle": "Administración Local — La Provincia, el Municipio y la Isla",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "PERE vs. nunca — ¿cuál es la diferencia clave?",
+    "back": "Los inscritos en el PERE cuentan a efectos de sufragio pero nunca como población del municipio."
+  },
+  {
+    "id": "c80",
+    "bloque": "I",
+    "tema": "T11",
+    "id_tema": "I-T11",
+    "temaTitle": "La organización de la Unión Europea",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "Consejo Europeo (jefes de Estado/Gobierno, orientaciones políticas, sin función legislativa) vs. Consejo de la Unión Europea (Ministros, función legislativa junto al Parlamento) — ¿por qué se diferencian?",
+    "back": "Consejo Europeo (jefes de Estado/Gobierno, orientaciones políticas, sin función legislativa) vs. Consejo de la Unión Europea (Ministros, función legislativa junto al Parlamento) — son órganos distintos con nombres muy parecidos; error clásico de examen."
+  },
+  {
+    "id": "c81",
+    "bloque": "I",
+    "tema": "T11",
+    "id_tema": "I-T11",
+    "temaTitle": "La organización de la Unión Europea",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "2 años y medio vs. 5 años — ¿cuál es la diferencia clave?",
+    "back": "Mandatos de 2 años y medio: Presidente del Consejo Europeo y Presidente del Parlamento Europeo. Mandato de 5 años: diputados del Parlamento y Comisión. Mandato de 6 años: jueces/abogados generales del TJUE y miembros del Tribunal de Cuentas (renovación parcial cada 3 años). Mandato de 8 años no renovable: Comité Ejecutivo del BCE."
+  },
+  {
+    "id": "c82",
+    "bloque": "I",
+    "tema": "T11",
+    "id_tema": "I-T11",
+    "temaTitle": "La organización de la Unión Europea",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "Reglamento (aplicación directa, sin transposición) vs. Directiva (obligación de resultado, requiere transposición nacional) — ¿por qué se diferencian?",
+    "back": "Reglamento (aplicación directa, sin transposición) vs. Directiva (obligación de resultado, requiere transposición nacional) — la pregunta más repetida de esta parte del temario."
+  },
+  {
+    "id": "c83",
+    "bloque": "I",
+    "tema": "T11",
+    "id_tema": "I-T11",
+    "temaTitle": "La organización de la Unión Europea",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "La ______ en el Consejo tiene dos fórmulas distintas según si actúa o no a propuesta de la Comisión (55%/15 miembros/65% población vs. 72%/65% población) — se presta a confusión numérica.",
+    "back": "La mayoría cualificada en el Consejo tiene dos fórmulas distintas según si actúa o no a propuesta de la Comisión (55%/15 miembros/65% población vs. 72%/65% población) — se presta a confusión numérica."
+  },
+  {
+    "id": "c84",
+    "bloque": "I",
+    "tema": "T11",
+    "id_tema": "I-T11",
+    "temaTitle": "La organización de la Unión Europea",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "España se adhirió a las Comunidades Europeas en 1986 (entrada en vigor 1 de enero), tras firmar el Tratado en 1985 — ¿por qué se diferencian?",
+    "back": "España se adhirió a las Comunidades Europeas en 1986 (entrada en vigor 1 de enero), tras firmar el Tratado en 1985 — no confundir año de firma con año de entrada en vigor."
+  },
+  {
+    "id": "c85",
+    "bloque": "I",
+    "tema": "T11",
+    "id_tema": "I-T11",
+    "temaTitle": "La organización de la Unión Europea",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "El Tribunal de Justicia (27 jueces + 11 abogados generales) tiene abogados generales; el Tribunal General (2 jueces por Estado) no tiene abogados generales — ¿por qué se diferencian?",
+    "back": "El Tribunal de Justicia (27 jueces + 11 abogados generales) tiene abogados generales; el Tribunal General (2 jueces por Estado) no tiene abogados generales — diferencia clave."
+  },
+  {
+    "id": "c86",
+    "bloque": "I",
+    "tema": "T11",
+    "id_tema": "I-T11",
+    "temaTitle": "La organización de la Unión Europea",
+    "bloqueName": "Bloque I — Materias comunes",
+    "front": "______ Consejo Europeo y Consejo de la UE → Bruselas; Parlamento Europeo → Estrasburgo (con sesiones en Bruselas); Comisión → Bruselas; TJUE y Tribunal de Cuentas → Luxemburgo; BCE → Frankfurt.",
+    "back": "Sede de las instituciones: Consejo Europeo y Consejo de la UE → Bruselas; Parlamento Europeo → Estrasburgo (con sesiones en Bruselas); Comisión → Bruselas; TJUE y Tribunal de Cuentas → Luxemburgo; BCE → Frankfurt."
+  },
+  {
+    "id": "c87",
+    "bloque": "II",
+    "tema": "T01",
+    "id_tema": "II-T01",
+    "temaTitle": "Atención al público: comunicación e información administrativa",
+    "bloqueName": "Bloque II — Atención al ciudadano y gestión documental",
+    "front": "No confundir el plazo de contestación de reclamaciones/sugerencias generales (15...",
+    "back": "No confundir el plazo de contestación de reclamaciones/sugerencias generales (15 días hábiles) con el del programa RD 951/2005 (20 días hábiles)."
+  },
+  {
+    "id": "c88",
+    "bloque": "II",
+    "tema": "T01",
+    "id_tema": "II-T01",
+    "temaTitle": "Atención al público: comunicación e información administrativa",
+    "bloqueName": "Bloque II — Atención al ciudadano y gestión documental",
+    "front": "Proxémica = distancia; Kinésica = movimiento corporal; Paralingüística = voz",
+    "back": "Proxémica = distancia; Kinésica = movimiento corporal; Paralingüística = voz — se cruzan con frecuencia en el examen."
+  },
+  {
+    "id": "c89",
+    "bloque": "II",
+    "tema": "T01",
+    "id_tema": "II-T01",
+    "temaTitle": "Atención al público: comunicación e información administrativa",
+    "bloqueName": "Bloque II — Atención al ciudadano y gestión documental",
+    "front": "no exige legitimación vs. sí exige — ¿cuál es la diferencia clave?",
+    "back": "La información general no exige legitimación; la particular sí exige ser interesado."
+  },
+  {
+    "id": "c90",
+    "bloque": "II",
+    "tema": "T01",
+    "id_tema": "II-T01",
+    "temaTitle": "Atención al público: comunicación e información administrativa",
+    "bloqueName": "Bloque II — Atención al ciudadano y gestión documental",
+    "front": "El derecho de petición se apoya en el art. 29 CE, no en el art. 20 (información)...",
+    "back": "El derecho de petición se apoya en el art. 29 CE, no en el art. 20 (información) ni en el 23 (participación política)."
+  },
+  {
+    "id": "c91",
+    "bloque": "II",
+    "tema": "T02",
+    "id_tema": "II-T02",
+    "temaTitle": "El documento administrativo. Registro y archivo",
+    "bloqueName": "Bloque II — Atención al ciudadano y gestión documental",
+    "front": "Archivo central = un solo organismo (microsistema); archivo intermedio = varios...",
+    "back": "Archivo central = un solo organismo (microsistema); archivo intermedio = varios organismos (macrosistema)."
+  },
+  {
+    "id": "c92",
+    "bloque": "II",
+    "tema": "T02",
+    "id_tema": "II-T02",
+    "temaTitle": "El documento administrativo. Registro y archivo",
+    "bloqueName": "Bloque II — Atención al ciudadano y gestión documental",
+    "front": "Providencia (no decide el fondo) vs. Resolución (decide, motivada) vs. Acuerdo (...",
+    "back": "Providencia (no decide el fondo) vs. Resolución (decide, motivada) vs. Acuerdo (resolución de órgano colegiado)."
+  },
+  {
+    "id": "c93",
+    "bloque": "II",
+    "tema": "T02",
+    "id_tema": "II-T02",
+    "temaTitle": "El documento administrativo. Registro y archivo",
+    "bloqueName": "Bloque II — Atención al ciudadano y gestión documental",
+    "front": "Ampliación de plazos: máximo la mitad del plazo, nunca sobre plazo vencido....",
+    "back": "Ampliación de plazos: máximo la mitad del plazo, nunca sobre plazo vencido."
+  },
+  {
+    "id": "c94",
+    "bloque": "II",
+    "tema": "T02",
+    "id_tema": "II-T02",
+    "temaTitle": "El documento administrativo. Registro y archivo",
+    "bloqueName": "Bloque II — Atención al ciudadano y gestión documental",
+    "front": "Plazo de reclamación de copias auténticas: 15 días (no confundir con los 20 días...",
+    "back": "Plazo de reclamación de copias auténticas: 15 días (no confundir con los 20 días del programa de quejas del Tema 1)."
+  },
+  {
+    "id": "c95",
+    "bloque": "II",
+    "tema": "T03",
+    "id_tema": "II-T03",
+    "temaTitle": "Administración electrónica y servicios al ciudadano",
+    "bloqueName": "Bloque II — Atención al ciudadano y gestión documental",
+    "front": "Ad extra = LPAC 39/2015 (ciudadano); ad intra = LRJSP 40/2015 (entre Administrac...",
+    "back": "Ad extra = LPAC 39/2015 (ciudadano); ad intra = LRJSP 40/2015 (entre Administraciones). Se cruzan con facilidad en el examen."
+  },
+  {
+    "id": "c96",
+    "bloque": "II",
+    "tema": "T03",
+    "id_tema": "II-T03",
+    "temaTitle": "Administración electrónica y servicios al ciudadano",
+    "bloqueName": "Bloque II — Atención al ciudadano y gestión documental",
+    "front": "Las 5 características de seguridad del documento electrónico (CIDAT) no son las mismas que las garantías del Sistema RED (autenticación, constancia, confidencialidad, integridad, no repudio)",
+    "back": "Las 5 características de seguridad del documento electrónico (CIDAT) no son las mismas que las garantías del Sistema RED (autenticación, constancia, confidencialidad, integridad, no repudio) — comparten nombres pero son listas distintas para contextos distintos."
+  },
+  {
+    "id": "c97",
+    "bloque": "II",
+    "tema": "T03",
+    "id_tema": "II-T03",
+    "temaTitle": "Administración electrónica y servicios al ciudadano",
+    "bloqueName": "Bloque II — Atención al ciudadano y gestión documental",
+    "front": "El plazo de notificación electrónica de la AEAT: 10 días naturales para entenderse producida (por no acceso) / 90 días naturales de disponibilidad en la DEH — ¿por qué se diferencian?",
+    "back": "El plazo de notificación electrónica de la AEAT: 10 días naturales para entenderse producida (por no acceso) / 90 días naturales de disponibilidad en la DEH — no confundir ambos plazos."
+  },
+  {
+    "id": "c98",
+    "bloque": "II",
+    "tema": "T03",
+    "id_tema": "II-T03",
+    "temaTitle": "Administración electrónica y servicios al ciudadano",
+    "bloqueName": "Bloque II — Atención al ciudadano y gestión documental",
+    "front": "PAE / CIRCE / DUE van siempre juntos: PAE es la red de oficinas, CIRCE el sistem...",
+    "back": "PAE / CIRCE / DUE van siempre juntos: PAE es la red de oficinas, CIRCE el sistema de tramitación, DUE el documento electrónico único."
+  },
+  {
+    "id": "c99",
+    "bloque": "II",
+    "tema": "T04",
+    "id_tema": "II-T04",
+    "temaTitle": "La protección de datos de carácter personal",
+    "bloqueName": "Bloque II — Atención al ciudadano y gestión documental",
+    "front": "RGPD entra en vigor el 24/05/2016 pero su aplicación plena (régimen sancionador) es el 25/05/2018",
+    "back": "RGPD entra en vigor el 24/05/2016 pero su aplicación plena (régimen sancionador) es el 25/05/2018 — dos fechas distintas, muy preguntadas."
+  },
+  {
+    "id": "c100",
+    "bloque": "II",
+    "tema": "T04",
+    "id_tema": "II-T04",
+    "temaTitle": "La protección de datos de carácter personal",
+    "bloqueName": "Bloque II — Atención al ciudadano y gestión documental",
+    "front": "La LOPDGDD entra en vigor el 7/12/2018, coincidiendo con el 40º aniversario de l...",
+    "back": "La LOPDGDD entra en vigor el 7/12/2018, coincidiendo con el 40º aniversario de la Constitución."
+  },
+  {
+    "id": "c101",
+    "bloque": "II",
+    "tema": "T04",
+    "id_tema": "II-T04",
+    "temaTitle": "La protección de datos de carácter personal",
+    "bloqueName": "Bloque II — Atención al ciudadano y gestión documental",
+    "front": "Portabilidad exige BASE (consentimiento o contrato) + MEDIO (automatizado) simul...",
+    "back": "Portabilidad exige BASE (consentimiento o contrato) + MEDIO (automatizado) simultáneamente."
+  },
+  {
+    "id": "c102",
+    "bloque": "II",
+    "tema": "T04",
+    "id_tema": "II-T04",
+    "temaTitle": "La protección de datos de carácter personal",
+    "bloqueName": "Bloque II — Atención al ciudadano y gestión documental",
+    "front": "No confundir \"poderes investigadores\" (recabar información) con \"poderes correct...",
+    "back": "No confundir \"poderes investigadores\" (recabar información) con \"poderes correctores\" (sancionar, ordenar, limitar)."
+  },
+  {
+    "id": "c103",
+    "bloque": "III",
+    "tema": "T03",
+    "id_tema": "III-T03",
+    "temaTitle": "El procedimiento administrativo, la revisión de oficio, los recursos administrativos y la jurisdicción contencioso-administrativa",
+    "bloqueName": "Bloque III — Derecho Administrativo",
+    "front": "Alzada vs. reposición vs. al superior jerárquico — ¿cuál es la diferencia clave?",
+    "back": "Alzada vs. reposición: alzada va al superior jerárquico contra actos que no agotan la vía administrativa; reposición va al mismo órgano contra actos que sí agotan la vía administrativa y es potestativo. Ambos: plazo de interposición 1 mes (expreso); alzada resuelve en 3 meses, reposición en 1 mes."
+  },
+  {
+    "id": "c104",
+    "bloque": "III",
+    "tema": "T03",
+    "id_tema": "III-T03",
+    "temaTitle": "El procedimiento administrativo, la revisión de oficio, los recursos administrativos y la jurisdicción contencioso-administrativa",
+    "bloqueName": "Bloque III — Derecho Administrativo",
+    "front": "______ el recurso de reposición contra su propia resolución (sí cabe, en cambio, acudir directamente a la vía contencioso-administrativa).",
+    "back": "No cabe repetir el recurso de reposición contra su propia resolución (sí cabe, en cambio, acudir directamente a la vía contencioso-administrativa)."
+  },
+  {
+    "id": "c105",
+    "bloque": "III",
+    "tema": "T03",
+    "id_tema": "III-T03",
+    "temaTitle": "El procedimiento administrativo, la revisión de oficio, los recursos administrativos y la jurisdicción contencioso-administrativa",
+    "bloqueName": "Bloque III — Derecho Administrativo",
+    "front": "El recurso extraordinario de revisión solo cabe por las 4 causas tasadas del art. 125 LPAC, y solo contra actos firmes; su plazo es de 4 años para error de hecho, pero 3 meses para las otras tres causas — ¿por qué se diferencian?",
+    "back": "El recurso extraordinario de revisión solo cabe por las 4 causas tasadas del art. 125 LPAC, y solo contra actos firmes; su plazo es de 4 años para error de hecho, pero 3 meses para las otras tres causas — es el error más frecuente confundir estos plazos."
+  },
+  {
+    "id": "c106",
+    "bloque": "III",
+    "tema": "T03",
+    "id_tema": "III-T03",
+    "temaTitle": "El procedimiento administrativo, la revisión de oficio, los recursos administrativos y la jurisdicción contencioso-administrativa",
+    "bloqueName": "Bloque III — Derecho Administrativo",
+    "front": "Declaración de lesividad: plazo de 4 años, para actos favorables anulables; tras declararla, debe impugnarse en vía contencioso-administrativa en 2 meses — ¿por qué se diferencian?",
+    "back": "Declaración de lesividad: plazo de 4 años, para actos favorables anulables; tras declararla, debe impugnarse en vía contencioso-administrativa en 2 meses — no la resuelve la propia Administración por sí sola, solo abre la puerta al proceso judicial."
+  },
+  {
+    "id": "c107",
+    "bloque": "III",
+    "tema": "T03",
+    "id_tema": "III-T03",
+    "temaTitle": "El procedimiento administrativo, la revisión de oficio, los recursos administrativos y la jurisdicción contencioso-administrativa",
+    "bloqueName": "Bloque III — Derecho Administrativo",
+    "front": "Revisión de actos nulos vs. dictamen previo favorable del Consejo de Estado — ¿cuál es la diferencia clave?",
+    "back": "Revisión de actos nulos (art. 106) exige dictamen previo favorable del Consejo de Estado; la revocación (art. 109.1) de actos desfavorables no lo exige."
+  },
+  {
+    "id": "c108",
+    "bloque": "III",
+    "tema": "T03",
+    "id_tema": "III-T03",
+    "temaTitle": "El procedimiento administrativo, la revisión de oficio, los recursos administrativos y la jurisdicción contencioso-administrativa",
+    "bloqueName": "Bloque III — Derecho Administrativo",
+    "front": "La responsabilidad patrimonial de la Administración es competencia exclusiva del orden contencioso-administrativo, aunque el hecho dañoso tenga apariencia civil o laboral — ¿por qué se diferencian?",
+    "back": "La responsabilidad patrimonial de la Administración es competencia exclusiva del orden contencioso-administrativo, aunque el hecho dañoso tenga apariencia civil o laboral — no puede demandarse por esta vía ante el orden civil o social."
+  },
+  {
+    "id": "c109",
+    "bloque": "III",
+    "tema": "T03",
+    "id_tema": "III-T03",
+    "temaTitle": "El procedimiento administrativo, la revisión de oficio, los recursos administrativos y la jurisdicción contencioso-administrativa",
+    "bloqueName": "Bloque III — Derecho Administrativo",
+    "front": "Normas Forales fiscales vascas vs. Tribunal Constitucional — ¿cuál es la diferencia clave?",
+    "back": "Las Normas Forales fiscales vascas son la única excepción que queda fuera del contencioso-administrativo y va directa al Tribunal Constitucional."
+  },
+  {
+    "id": "c110",
+    "bloque": "III",
+    "tema": "T03",
+    "id_tema": "III-T03",
+    "temaTitle": "El procedimiento administrativo, la revisión de oficio, los recursos administrativos y la jurisdicción contencioso-administrativa",
+    "bloqueName": "Bloque III — Derecho Administrativo",
+    "front": "Caducidad del procedimiento a solicitud del interesado (3 meses de paralización imputable a él) vs. caducidad del procedimiento de revisión de oficio (6 meses sin resolución) — ¿por qué se diferencian?",
+    "back": "Caducidad del procedimiento a solicitud del interesado (3 meses de paralización imputable a él) vs. caducidad del procedimiento de revisión de oficio (6 meses sin resolución) — plazos distintos, no confundir."
+  },
+  {
+    "id": "c111",
+    "bloque": "III",
+    "tema": "T04",
+    "id_tema": "III-T04",
+    "temaTitle": "Los contratos del sector público",
+    "bloqueName": "Bloque III — Derecho Administrativo",
+    "front": "Los ______ son obra, concesión de obra, concesión de servicios, suministro y servicios — no existe ya el contrato de gestión de servicios públicos como figura autónoma.",
+    "back": "Los 5 contratos típicos son obra, concesión de obra, concesión de servicios, suministro y servicios — no existe ya el contrato de gestión de servicios públicos como figura autónoma."
+  },
+  {
+    "id": "c112",
+    "bloque": "III",
+    "tema": "T04",
+    "id_tema": "III-T04",
+    "temaTitle": "Los contratos del sector público",
+    "bloqueName": "Bloque III — Derecho Administrativo",
+    "front": "______: es una cualificación transversal (sujeto + objeto + cuantía) que puede combinarse con administrativo o privado.",
+    "back": "SARA no es un tipo de contrato: es una cualificación transversal (sujeto + objeto + cuantía) que puede combinarse con administrativo o privado."
+  },
+  {
+    "id": "c113",
+    "bloque": "III",
+    "tema": "T04",
+    "id_tema": "III-T04",
+    "temaTitle": "Los contratos del sector público",
+    "bloqueName": "Bloque III — Derecho Administrativo",
+    "front": "Garantía provisional (potestativa, 3%) vs. garantía definitiva (obligatoria, 5%) — ¿por qué se diferencian?",
+    "back": "Garantía provisional (potestativa, 3%) vs. garantía definitiva (obligatoria, 5%) — no confundir cuál es obligatoria."
+  },
+  {
+    "id": "c114",
+    "bloque": "III",
+    "tema": "T04",
+    "id_tema": "III-T04",
+    "temaTitle": "Los contratos del sector público",
+    "bloqueName": "Bloque III — Derecho Administrativo",
+    "front": "______: < 40.000 € obras / < 15.000 € suministros y servicios — cifras que cambian con cada reforma, memorizar las vigentes.",
+    "back": "Contrato menor: < 40.000 € obras / < 15.000 € suministros y servicios — cifras que cambian con cada reforma, memorizar las vigentes."
+  },
+  {
+    "id": "c115",
+    "bloque": "III",
+    "tema": "T04",
+    "id_tema": "III-T04",
+    "temaTitle": "Los contratos del sector público",
+    "bloqueName": "Bloque III — Derecho Administrativo",
+    "front": "Modificados previstos en el PCAP (máx. 20% con IVA) vs. no previstos/imprevisibles (máx. 50% sin IVA) — ¿por qué se diferencian?",
+    "back": "Modificados previstos en el PCAP (máx. 20% con IVA) vs. no previstos/imprevisibles (máx. 50% sin IVA) — límites y bases de cálculo distintas (con IVA vs. sin IVA)."
+  },
+  {
+    "id": "c116",
+    "bloque": "III",
+    "tema": "T04",
+    "id_tema": "III-T04",
+    "temaTitle": "Los contratos del sector público",
+    "bloqueName": "Bloque III — Derecho Administrativo",
+    "front": "______: regla muy restrictiva — solo obra, armamento, energía o inversión recuperable en ≥5 años, y solo tras ejecutar el 20% y transcurrir 1 año (salvo concesión de servicios).",
+    "back": "Revisión de precios: regla muy restrictiva — solo obra, armamento, energía o inversión recuperable en ≥5 años, y solo tras ejecutar el 20% y transcurrir 1 año (salvo concesión de servicios)."
+  },
+  {
+    "id": "c117",
+    "bloque": "III",
+    "tema": "T04",
+    "id_tema": "III-T04",
+    "temaTitle": "Los contratos del sector público",
+    "bloqueName": "Bloque III — Derecho Administrativo",
+    "front": "Recurso de alzada/reposición (LPAC) para la invalidez de derecho administrativo del acto vs. REC (recurso especial, distinto y previo a la vía contencioso-administrativa) para los actos cualificados del procedimiento de adjudicación en contratos de cierto umbral — ¿por qué se diferencian?",
+    "back": "Recurso de alzada/reposición (LPAC) para la invalidez de derecho administrativo del acto vs. REC (recurso especial, distinto y previo a la vía contencioso-administrativa) para los actos cualificados del procedimiento de adjudicación en contratos de cierto umbral — son dos vías distintas, no alternativas para el mismo acto."
+  },
+  {
+    "id": "c118",
+    "bloque": "III",
+    "tema": "T04",
+    "id_tema": "III-T04",
+    "temaTitle": "Los contratos del sector público",
+    "bloqueName": "Bloque III — Derecho Administrativo",
+    "front": "El ______, resuelto por un órgano especializado e independiente (TARC), no por el propio órgano de contratación.",
+    "back": "El REC es potestativo y gratuito, resuelto por un órgano especializado e independiente (TARC), no por el propio órgano de contratación."
+  },
+  {
+    "id": "c119",
+    "bloque": "III",
+    "tema": "T04",
+    "id_tema": "III-T04",
+    "temaTitle": "Los contratos del sector público",
+    "bloqueName": "Bloque III — Derecho Administrativo",
+    "front": "Procedimiento abierto (sin negociación, cualquiera licita) vs. restringido (sin negociación, pero con selección previa de candidatos) vs. negociado (sí hay negociación) — ¿por qué se diferencian?",
+    "back": "Procedimiento abierto (sin negociación, cualquiera licita) vs. restringido (sin negociación, pero con selección previa de candidatos) vs. negociado (sí hay negociación) — la clave distintiva es si cabe negociación y si hay fase de selección previa."
+  },
+  {
+    "id": "c120",
+    "bloque": "III",
+    "tema": "T04",
+    "id_tema": "III-T04",
+    "temaTitle": "Los contratos del sector público",
+    "bloqueName": "Bloque III — Derecho Administrativo",
+    "front": "Penalidades por demora: ______ del precio por día — cifra fácil de confundir con otros porcentajes del tema.",
+    "back": "Penalidades por demora: 0,60 €/1.000 € del precio por día — cifra fácil de confundir con otros porcentajes del tema."
+  },
+  {
+    "id": "c121",
+    "bloque": "III",
+    "tema": "T05",
+    "id_tema": "III-T05",
+    "temaTitle": "Formas de la actividad administrativa",
+    "bloqueName": "Bloque III — Derecho Administrativo",
+    "front": "Autorización (derecho preexistente, sin límite de beneficiarios, acto reglado no modulable) vs. concesión (el derecho nace con el acto, beneficiarios limitados, modulable) — ¿por qué se diferencian?",
+    "back": "Autorización (derecho preexistente, sin límite de beneficiarios, acto reglado no modulable) vs. concesión (el derecho nace con el acto, beneficiarios limitados, modulable) — es el par de confusión más clásico del tema."
+  },
+  {
+    "id": "c122",
+    "bloque": "III",
+    "tema": "T05",
+    "id_tema": "III-T05",
+    "temaTitle": "Formas de la actividad administrativa",
+    "bloqueName": "Bloque III — Derecho Administrativo",
+    "front": "La Administración ______ (art. 25.3 CE) — límite absoluto de la potestad sancionadora.",
+    "back": "La Administración no puede imponer sanciones privativas de libertad (art. 25.3 CE) — límite absoluto de la potestad sancionadora."
+  },
+  {
+    "id": "c123",
+    "bloque": "III",
+    "tema": "T05",
+    "id_tema": "III-T05",
+    "temaTitle": "Formas de la actividad administrativa",
+    "bloqueName": "Bloque III — Derecho Administrativo",
+    "front": "En el procedimiento sancionador: ______ por reconocimiento de responsabilidad en sanciones pecuniarias — cifra fácil de confundir con otros porcentajes.",
+    "back": "En el procedimiento sancionador: reducción del 20% por reconocimiento de responsabilidad en sanciones pecuniarias — cifra fácil de confundir con otros porcentajes."
+  },
+  {
+    "id": "c124",
+    "bloque": "III",
+    "tema": "T05",
+    "id_tema": "III-T05",
+    "temaTitle": "Formas de la actividad administrativa",
+    "bloqueName": "Bloque III — Derecho Administrativo",
+    "front": "Concesión (transferencia de riesgo operacional) vs. contrato de servicios (sin transferencia de riesgo) como modalidades de gestión indirecta — ¿por qué se diferencian?",
+    "back": "Concesión (transferencia de riesgo operacional) vs. contrato de servicios (sin transferencia de riesgo) como modalidades de gestión indirecta — mismo criterio distintivo que en el Tema 4 sobre contratación."
+  },
+  {
+    "id": "c125",
+    "bloque": "III",
+    "tema": "T05",
+    "id_tema": "III-T05",
+    "temaTitle": "Formas de la actividad administrativa",
+    "bloqueName": "Bloque III — Derecho Administrativo",
+    "front": "Actividad arbitral \"administrativa\" (acto administrativo, recurrible en contencioso-administrativo, ejecutoria propia) vs. actividad arbitral conforme a la Ley de Arbitraje (no es acto administrativo, se enjuicia en vía civil, solo cabe recurso de anulación, no tiene ejecutoriedad propia — ¿por qué se diferencian?",
+    "back": "Actividad arbitral \"administrativa\" (acto administrativo, recurrible en contencioso-administrativo, ejecutoria propia) vs. actividad arbitral conforme a la Ley de Arbitraje (no es acto administrativo, se enjuicia en vía civil, solo cabe recurso de anulación, no tiene ejecutoriedad propia — la ejecuta el Juez de Primera Instancia) — dos regímenes bien distintos que comparten el nombre \"arbitraje\"."
+  },
+  {
+    "id": "c126",
+    "bloque": "III",
+    "tema": "T05",
+    "id_tema": "III-T05",
+    "temaTitle": "Formas de la actividad administrativa",
+    "bloqueName": "Bloque III — Derecho Administrativo",
+    "front": "Transporte público propio vs. transporte público impropio — ¿cuál es la diferencia clave?",
+    "back": "Transporte público propio (regular → concesión) vs. transporte público impropio (discrecional → autorización)."
+  },
+  {
+    "id": "c127",
+    "bloque": "III",
+    "tema": "T05",
+    "id_tema": "III-T05",
+    "temaTitle": "Formas de la actividad administrativa",
+    "bloqueName": "Bloque III — Derecho Administrativo",
+    "front": "La actividad de ______ no crea servicios públicos ni usa la coacción — se diferencia claramente tanto de la limitación (coacción) como del servicio público (gestión directa).",
+    "back": "La actividad de fomento no crea servicios públicos ni usa la coacción — se diferencia claramente tanto de la limitación (coacción) como del servicio público (gestión directa)."
+  },
+  {
+    "id": "c128",
+    "bloque": "III",
+    "tema": "T05",
+    "id_tema": "III-T05",
+    "temaTitle": "Formas de la actividad administrativa",
+    "bloqueName": "Bloque III — Derecho Administrativo",
+    "front": "Servicio público (actividad prestacional, contenido económico/asistencial) se diferencia de la función pública (ejercicio de autoridad: justicia, defensa, seguridad ciudadana) — ¿por qué se diferencian?",
+    "back": "Servicio público (actividad prestacional, contenido económico/asistencial) se diferencia de la función pública (ejercicio de autoridad: justicia, defensa, seguridad ciudadana) — no confundir ambos conceptos aunque compartan la palabra \"servicio\"."
+  },
+  {
+    "id": "c129",
+    "bloque": "III",
+    "tema": "T05",
+    "id_tema": "III-T05",
+    "temaTitle": "Formas de la actividad administrativa",
+    "bloqueName": "Bloque III — Derecho Administrativo",
+    "front": "Ningún servicio que implique ejercicio de autoridad puede gestionarse de forma indirecta — ¿por qué se diferencian?",
+    "back": "Ningún servicio que implique ejercicio de autoridad puede gestionarse de forma indirecta — solo gestión directa."
+  },
+  {
+    "id": "c130",
+    "bloque": "III",
+    "tema": "T06",
+    "id_tema": "III-T06",
+    "temaTitle": "La responsabilidad patrimonial de las Administraciones Públicas",
+    "bloqueName": "Bloque III — Derecho Administrativo",
+    "front": "La responsabilidad patrimonial es objetiva: no exige culpa ni negligencia, basta el funcionamiento normal o anormal del servicio — ¿por qué se diferencian?",
+    "back": "La responsabilidad patrimonial es objetiva: no exige culpa ni negligencia, basta el funcionamiento normal o anormal del servicio — el único límite real es la fuerza mayor."
+  },
+  {
+    "id": "c131",
+    "bloque": "III",
+    "tema": "T06",
+    "id_tema": "III-T06",
+    "temaTitle": "La responsabilidad patrimonial de las Administraciones Públicas",
+    "bloqueName": "Bloque III — Derecho Administrativo",
+    "front": "Fuerza mayor vs. imprevisible o inevitable — ¿cuál es la diferencia clave?",
+    "back": "Fuerza mayor = hecho imprevisible o inevitable conforme al estado de la ciencia/técnica; no confundir con el \"caso fortuito\" del Derecho civil, ni asimilar a cualquier causa externa."
+  },
+  {
+    "id": "c132",
+    "bloque": "III",
+    "tema": "T06",
+    "id_tema": "III-T06",
+    "temaTitle": "La responsabilidad patrimonial de las Administraciones Públicas",
+    "bloqueName": "Bloque III — Derecho Administrativo",
+    "front": "La ______ el derecho a indemnización — deben concurrir todos los requisitos (daño efectivo, nexo causal, etc.).",
+    "back": "La anulación de un acto administrativo NO presupone automáticamente el derecho a indemnización — deben concurrir todos los requisitos (daño efectivo, nexo causal, etc.)."
+  },
+  {
+    "id": "c133",
+    "bloque": "III",
+    "tema": "T06",
+    "id_tema": "III-T06",
+    "temaTitle": "La responsabilidad patrimonial de las Administraciones Públicas",
+    "bloqueName": "Bloque III — Derecho Administrativo",
+    "front": "Prescripción de la acción: 1 año desde el hecho (o desde la manifestación del efecto lesivo); en daños físicos/psíquicos, desde la curación o consolidación de secuelas — ¿por qué se diferencian?",
+    "back": "Prescripción de la acción: 1 año desde el hecho (o desde la manifestación del efecto lesivo); en daños físicos/psíquicos, desde la curación o consolidación de secuelas — plazo distinto que otros del Derecho administrativo (no confundir con los 4 años de otras acciones)."
+  },
+  {
+    "id": "c134",
+    "bloque": "III",
+    "tema": "T06",
+    "id_tema": "III-T06",
+    "temaTitle": "La responsabilidad patrimonial de las Administraciones Públicas",
+    "bloqueName": "Bloque III — Derecho Administrativo",
+    "front": "Dictamen del Consejo de Estado obligatorio cuando la reclamación es ≥ 50.000 € — ¿por qué se diferencian?",
+    "back": "Dictamen del Consejo de Estado obligatorio cuando la reclamación es ≥ 50.000 € — cifra fácil de confundir con otros umbrales del temario."
+  },
+  {
+    "id": "c135",
+    "bloque": "III",
+    "tema": "T06",
+    "id_tema": "III-T06",
+    "temaTitle": "La responsabilidad patrimonial de las Administraciones Públicas",
+    "bloqueName": "Bloque III — Derecho Administrativo",
+    "front": "El silencio en responsabilidad patrimonial es positivo transcurridos 6 meses, salvo que una ley o norma europea diga lo contrario — ¿por qué se diferencian?",
+    "back": "El silencio en responsabilidad patrimonial es positivo transcurridos 6 meses, salvo que una ley o norma europea diga lo contrario — no confundir con el silencio negativo que rige en otros procedimientos (p.ej., revisión de oficio a instancia del interesado)."
+  },
+  {
+    "id": "c136",
+    "bloque": "III",
+    "tema": "T06",
+    "id_tema": "III-T06",
+    "temaTitle": "La responsabilidad patrimonial de las Administraciones Públicas",
+    "bloqueName": "Bloque III — Derecho Administrativo",
+    "front": "Error judicial (jueces, en el ejercicio de la función jurisdiccional) vs. funcionamiento anormal de la Administración de Justicia (personal no jurisdiccional) — ¿por qué se diferencian?",
+    "back": "Error judicial (jueces, en el ejercicio de la función jurisdiccional) vs. funcionamiento anormal de la Administración de Justicia (personal no jurisdiccional) — dos vías procedimentales distintas dentro del art. 121 CE, aunque ambas acaban tramitándose ante el Ministerio de Justicia."
+  },
+  {
+    "id": "c137",
+    "bloque": "III",
+    "tema": "T06",
+    "id_tema": "III-T06",
+    "temaTitle": "La responsabilidad patrimonial de las Administraciones Públicas",
+    "bloqueName": "Bloque III — Derecho Administrativo",
+    "front": "La prisión preventiva indebida exige haber sufrido perjuicios tras la absolución o el sobreseimiento libre — ¿por qué se diferencian?",
+    "back": "La prisión preventiva indebida exige haber sufrido perjuicios tras la absolución o el sobreseimiento libre — el requisito de que fuera \"por inexistencia del hecho\" fue declarado inconstitucional, ampliando el derecho a la indemnización."
+  },
+  {
+    "id": "c138",
+    "bloque": "III",
+    "tema": "T06",
+    "id_tema": "III-T06",
+    "temaTitle": "La responsabilidad patrimonial de las Administraciones Públicas",
+    "bloqueName": "Bloque III — Derecho Administrativo",
+    "front": "Responsabilidad del poder legislativo por ley inconstitucional o contraria al Derecho de la UE: exige haber obtenido sentencia firme desestimatoria previa de un recurso contra la actuación administrativa dañosa, habiendo alegado ya entonces el vicio que luego se declaró — ¿por qué se diferencian?",
+    "back": "Responsabilidad del poder legislativo por ley inconstitucional o contraria al Derecho de la UE: exige haber obtenido sentencia firme desestimatoria previa de un recurso contra la actuación administrativa dañosa, habiendo alegado ya entonces el vicio que luego se declaró — no basta con la mera declaración de inconstitucionalidad o infracción europea posterior sin ese litigio previo."
+  },
+  {
+    "id": "c139",
+    "bloque": "III",
+    "tema": "T07",
+    "id_tema": "III-T07",
+    "temaTitle": "Políticas de igualdad de género, violencia de género, discapacidad y dependencia",
+    "bloqueName": "Bloque III — Derecho Administrativo",
+    "front": "Sexo (biológico) vs. género (sociocultural) — ¿por qué se diferencian?",
+    "back": "Sexo (biológico) vs. género (sociocultural) — distinción de base que suele usarse como distractor conceptual."
+  },
+  {
+    "id": "c140",
+    "bloque": "III",
+    "tema": "T07",
+    "id_tema": "III-T07",
+    "temaTitle": "Políticas de igualdad de género, violencia de género, discapacidad y dependencia",
+    "bloqueName": "Bloque III — Derecho Administrativo",
+    "front": "Discriminación directa vs. indirecta — ¿cuál es la diferencia clave?",
+    "back": "Discriminación directa vs. indirecta: la clave de la indirecta es el carácter \"aparentemente neutro\" de la disposición o práctica que genera desventaja."
+  },
+  {
+    "id": "c141",
+    "bloque": "III",
+    "tema": "T07",
+    "id_tema": "III-T07",
+    "temaTitle": "Políticas de igualdad de género, violencia de género, discapacidad y dependencia",
+    "bloqueName": "Bloque III — Derecho Administrativo",
+    "front": "Acoso sexual (naturaleza sexual) vs. acoso por razón de sexo (sin naturaleza sexual pero motivado por el sexo) — ¿por qué se diferencian?",
+    "back": "Acoso sexual (naturaleza sexual) vs. acoso por razón de sexo (sin naturaleza sexual pero motivado por el sexo) — mismo efecto (entorno intimidatorio/degradante), distinta naturaleza del comportamiento."
+  },
+  {
+    "id": "c142",
+    "bloque": "III",
+    "tema": "T07",
+    "id_tema": "III-T07",
+    "temaTitle": "Políticas de igualdad de género, violencia de género, discapacidad y dependencia",
+    "bloqueName": "Bloque III — Derecho Administrativo",
+    "front": "Planes de igualdad obligatorios en empresas de 50 o más trabajadores (LO 3/2007) — ¿por qué se diferencian?",
+    "back": "Planes de igualdad obligatorios en empresas de 50 o más trabajadores (LO 3/2007) — cifra que puede confundirse con otros umbrales del temario de contratación o función pública."
+  },
+  {
+    "id": "c143",
+    "bloque": "III",
+    "tema": "T07",
+    "id_tema": "III-T07",
+    "temaTitle": "Políticas de igualdad de género, violencia de género, discapacidad y dependencia",
+    "bloqueName": "Bloque III — Derecho Administrativo",
+    "front": "______: la ejercida sobre hijos/familiares menores para causar daño a la mujer — concepto incorporado expresamente a la LO 1/2004.",
+    "back": "Violencia vicaria: la ejercida sobre hijos/familiares menores para causar daño a la mujer — concepto incorporado expresamente a la LO 1/2004."
+  },
+  {
+    "id": "c144",
+    "bloque": "III",
+    "tema": "T07",
+    "id_tema": "III-T07",
+    "temaTitle": "Políticas de igualdad de género, violencia de género, discapacidad y dependencia",
+    "bloqueName": "Bloque III — Derecho Administrativo",
+    "front": "Cuantías de la ______ para víctimas de violencia de género: 6 meses (base) / 12 (discapacidad ≥33%) / 18 (responsabilidades familiares) / 24 (ambas) — fácil de confundir entre sí.",
+    "back": "Cuantías de la ayuda económica de pago único para víctimas de violencia de género: 6 meses (base) / 12 (discapacidad ≥33%) / 18 (responsabilidades familiares) / 24 (ambas) — fácil de confundir entre sí."
+  },
+  {
+    "id": "c145",
+    "bloque": "III",
+    "tema": "T07",
+    "id_tema": "III-T07",
+    "temaTitle": "Políticas de igualdad de género, violencia de género, discapacidad y dependencia",
+    "bloqueName": "Bloque III — Derecho Administrativo",
+    "front": "Discapacidad (enfoque biosocial: deficiencia + entorno = barrera) no es lo mismo que dependencia (falta de autonomía personal) — ¿por qué se diferencian?",
+    "back": "Discapacidad (enfoque biosocial: deficiencia + entorno = barrera) no es lo mismo que dependencia (falta de autonomía personal) — pueden coincidir en una misma persona pero son conceptos jurídicos distintos, con normativa distinta (RDLeg 1/2013 vs. Ley 39/2006)."
+  },
+  {
+    "id": "c146",
+    "bloque": "III",
+    "tema": "T07",
+    "id_tema": "III-T07",
+    "temaTitle": "Políticas de igualdad de género, violencia de género, discapacidad y dependencia",
+    "bloqueName": "Bloque III — Derecho Administrativo",
+    "front": "______ (propia del ámbito de discapacidad, no se menciona expresamente para género en este tema) — trato discriminatorio por la relación con una persona con discapacidad, no por la propia discapacidad del sujeto.",
+    "back": "Discriminación por asociación (propia del ámbito de discapacidad, no se menciona expresamente para género en este tema) — trato discriminatorio por la relación con una persona con discapacidad, no por la propia discapacidad del sujeto."
+  },
+  {
+    "id": "c147",
+    "bloque": "III",
+    "tema": "T07",
+    "id_tema": "III-T07",
+    "temaTitle": "Políticas de igualdad de género, violencia de género, discapacidad y dependencia",
+    "bloqueName": "Bloque III — Derecho Administrativo",
+    "front": "Los ______ (I moderada, II severa, III gran dependencia) — memorizar el orden y la correspondencia con la frecuencia de ayuda necesaria (1 vez/día, 2-3 veces/día, varias veces/día con pérdida total de autonomía).",
+    "back": "Los tres grados de dependencia (I moderada, II severa, III gran dependencia) — memorizar el orden y la correspondencia con la frecuencia de ayuda necesaria (1 vez/día, 2-3 veces/día, varias veces/día con pérdida total de autonomía)."
+  },
+  {
+    "id": "c148",
+    "bloque": "III",
+    "tema": "T07",
+    "id_tema": "III-T07",
+    "temaTitle": "Políticas de igualdad de género, violencia de género, discapacidad y dependencia",
+    "bloqueName": "Bloque III — Derecho Administrativo",
+    "front": "Nivel mínimo de protección del SAAD: lo financia la AGE con cargo a los PGE; el nivel adicional lo decide y financia cada CCAA — ¿por qué se diferencian?",
+    "back": "Nivel mínimo de protección del SAAD: lo financia la AGE con cargo a los PGE; el nivel adicional lo decide y financia cada CCAA — no confundir quién financia cada nivel."
+  },
+  {
+    "id": "c149",
+    "bloque": "III",
+    "tema": "T01",
+    "id_tema": "III-T01",
+    "temaTitle": "Las fuentes del Derecho Administrativo",
+    "bloqueName": "Bloque III — Derecho Administrativo",
+    "front": "Jerarquía normativa (subordinación entre normas según el rango del órgano) vs. principio de competencia (reparto de materias entre órganos, sin relación de subordinación) — ¿por qué se diferencian?",
+    "back": "Jerarquía normativa (subordinación entre normas según el rango del órgano) vs. principio de competencia (reparto de materias entre órganos, sin relación de subordinación) — son dos principios distintos que se aplican de forma complementaria."
+  },
+  {
+    "id": "c150",
+    "bloque": "III",
+    "tema": "T01",
+    "id_tema": "III-T01",
+    "temaTitle": "Las fuentes del Derecho Administrativo",
+    "bloqueName": "Bloque III — Derecho Administrativo",
+    "front": "Reserva material de ley vs. reserva formal de ley — ¿cuál es la diferencia clave?",
+    "back": "Reserva material de ley (la CE exige que cierta materia se regule por ley) vs. reserva formal de ley (una vez una materia se ha regulado por ley, ya no puede \"bajar\" a reglamento, aunque sea intrascendente)."
+  },
+  {
+    "id": "c151",
+    "bloque": "III",
+    "tema": "T01",
+    "id_tema": "III-T01",
+    "temaTitle": "Las fuentes del Derecho Administrativo",
+    "bloqueName": "Bloque III — Derecho Administrativo",
+    "front": "Las Leyes Orgánicas requieren mayoría absoluta del Congreso en votación final sobre el conjunto; no se exige mayoría especial en el Senado — ¿por qué se diferencian?",
+    "back": "Las Leyes Orgánicas requieren mayoría absoluta del Congreso en votación final sobre el conjunto; no se exige mayoría especial en el Senado — error típico es pensar que también se exige en el Senado."
+  },
+  {
+    "id": "c152",
+    "bloque": "III",
+    "tema": "T01",
+    "id_tema": "III-T01",
+    "temaTitle": "Las fuentes del Derecho Administrativo",
+    "bloqueName": "Bloque III — Derecho Administrativo",
+    "front": "Decreto-Ley (extraordinaria y urgente necesidad, control parlamentario en 30 días, convalidación o derogación en bloque sin enmiendas) vs. Decreto Legislativo (delegación legislativa previa de las Cortes, texto articulado o refundido) — ¿por qué se diferencian?",
+    "back": "Decreto-Ley (extraordinaria y urgente necesidad, control parlamentario en 30 días, convalidación o derogación en bloque sin enmiendas) vs. Decreto Legislativo (delegación legislativa previa de las Cortes, texto articulado o refundido) — confusión clásica de examen."
+  },
+  {
+    "id": "c153",
+    "bloque": "III",
+    "tema": "T01",
+    "id_tema": "III-T01",
+    "temaTitle": "Las fuentes del Derecho Administrativo",
+    "bloqueName": "Bloque III — Derecho Administrativo",
+    "front": "El Decreto-Ley ______ a: instituciones básicas del Estado, derechos del Título I, régimen de las CC.AA. ni Derecho electoral general — memorizar esta lista.",
+    "back": "El Decreto-Ley no puede afectar a: instituciones básicas del Estado, derechos del Título I, régimen de las CC.AA. ni Derecho electoral general — memorizar esta lista."
+  },
+  {
+    "id": "c154",
+    "bloque": "III",
+    "tema": "T01",
+    "id_tema": "III-T01",
+    "temaTitle": "Las fuentes del Derecho Administrativo",
+    "bloqueName": "Bloque III — Derecho Administrativo",
+    "front": "Ley de Bases → Texto Articulado; Ley ordinaria de autorización → Texto Refundido — ¿por qué se diferencian?",
+    "back": "Ley de Bases → Texto Articulado; Ley ordinaria de autorización → Texto Refundido — no intercambiar los pares."
+  },
+  {
+    "id": "c155",
+    "bloque": "III",
+    "tema": "T01",
+    "id_tema": "III-T01",
+    "temaTitle": "Las fuentes del Derecho Administrativo",
+    "bloqueName": "Bloque III — Derecho Administrativo",
+    "front": "El control judicial de Decretos-Leyes y Decretos Legislativos corresponde en exclusiva al ______ (no a la jurisdicción contencioso-administrativa ordinaria, por tratarse de normas con rango de ley).",
+    "back": "El control judicial de Decretos-Leyes y Decretos Legislativos corresponde en exclusiva al Tribunal Constitucional (no a la jurisdicción contencioso-administrativa ordinaria, por tratarse de normas con rango de ley)."
+  },
+  {
+    "id": "c156",
+    "bloque": "III",
+    "tema": "T01",
+    "id_tema": "III-T01",
+    "temaTitle": "Las fuentes del Derecho Administrativo",
+    "bloqueName": "Bloque III — Derecho Administrativo",
+    "front": "La costumbre es fuente supletoria de primer grado; los principios generales del Derecho, de segundo grado — ¿por qué se diferencian?",
+    "back": "La costumbre es fuente supletoria de primer grado; los principios generales del Derecho, de segundo grado — no invertir el orden."
+  },
+  {
+    "id": "c157",
+    "bloque": "III",
+    "tema": "T01",
+    "id_tema": "III-T01",
+    "temaTitle": "Las fuentes del Derecho Administrativo",
+    "bloqueName": "Bloque III — Derecho Administrativo",
+    "front": "La ______ formalmente (no aparece en el art. 1.1 CC), aunque \"complementa\" el ordenamiento — matiz que se pregunta con frecuencia en examen tipo test.",
+    "back": "La jurisprudencia no es fuente del Derecho formalmente (no aparece en el art. 1.1 CC), aunque \"complementa\" el ordenamiento — matiz que se pregunta con frecuencia en examen tipo test."
+  },
+  {
+    "id": "c158",
+    "bloque": "III",
+    "tema": "T01",
+    "id_tema": "III-T01",
+    "temaTitle": "Las fuentes del Derecho Administrativo",
+    "bloqueName": "Bloque III — Derecho Administrativo",
+    "front": "______ (no son fuente del Derecho, a diferencia del Reglamento): su incumplimiento no invalida el acto dictado, solo genera responsabilidad disciplinaria.",
+    "back": "Instrucciones y circulares carecen de carácter normativo (no son fuente del Derecho, a diferencia del Reglamento): su incumplimiento no invalida el acto dictado, solo genera responsabilidad disciplinaria."
+  },
+  {
+    "id": "c159",
+    "bloque": "III",
+    "tema": "T02",
+    "id_tema": "III-T02",
+    "temaTitle": "El acto administrativo",
+    "bloqueName": "Bloque III — Derecho Administrativo",
+    "front": "Silencio positivo (regla general en procedimientos a instancia de parte) vs. silencio negativo (lista tasada de excepciones: derecho de petición, dominio/servicio público, medio ambiente, responsabilidad patrimonial, revisión de oficio a instancia, impugnación de actos) — ¿por qué se diferencian?",
+    "back": "Silencio positivo (regla general en procedimientos a instancia de parte) vs. silencio negativo (lista tasada de excepciones: derecho de petición, dominio/servicio público, medio ambiente, responsabilidad patrimonial, revisión de oficio a instancia, impugnación de actos) — memorizar la lista de excepciones, no la regla general."
+  },
+  {
+    "id": "c160",
+    "bloque": "III",
+    "tema": "T02",
+    "id_tema": "III-T02",
+    "temaTitle": "El acto administrativo",
+    "bloqueName": "Bloque III — Derecho Administrativo",
+    "front": "Nulidad vs. anulabilidad — ¿cuál es la diferencia clave?",
+    "back": "Nulidad (vicio más grave, efecto retroactivo, causas tasadas del art. 47.1) vs. anulabilidad (cualquier infracción no tasada como nulidad, incluida la desviación de poder) vs. irregularidad no invalidante (defectos puramente formales sin trascendencia)."
+  },
+  {
+    "id": "c161",
+    "bloque": "III",
+    "tema": "T02",
+    "id_tema": "III-T02",
+    "temaTitle": "El acto administrativo",
+    "bloqueName": "Bloque III — Derecho Administrativo",
+    "front": "Revisión de actos nulos (cualquier momento, previo dictamen del Consejo de Estado) vs. declaración de lesividad de actos anulables favorables (plazo de 4 años, exige audiencia, y posterior impugnación judicial) — ¿por qué se diferencian?",
+    "back": "Revisión de actos nulos (cualquier momento, previo dictamen del Consejo de Estado) vs. declaración de lesividad de actos anulables favorables (plazo de 4 años, exige audiencia, y posterior impugnación judicial) — no confundir procedimientos ni plazos."
+  },
+  {
+    "id": "c162",
+    "bloque": "III",
+    "tema": "T02",
+    "id_tema": "III-T02",
+    "temaTitle": "El acto administrativo",
+    "bloqueName": "Bloque III — Derecho Administrativo",
+    "front": "El plazo de ______ aparece dos veces con significados distintos: plazo para notificar un acto ya dictado, y plazo para publicarlo — no confundir con los 30 días del Decreto-Ley (Tema 1) ni con los 6 meses de caducidad de la revisión de oficio.",
+    "back": "El plazo de 10 días aparece dos veces con significados distintos: plazo para notificar un acto ya dictado, y plazo para publicarlo — no confundir con los 30 días del Decreto-Ley (Tema 1) ni con los 6 meses de caducidad de la revisión de oficio."
+  },
+  {
+    "id": "c163",
+    "bloque": "III",
+    "tema": "T02",
+    "id_tema": "III-T02",
+    "temaTitle": "El acto administrativo",
+    "bloqueName": "Bloque III — Derecho Administrativo",
+    "front": "Notificación en papel: ______ puede hacerse cargo de ella — cifra fácil de confundir con la mayoría de edad civil (18 años).",
+    "back": "Notificación en papel: mayor de 14 años puede hacerse cargo de ella — cifra fácil de confundir con la mayoría de edad civil (18 años)."
+  },
+  {
+    "id": "c164",
+    "bloque": "III",
+    "tema": "T02",
+    "id_tema": "III-T02",
+    "temaTitle": "El acto administrativo",
+    "bloqueName": "Bloque III — Derecho Administrativo",
+    "front": "Convalidación (subsana el vicio, mantiene el acto) vs. conversión (el acto vicioso produce los efectos de otro distinto que sí cumple) vs. conservación (mantiene los actos/trámites no afectados por la parte viciada) — ¿por qué se diferencian?",
+    "back": "Convalidación (subsana el vicio, mantiene el acto) vs. conversión (el acto vicioso produce los efectos de otro distinto que sí cumple) vs. conservación (mantiene los actos/trámites no afectados por la parte viciada) — tres figuras vecinas del principio de conservación de actos que se prestan a confusión."
+  },
+  {
+    "id": "c165",
+    "bloque": "III",
+    "tema": "T02",
+    "id_tema": "III-T02",
+    "temaTitle": "El acto administrativo",
+    "bloqueName": "Bloque III — Derecho Administrativo",
+    "front": "Actividad discrecional (varias soluciones igualmente válidas, elegidas motivadamente) vs. conceptos jurídicos indeterminados (una única solución correcta, sin margen de elección) — ¿por qué se diferencian?",
+    "back": "Actividad discrecional (varias soluciones igualmente válidas, elegidas motivadamente) vs. conceptos jurídicos indeterminados (una única solución correcta, sin margen de elección) — distinción clásica y muy preguntada."
+  }
+]

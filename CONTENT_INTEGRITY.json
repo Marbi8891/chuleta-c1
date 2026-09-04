@@ -1,0 +1,22 @@
+{
+  "$comment": "Baseline de integridad del contenido migrado. extract-content.mjs bloquea CUALQUIER escritura si legacySource.sha256 no coincide con el hash real. verify-content.mjs compara el estado real (legacy + src/data) contra 'baseline'. Actualizar 'baseline' es una acción deliberada y auditable (ej. al añadir un tema nuevo) — nunca la hace el propio verificador automáticamente.",
+  "schemaVersion": 1,
+  "legacySource": {
+    "path": "legacy/index.original.html",
+    "sha256": "d8d0c7758dc48a5b19c0d9c533c2937a7323fadb45edde0918234123917d8775"
+  },
+  "academicStatus": "EXPERT_AUDITED",
+  "baseline": {
+    "studyTopics": 25,
+    "quizBanks": 25,
+    "questions": 500,
+    "flashcards": 165
+  },
+  "nonRegressionFloor": {
+    "$comment": "Mínimo histórico protegido. NUNCA baja por sí solo cuando 'baseline' cambia — solo se sube deliberadamente, y solo tras confirmar que el contenido nuevo realmente lo alcanza. Si 'baseline' se edita por error hacia abajo, este floor sigue haciendo fallar la verificación.",
+    "studyTopics": 25,
+    "quizBanks": 25,
+    "questions": 500,
+    "flashcards": 165
+  }
+}
