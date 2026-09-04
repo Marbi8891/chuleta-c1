@@ -1,0 +1,82 @@
+/*
+ * src/theme/tokens.css
+ *
+ * Design tokens migrados literalmente del <style> de legacy/index.original.html
+ * (ver /tmp/legacy.css, líneas 1-72). Migración, no rediseño: mismos nombres de
+ * variable, mismos valores, mismo patrón de tres estados de tema (root claro,
+ * prefers-color-scheme oscuro, y [data-theme] explícito) ya presente en el
+ * original.
+ */
+
+
+:root{
+  --bg:#faf7f0;
+  --surface:#ffffff;
+  --surface-alt:#f1ebdc;
+  --surface-alt-2:#e9e1cd;
+  --ink:#1c2b4a;
+  --text:#1c2b4a;
+  --text-secondary:#5c6b88;
+  --text-tertiary:#8592ab;
+  --border:#e4dcc9;
+  --border-strong:#d3c8ad;
+  --accent:#bd7f2c;
+  --accent-ink:#7a5017;
+  --accent-soft:#f3e1c2;
+  --success:#2f7a4f;
+  --success-bg:#e5f2ea;
+  --success-border:#bfe0cc;
+  --error:#b23a34;
+  --error-bg:#fbeae8;
+  --error-border:#eec6c1;
+  --shadow: 0 1px 2px rgba(28,43,74,.06), 0 8px 24px -12px rgba(28,43,74,.18);
+  --radius-card: 20px;
+  --radius-chip: 999px;
+  --radius-sm: 10px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0f1626;
+    --surface:#171f34;
+    --surface-alt:#1e2740;
+    --surface-alt-2:#26304c;
+    --ink:#e9edf8;
+    --text:#e9edf8;
+    --text-secondary:#a3aecb;
+    --text-tertiary:#7986a8;
+    --border:#2b3552;
+    --border-strong:#374264;
+    --accent:#dda45c;
+    --accent-ink:#f0c384;
+    --accent-soft:#3a3120;
+    --success:#57b489;
+    --success-bg:#173226;
+    --success-border:#295b40;
+    --error:#e2726b;
+    --error-bg:#3a1e1e;
+    --error-border:#63302c;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 12px 28px -14px rgba(0,0,0,.6);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0f1626;
+  --surface:#171f34;
+  --surface-alt:#1e2740;
+  --surface-alt-2:#26304c;
+  --ink:#e9edf8;
+  --text:#e9edf8;
+  --text-secondary:#a3aecb;
+  --text-tertiary:#7986a8;
+  --border:#2b3552;
+  --border-strong:#374264;
+  --accent:#dda45c;
+  --accent-ink:#f0c384;
+  --accent-soft:#3a3120;
+  --success:#57b489;
+  --success-bg:#173226;
+  --success-border:#295b40;
+  --error:#e2726b;
+  --error-bg:#3a1e1e;
+  --error-border:#63302c;
+  --shadow: 0 1px 2px rgba(0,0,0,.3), 0 12px 28px -14px rgba(0,0,0,.6);
+}
