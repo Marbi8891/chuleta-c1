@@ -6,9 +6,15 @@
     <meta name="theme-color" content="#1c2b4a" />
     <meta name="description" content="Estudia el temario y ponte a prueba con tests estilo oposición para el Cuerpo General Administrativo del Estado (C1)." />
     <title>Chuleta C1</title>
-    <link rel="manifest" href="/manifest.webmanifest" />
-    <link rel="icon" href="/icons/icon-192.png" type="image/png" />
-    <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+    <!--
+      %BASE_URL% (sustituido por Vite en build) — nunca una ruta absoluta
+      "/xxx" a secas: en GitHub Pages la app vive bajo "/chuleta-c1/", y una
+      ruta absoluta apuntaría por error a la raíz del dominio. Ver
+      docs/adr/0005-github-pages-deployment.md.
+    -->
+    <link rel="manifest" href="%BASE_URL%manifest.webmanifest" />
+    <link rel="icon" href="%BASE_URL%icons/icon-192.png" type="image/png" />
+    <link rel="apple-touch-icon" href="%BASE_URL%icons/icon-192.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
