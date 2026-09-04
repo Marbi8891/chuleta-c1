@@ -23,13 +23,18 @@ function renderApp(initialEntry: string) {
 }
 
 describe('Navegación de la app', () => {
-  it('arranca en Hoy y permite navegar a Temario mediante la barra inferior', () => {
+  it('arranca en Hoy y permite navegar a Temario mediante la barra inferior', async () => {
     renderApp('/');
     expect(screen.getByRole('heading', { name: 'Hoy' })).toBeInTheDocument();
 
     const nav = screen.getByRole('navigation', { name: 'Navegación principal' });
     fireEvent.click(within(nav).getByRole('link', { name: /Temario/ }));
-    expect(screen.getByText(/Elige un tema para leerlo/)).toBeInTheDocument();
+    // Fase 4, punto 9: StudyHomePage se carga con React.lazy (ver
+    // src/app/router.tsx) — tras el click, React pinta primero el
+    // fallback de Suspense ("Cargando…") y resuelve el chunk de forma
+    // asíncrona incluso en test (import() real, aunque ya esté en la
+    // caché de módulos de Vitest). findByText espera a esa resolución.
+    expect(await screen.findByText(/Elige un tema para leerlo/)).toBeInTheDocument();
   });
 
   it('una ruta inválida muestra la página de "no encontrada"', () => {
