@@ -7,7 +7,7 @@
 
 import { Link } from 'react-router-dom';
 import { BLOQUES, getTemasOrdered } from '../../data/topics';
-import { useAppState } from '../../state/useAppState';
+import { useStudiedTopics } from '../../db/topicProgress';
 
 function CheckIcon() {
   return (
@@ -25,7 +25,7 @@ function ArrowIcon() {
 }
 
 export function StudyHomePage() {
-  const appState = useAppState();
+  const studied = useStudiedTopics();
   const temas = getTemasOrdered();
 
   return (
@@ -44,7 +44,7 @@ export function StudyHomePage() {
             </div>
             <div className="study-list">
               {temasBloque.map((t) => {
-                const done = !!appState.studied[t.id];
+                const done = !!studied[t.id];
                 return (
                   <Link key={t.id} to={`/study/${t.id}`} className={'study-row' + (done ? ' done' : '')}>
                     <span className="sr-badge">{t.tema}</span>

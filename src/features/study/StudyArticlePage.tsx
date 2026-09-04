@@ -17,7 +17,7 @@ import remarkGfm from 'remark-gfm';
 import type { Components } from 'react-markdown';
 import { getQuestionsByTopic, getTopicById } from '../../data/index';
 import { BLOQUES, getTemasOrdered } from '../../data/topics';
-import { markStudied, getStudyFsIndex, getStudyFsSteps, setStudyFsIndex } from '../../state/appState';
+import { markTopicStudied, getStudyFsIndex, getStudyFsSteps, setStudyFsIndex } from '../../db/topicProgress';
 import { useScope } from '../../app/ScopeContext';
 import { shuffle, useQuiz } from '../../app/QuizContext';
 
@@ -41,7 +41,7 @@ export function StudyArticlePage() {
   const navigate = useNavigate();
   const { setScopeToSingle } = useScope();
   const { startQuiz } = useQuiz();
-  const [fsIndex, setFsIndex] = useState(() => getStudyFsIndex());
+  const [fsIndex, setFsIndex] = useState(1); // valor por defecto (18px, STUDY_FS_DEFAULT_INDEX) hasta que cargue el real de Dexie
 
   const topic = topicId ? getTopicById(topicId) : undefined;
   const temas = getTemasOrdered();
@@ -50,19 +50,25 @@ export function StudyArticlePage() {
   const next = idx >= 0 && idx < temas.length - 1 ? temas[idx + 1] : null;
 
   useEffect(() => {
-    if (topic) markStudied(topic.id);
+    getStudyFsIndex().then(setFsIndex);
+  }, []);
+
+  useEffect(() => {
+    if (topic) void markTopicStudied(topic.id);
     window.scrollTo({ top: 0 });
   }, [topic]);
 
   const fsSteps = getStudyFsSteps();
 
   function decreaseFs() {
-    setStudyFsIndex(fsIndex - 1);
-    setFsIndex(getStudyFsIndex());
+    setStudyFsIndex(fsIndex - 1)
+      .then(() => getStudyFsIndex())
+      .then(setFsIndex);
   }
   function increaseFs() {
-    setStudyFsIndex(fsIndex + 1);
-    setFsIndex(getStudyFsIndex());
+    setStudyFsIndex(fsIndex + 1)
+      .then(() => getStudyFsIndex())
+      .then(setFsIndex);
   }
 
   if (!topic) {
@@ -83,7 +89,7 @@ export function StudyArticlePage() {
     if (!topic) return;
     setScopeToSingle(topic.id);
     const pool = shuffle(getQuestionsByTopic(topic.id).slice());
-    startQuiz(pool);
+    startQuiz(pool, [topic.id]);
     navigate('/quiz/run');
   }
 

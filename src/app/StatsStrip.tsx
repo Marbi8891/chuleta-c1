@@ -5,12 +5,12 @@
 
 import { getFlashcards, getQuestions } from '../data/index';
 import { getTemasOrdered } from '../data/topics';
-import { useAppState } from '../state/useAppState';
+import { useStudiedTopics } from '../db/topicProgress';
 
 export function StatsStrip() {
-  const appState = useAppState();
+  const studied = useStudiedTopics();
   const temasCount = getTemasOrdered().length;
-  const studiedCount = Object.values(appState.studied).filter(Boolean).length;
+  const studiedCount = Object.values(studied).filter(Boolean).length;
   const questionsCount = getQuestions().length;
   const cardsCount = getFlashcards().length;
 

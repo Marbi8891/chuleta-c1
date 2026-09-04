@@ -12,26 +12,21 @@
 // que en legacy, donde marcar una tarjeta como sabida/a repasar solo avanza
 // el índice (advanceFlash) sin reconstruir la cola.
 //
-// Fase 2B punto 3: `buildQueue` lee `known` con `getState()` (lectura
-// directa del store, no reactiva) en vez de con el hook `useAppState()`.
-// Con el hook, `buildQueue` (memoizada con `useCallback`) capturaba en su
-// cierre el `known` del último render en el que se había recalculado —
-// que, tras `resetKnownFor()` seguido síncronamente de `restart()` en
-// `handleResetKnown()`, todavía era el snapshot ANTERIOR al reset (React
-// no ha vuelto a renderizar todavía en ese punto). Resultado: "Reiniciar
-// dominadas" no siempre devolvía las tarjetas recién reiniciadas a la cola
-// cuando "ocultar dominadas" estaba activo. `getState()` siempre devuelve
-// el estado actual del store en el momento de la llamada, sin ese desfase.
-// No se usa `useAppState()` en ningún otro punto de este componente, así
-// que se elimina del todo (evita además una suscripción/rerender que no
-// hacía falta).
+// Fase 3: `known` vive en IndexedDB (src/db/flashcardProgress.ts), no en
+// localStorage. `buildQueue` es asíncrona y SIEMPRE hace una lectura
+// fresca a Dexie (getKnownFlashcardIds) — nunca lee de una caché ni de un
+// snapshot de render — para no reintroducir la clase de bug de cierre
+// obsoleto que la Fase 2B corrigió (ver el comentario de
+// getKnownFlashcardIds en src/db/flashcardProgress.ts). `handleResetKnown`
+// espera (`await`) a que el borrado en Dexie termine antes de reconstruir
+// la cola, así que la reconstrucción ve siempre el estado post-escritura.
 
 import { useCallback, useEffect, useState } from 'react';
 import { getFlashcards } from '../../data/index';
 import type { Flashcard } from '../../types/flashcard';
 import { useScope } from '../../app/ScopeContext';
 import { shuffle } from '../../app/QuizContext';
-import { getState, resetKnownFor, setKnown } from '../../state/appState';
+import { getKnownFlashcardIds, resetFlashcardsKnown, setFlashcardKnown } from '../../db/flashcardProgress';
 import { renderBold, renderCloze } from './textFormat';
 
 export function FlashcardsPage() {
@@ -41,26 +36,35 @@ export function FlashcardsPage() {
   const [index, setIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
 
-  const buildQueue = useCallback((): Flashcard[] => {
+  const buildQueue = useCallback(async (): Promise<Flashcard[]> => {
     let pool = getFlashcards().filter((c) => scope.has(c.id_tema));
     if (hideKnown) {
-      const known = getState().known;
-      pool = pool.filter((c) => !known[c.id]);
+      const known = await getKnownFlashcardIds();
+      pool = pool.filter((c) => !known.has(c.id));
     }
     return shuffle(pool);
   }, [scope, hideKnown]);
 
-  const restart = useCallback(() => {
-    setQueue(buildQueue());
+  const restart = useCallback(async () => {
+    const q = await buildQueue();
+    setQueue(q);
     setIndex(0);
     setFlipped(false);
   }, [buildQueue]);
 
   // Igual que renderFlashView() al cambiar de modo o tocar alcance: reconstruye y mezcla.
   useEffect(() => {
-    restart();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [scope, hideKnown]);
+    let cancelled = false;
+    buildQueue().then((q) => {
+      if (cancelled) return;
+      setQueue(q);
+      setIndex(0);
+      setFlipped(false);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [buildQueue]);
 
   if (scope.size === 0) {
     return <div className="empty-note">Selecciona al menos un tema en «Alcance» para repasar sus flashcards.</div>;
@@ -95,17 +99,17 @@ export function FlashcardsPage() {
   }
 
   function handleReview() {
-    setKnown(card.id, false);
+    void setFlashcardKnown(card.id, false);
     advance();
   }
   function handleKnown() {
-    setKnown(card.id, true);
+    void setFlashcardKnown(card.id, true);
     advance();
   }
-  function handleResetKnown() {
+  async function handleResetKnown() {
     const idsInScope = getFlashcards().filter((c) => scope.has(c.id_tema)).map((c) => c.id);
-    resetKnownFor(idsInScope);
-    restart();
+    await resetFlashcardsKnown(idsInScope);
+    await restart();
   }
 
   return (

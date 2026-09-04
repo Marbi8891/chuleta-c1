@@ -29,7 +29,7 @@ export function QuizSetupPage() {
 
   function handleStart() {
     const pool = shuffle(buildQuizPool(scope)).slice(0, effectiveCount);
-    startQuiz(pool);
+    startQuiz(pool, Array.from(scope));
     navigate('/quiz/run');
   }
 

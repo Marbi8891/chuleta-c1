@@ -2,6 +2,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { ScopeProvider } from './ScopeContext';
 import { QuizProvider } from './QuizContext';
 import { AppRouter } from './router';
+import { PersistenceGate } from '../db/PersistenceGate';
 
 // import.meta.env.BASE_URL es el `base` de vite.config.ts ("/" en local,
 // "/chuleta-c1/" en el build de GitHub Pages — ver
@@ -14,11 +15,13 @@ const basename = BASE_URL === '/' ? undefined : BASE_URL.replace(/\/$/, '');
 export function App() {
   return (
     <BrowserRouter basename={basename} future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-      <ScopeProvider>
-        <QuizProvider>
-          <AppRouter />
-        </QuizProvider>
-      </ScopeProvider>
+      <PersistenceGate>
+        <ScopeProvider>
+          <QuizProvider>
+            <AppRouter />
+          </QuizProvider>
+        </ScopeProvider>
+      </PersistenceGate>
     </BrowserRouter>
   );
 }

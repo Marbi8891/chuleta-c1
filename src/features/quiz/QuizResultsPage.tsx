@@ -29,7 +29,10 @@ export function QuizResultsPage() {
   const breakdownEntries = Object.entries(state.temaTally);
 
   function handleRetryWrong() {
-    startQuiz(state.wrong.map((q) => ({ ...q })));
+    // Mismo alcance que la sesión original: repetir fallos no es un nuevo
+    // alcance elegido por el usuario, sigue perteneciendo al mismo dominio
+    // de temas que el test que se acaba de completar.
+    startQuiz(state.wrong.map((q) => ({ ...q })), state.scope);
     navigate('/quiz/run');
   }
 
