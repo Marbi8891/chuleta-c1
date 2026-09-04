@@ -1,0 +1,39 @@
+# CI — validación completa en cada Pull Request (Fase 3C, punto 7).
+#
+# No duplica lógica: `npm run check` ya encadena
+# verify-content -> typecheck -> lint -> test (Node + Vitest) -> build (ver
+# `package.json`, script "check"). Este workflow solo instala de forma
+# reproducible (`npm ci`) y ejecuta ese único script, con la versión de
+# Node leída de `.nvmrc` (igual que `deploy-pages.yml`, para no poder
+# quedar desincronizada de él).
+#
+# El despliegue a GitHub Pages sigue siendo un workflow aparte
+# (`deploy-pages.yml`, disparado por push a `main`) — este workflow no
+# despliega nada, solo valida.
+
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - 'feat/**'
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+
+      - name: Install (clean, reproducible)
+        run: npm ci
+
+      - name: Full check (verify-content + typecheck + lint + test + build)
+        run: npm run check
