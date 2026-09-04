@@ -23,10 +23,15 @@ export function PersistenceGate({ children }: { children: ReactNode }) {
       try {
         await db.open();
         const result = await runLegacyMigration(db);
-        if (result.status === 'invalid-legacy-data' || result.status === 'migration-failed') {
+        if (
+          result.status === 'invalid-legacy-data' ||
+          result.status === 'migration-failed' ||
+          result.status === 'storage-unavailable'
+        ) {
           // No es un error fatal: IndexedDB está operativa, solo no se pudo
-          // importar el progreso legacy (o falló a mitad y se revirtió por
-          // completo). La app sigue siendo usable — ya se registró en
+          // importar el progreso legacy (datos corruptos, transacción
+          // revertida, o localStorage momentáneamente inaccesible — Fase
+          // 3B, punto 2). La app sigue siendo usable — ya se registró en
           // consola dentro de runLegacyMigration — y se reintentará en el
           // próximo arranque (no se marcó como completada).
           console.warn('[PersistenceGate] progreso legacy no migrado:', result.status, result.reason);

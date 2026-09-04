@@ -40,19 +40,31 @@ export type LegacyMigrationResult =
    * legacyMigrationVersion tampoco queda marcada, así que la próxima vez
    * que arranque la app se reintentará desde cero.
    */
-  | { status: 'migration-failed'; reason: string };
+  | { status: 'migration-failed'; reason: string }
+  /**
+   * Fase 3B, punto 2: `localStorage.getItem` ha lanzado una excepción — NO
+   * es lo mismo que "no hay clave". Es un estado transitorio del storage
+   * (modo privado estricto, cuota, entorno roto momentáneamente), no una
+   * afirmación de que no hay progreso legacy que migrar. Por eso NO se
+   * marca `legacyMigrationVersion` (a diferencia de 'no-legacy-data'):
+   * se reintentará en el próximo arranque, con la esperanza de que
+   * localStorage vuelva a responder. IndexedDB no se ve afectada por esto
+   * y la app sigue siendo usable (ver PersistenceGate).
+   */
+  | { status: 'storage-unavailable'; reason: string };
 
-function readRawLegacyBlob(): string | null {
+/**
+ * Distingue "la clave no existe" (`raw: null`, `available: true`) de "no se
+ * ha podido ni preguntar" (`available: false`, lanzó `getItem`) — la
+ * versión anterior de esta función conflaba ambos casos en `null`, lo que
+ * hacía que un fallo transitorio de localStorage se marcara igual que "este
+ * usuario nunca tuvo progreso legacy" (Fase 3B, punto 2).
+ */
+function readRawLegacyBlob(): { available: true; raw: string | null } | { available: false; reason: string } {
   try {
-    return localStorage.getItem(STORAGE_KEY);
-  } catch {
-    // localStorage inaccesible (modo privado, cuota, entorno sin storage):
-    // no hay forma de saber si había algo que migrar. Tratarlo como "nada
-    // que migrar" — igual que el try/catch silencioso que la propia app
-    // legacy ya usaba para este mismo caso (appState.ts) — en vez de
-    // bloquear la app reintentando para siempre contra un storage que no
-    // responde.
-    return null;
+    return { available: true, raw: localStorage.getItem(STORAGE_KEY) };
+  } catch (e) {
+    return { available: false, reason: e instanceof Error ? e.message : String(e) };
   }
 }
 
@@ -84,8 +96,23 @@ const STUDY_FS_STEPS_LENGTH = 5; // ver src/db/topicProgress.ts — mismo rango 
 
 /**
  * Ejecuta la migración si hace falta (no-op seguro si ya se ejecutó — ver
- * IDEMPOTENCIA en la especificación de Fase 3). Debe llamarse una vez al
- * arrancar la app, antes de leer progreso persistido (ver PersistenceGate).
+ * IDEMPOTENCIA en la especificación de Fase 3, y CONCURRENCIA más abajo).
+ * Debe llamarse una vez al arrancar la app, antes de leer progreso
+ * persistido (ver PersistenceGate).
+ *
+ * CONCURRENCIA (Fase 3B, punto 1): la comprobación de
+ * `legacyMigrationVersion` de aquí abajo es solo un atajo (evita abrir una
+ * transacción de escritura en cada arranque una vez ya migrado) — NO es la
+ * garantía de idempotencia. Dos llamadas concurrentes (p. ej. StrictMode,
+ * o dos pestañas) podrían leer ambas "no migrado" en este punto antes de
+ * que ninguna haya escrito nada. La garantía real está DENTRO de la
+ * transacción de más abajo, que vuelve a leer `legacyMigrationVersion` una
+ * vez ya tiene el lock de escritura sobre `appMeta`: IndexedDB serializa
+ * las transacciones `readwrite` que comparten un object store, así que la
+ * segunda transacción en llegar ve siempre el resultado ya escrito por la
+ * primera y hace no-op — nunca migra dos veces. Ver el test "MIGRACIÓN
+ * CONCURRENTE" en legacyMigration.test.ts, que fuerza exactamente este
+ * escenario con `Promise.all`.
  */
 export async function runLegacyMigration(database: ChuletaC1DB = defaultDb): Promise<LegacyMigrationResult> {
   const currentVersion = await getMeta<number>(APP_META_KEYS.legacyMigrationVersion, database);
@@ -93,8 +120,22 @@ export async function runLegacyMigration(database: ChuletaC1DB = defaultDb): Pro
     return { status: 'already-migrated' };
   }
 
-  const raw = readRawLegacyBlob();
+  const blob = readRawLegacyBlob();
+  if (!blob.available) {
+    // Storage inaccesible (Fase 3B, punto 2): NO es "nada que migrar" — es
+    // un fallo transitorio. No se marca legacyMigrationVersion, así que se
+    // reintentará en el próximo arranque. IndexedDB sigue operativa; la
+    // app continúa (ver PersistenceGate).
+    console.warn('[legacyMigration] localStorage no está disponible (lanzó al leer); se reintentará en el próximo arranque.', blob.reason);
+    return { status: 'storage-unavailable', reason: blob.reason };
+  }
+
+  const raw = blob.raw;
   if (raw === null) {
+    // Clave realmente ausente: sí es "nada que migrar" — marcar terminado.
+    // markMigrationDone también vuelve a comprobar la versión dentro de su
+    // propia transacción, así que dos llamadas concurrentes por esta rama
+    // tampoco causan ningún problema (la segunda simplemente no-opea).
     await markMigrationDone(database);
     return { status: 'no-legacy-data' };
   }
@@ -128,6 +169,12 @@ export async function runLegacyMigration(database: ChuletaC1DB = defaultDb): Pro
     studyFsIndexMigrated: false,
   };
 
+  // Ganada la carrera dentro de la transacción de abajo (ver CONCURRENCIA):
+  // permanece `false` si esta llamada es la que realmente migra; pasa a
+  // `true` si, al entrar en la transacción, otra llamada concurrente ya
+  // había terminado de migrar primero — en cuyo caso esta no escribe nada.
+  let alreadyMigratedConcurrently = false;
+
   try {
     await database.transaction(
       'rw',
@@ -136,9 +183,20 @@ export async function runLegacyMigration(database: ChuletaC1DB = defaultDb): Pro
       database.flashcardProgress,
       database.quizSessions,
       async () => {
+        // Re-lectura DENTRO de la transacción — ver el comentario de
+        // CONCURRENCIA más arriba. Esto es lo que hace la migración segura
+        // bajo llamadas concurrentes, no solo "improbable de que ocurra".
+        const versionRow = await database.appMeta.get(APP_META_KEYS.legacyMigrationVersion);
+        const versionInsideTx = versionRow?.value;
+        if (typeof versionInsideTx === 'number' && versionInsideTx >= LEGACY_MIGRATION_VERSION) {
+          alreadyMigratedConcurrently = true;
+          return;
+        }
+
         // studied → topicProgress. Solo true: en legacy `false`/ausente son
         // equivalentes (Record<string,boolean> leído por verdad), y el
-        // modelo nuevo tampoco distingue "false" de "sin fila".
+        // modelo nuevo tampoco distingue "false" de "sin fila". `put` sobre
+        // la PK natural (topicId) ya es idempotente por construcción.
         for (const [topicId, value] of Object.entries(legacy.studied ?? {})) {
           if (value !== true) continue;
           if (!getTopicById(topicId)) {
@@ -172,14 +230,28 @@ export async function runLegacyMigration(database: ChuletaC1DB = defaultDb): Pro
         // quizHistory → quizSessions (sin quizAnswers: legacy no registraba
         // respuesta por respuesta — no se fabrican). Entradas individuales
         // con forma inesperada se omiten y se cuentan, sin abortar el resto.
+        //
+        // ID determinista (Fase 3B, punto 1) en vez de crypto.randomUUID():
+        // `legacy-{índice}` en vez de un UUID aleatorio. La garantía real
+        // de "no migrar dos veces" ya la da la re-lectura de versión dentro
+        // de esta misma transacción (arriba) — pero un id determinista es
+        // una segunda capa de seguridad barata: si por lo que sea esta
+        // función se invocara fuera de su guarda normal (p. ej. una futura
+        // migración manual de re-intento), `put` sobre el mismo id
+        // reemplaza la fila en vez de duplicarla. El orden del array de
+        // `quizHistory` es estable dentro de una misma migración (no se
+        // reordena en ningún punto de este módulo), así que el índice es
+        // un id estable para esa ejecución.
+        let quizHistoryIndex = 0;
         for (const entry of legacy.quizHistory ?? []) {
+          const entryIndex = quizHistoryIndex++;
           if (!isValidQuizHistoryEntry(entry)) {
             summary.quizHistoryEntriesSkipped++;
             console.warn('[legacyMigration] entrada de quizHistory con forma inesperada; se omite.', entry);
             continue;
           }
           await database.quizSessions.put({
-            id: crypto.randomUUID(),
+            id: `legacy-${entryIndex}`,
             startedAt: entry.date,
             completedAt: entry.date,
             scope: undefined,
@@ -205,10 +277,20 @@ export async function runLegacyMigration(database: ChuletaC1DB = defaultDb): Pro
     return { status: 'migration-failed', reason: e instanceof Error ? e.message : String(e) };
   }
 
+  if (alreadyMigratedConcurrently) {
+    return { status: 'already-migrated' };
+  }
+
   return { status: 'migrated', summary };
 }
 
 async function markMigrationDone(database: ChuletaC1DB): Promise<void> {
+  // Segura bajo llamadas concurrentes sin necesitar una re-lectura
+  // explícita de versión (a diferencia de la rama principal de arriba):
+  // `setMeta`/`legacyMigrationVersion` es un `put` sobre una PK fija, así
+  // que dos transacciones concurrentes que lleguen aquí simplemente
+  // escriben el mismo valor dos veces (idempotente por construcción, no
+  // hay filas que duplicar en esta rama).
   await database.transaction('rw', database.appMeta, async () => {
     await setMeta(APP_META_KEYS.legacyMigrationVersion, LEGACY_MIGRATION_VERSION, database);
     const createdAt = await database.appMeta.get(APP_META_KEYS.databaseCreatedAt);

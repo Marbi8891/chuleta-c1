@@ -61,4 +61,26 @@ describe('recordQuizSession', () => {
     expect(await testDb.quizAnswers.where('sessionId').equals('s1').count()).toBe(1);
     expect(await testDb.quizAnswers.where('sessionId').equals('s2').count()).toBe(1);
   });
+
+  it('IDEMPOTENTE (Fase 3B, obligatorio): llamarla dos veces con el mismo sessionId no duplica quizAnswers', async () => {
+    const input = {
+      id: 'retry-session',
+      startedAt: '2026-01-01T00:00:00.000Z',
+      completedAt: '2026-01-01T00:05:00.000Z',
+      scope: ['I-T01'] as const,
+      answers: [
+        { questionId: 'I-T01-Q001', selectedAnswer: 'a' as const, correct: true, answeredAt: '2026-01-01T00:01:00.000Z' },
+        { questionId: 'I-T01-Q002', selectedAnswer: 'b' as const, correct: false, answeredAt: '2026-01-01T00:02:00.000Z' },
+        { questionId: 'I-T01-Q003', selectedAnswer: 'c' as const, correct: true, answeredAt: '2026-01-01T00:03:00.000Z' },
+      ],
+    };
+
+    await recordQuizSession(input, testDb);
+    await recordQuizSession(input, testDb); // simula un reintento tras un fallo aparente
+
+    expect(await testDb.quizSessions.count()).toBe(1);
+    const answers = await testDb.quizAnswers.where('sessionId').equals('retry-session').toArray();
+    expect(answers).toHaveLength(3); // N, NO 2N
+    expect(answers.map((a) => a.questionId).sort()).toEqual(['I-T01-Q001', 'I-T01-Q002', 'I-T01-Q003']);
+  });
 });

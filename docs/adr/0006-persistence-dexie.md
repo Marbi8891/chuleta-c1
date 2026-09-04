@@ -125,6 +125,54 @@ recuperable y no fatal (la app sigue siendo perfectamente usable sin
 progreso legacy importado), y queda registrado en consola para poder
 investigarlo.
 
+## Fase 3B — PERSISTENCE HARDENING
+
+Auditoría posterior a la Fase 3 que corrigió cinco puntos concretos, sin
+tocar el diseño de arriba (tablas, `DB_NAME`, versionado, ausencia de store
+paralelo — todo eso queda aprobado tal cual):
+
+1. **Migración legacy bajo concurrencia**: la comprobación de
+   `legacyMigrationVersion` se repite DENTRO de la transacción de
+   migración (no solo antes de abrirla), aprovechando que IndexedDB
+   serializa las transacciones `readwrite` que comparten object store —
+   ver la sección "Idempotencia bajo concurrencia" de
+   `docs/LEGACY_MIGRATION.md`. Los ids de las sesiones migradas pasaron de
+   `crypto.randomUUID()` a deterministas (`legacy-{índice}`) como capa
+   adicional de seguridad.
+2. **`storage-unavailable` como estado propio**: `runLegacyMigration()`
+   distinguía mal "localStorage no tiene la clave" de "localStorage lanzó
+   al leer" — ambos colapsaban en "nada que migrar" y marcaban la
+   migración como completada. Ahora son dos resultados distintos; el
+   segundo NO marca completado y se reintenta en el próximo arranque. Ver
+   `docs/LEGACY_MIGRATION.md`.
+3. **Finalización de test segura (SAFE QUIZ COMPLETION)**: `QuizContext`
+   ya no marca `completed: true` en el mismo tick que se pulsa "Siguiente"
+   en la última pregunta — antes disparaba `void recordQuizSession(...)`
+   sin esperar. Ahora `completed` solo pasa a `true` tras un
+   `await recordQuizSession(...)` exitoso (estados `saving`/`saveError`
+   añadidos a `QuizState`); si falla, la sesión (respuestas, score,
+   `sessionId`) permanece intacta en memoria y la UI (`QuizRunPage`)
+   muestra el error con un botón que reintenta el mismo guardado.
+4. **`recordQuizSession` idempotente por `sessionId`**: al no completarse
+   de forma síncrona, una sesión puede intentar guardarse más de una vez
+   (reintento tras fallo). `quizSessions.put` ya era idempotente por PK,
+   pero `quizAnswers` usaba un id autoincremental sin deduplicar — ahora,
+   dentro de la misma transacción, se borran las respuestas previas de esa
+   `sessionId` antes de reinsertar, así dos llamadas dejan siempre N filas
+   (nunca 2N).
+5. **Escrituras "fire-and-forget" auditadas**: `markTopicStudied()` y
+   `setFlashcardKnown()` siguen sin bloquear la navegación a propósito
+   (progreso de bajo riesgo, fácilmente reversible) — pero antes se
+   llamaban como `void fn(...)` sin ningún `.catch`, así que un fallo real
+   de Dexie quedaba como promesa rechazada sin gestionar. Ahora ambas
+   llamadas capturan el error con un helper común
+   (`src/db/reportWriteError.ts`) que deja un log con contexto.
+   `handleResetKnown` (FlashcardsPage) sigue siendo la excepción que SÍ
+   espera (`await`): reconstruir la cola de flashcards antes de que el
+   borrado se confirme en Dexie mostraría datos visiblemente
+   inconsistentes, no solo una escritura de bajo riesgo perdida — ver el
+   comentario en `FlashcardsPage.tsx`.
+
 ## Consecuencias / deuda explícita para fases futuras
 
 - SM-2/ease factor/intervals para flashcards: fuera de alcance a

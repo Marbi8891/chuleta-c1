@@ -76,6 +76,51 @@ describe('runLegacyMigration — IDEMPOTENCIA (obligatorio)', () => {
   });
 });
 
+describe('runLegacyMigration — CONCURRENCIA (Fase 3B, obligatorio)', () => {
+  it('dos llamadas concurrentes con Promise.all no migran dos veces (especialmente quizHistory, que antes usaba randomUUID)', async () => {
+    const topic = getTopics()[0]!;
+    const card = getFlashcards()[0]!;
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({
+        known: { [card.id]: true },
+        studied: { [topic.id]: true },
+        quizHistory: [
+          { date: '2026-01-01T00:00:00.000Z', total: 10, pct: 80 },
+          { date: '2026-01-02T00:00:00.000Z', total: 20, pct: 55 },
+        ],
+      }),
+    );
+
+    // Ambas llamadas parten de "no migrado" antes de que ninguna haya
+    // escrito nada — exactamente el escenario que la re-lectura de versión
+    // DENTRO de la transacción (ver legacyMigration.ts) tiene que resolver.
+    const [r1, r2] = await Promise.all([runLegacyMigration(testDb), runLegacyMigration(testDb)]);
+
+    // Una de las dos migra de verdad, la otra la observa ya hecha (en
+    // cualquier orden — no se puede predecir cuál gana la carrera).
+    const statuses = [r1.status, r2.status].sort();
+    expect(statuses).toEqual(['already-migrated', 'migrated']);
+
+    // El resultado final es EXACTAMENTE el de una única migración: nunca
+    // el doble. Este es el caso que quizHistory con crypto.randomUUID()
+    // habría duplicado silenciosamente (dos ids aleatorios distintos para
+    // el mismo dato) — de ahí el cambio a ids deterministas.
+    expect(await allRows(testDb.topicProgress)).toHaveLength(1);
+    expect(await allRows(testDb.flashcardProgress)).toHaveLength(1);
+    expect(await allRows(testDb.quizSessions)).toHaveLength(2); // NO 4
+
+    const version = await testDb.appMeta.get(APP_META_KEYS.legacyMigrationVersion);
+    expect(version?.value).toBe(LEGACY_MIGRATION_VERSION);
+
+    // Un tercer intento posterior (ya no concurrente) confirma que queda
+    // estable en already-migrated, sin seguir escribiendo nada.
+    const third = await runLegacyMigration(testDb);
+    expect(third.status).toBe('already-migrated');
+    expect(await allRows(testDb.quizSessions)).toHaveLength(2);
+  });
+});
+
 describe('runLegacyMigration — INVALID LEGACY DATA (obligatorio)', () => {
   it('JSON mal formado: no toca IndexedDB, no marca la migración, deja localStorage intacto', async () => {
     const raw = '{not valid json';
@@ -129,16 +174,33 @@ describe('runLegacyMigration — INVALID LEGACY DATA (obligatorio)', () => {
     expect(result.summary.topicsMigrated).toBe(1); // el resto de la migración no se ve afectado
   });
 
-  it('localStorage inaccesible (lanza al leer): se trata como "nada que migrar", no como dato inválido', async () => {
+});
+
+describe('runLegacyMigration — STORAGE UNAVAILABLE (Fase 3B, obligatorio)', () => {
+  it('localStorage inaccesible (lanza al leer): NO es "nada que migrar" — no marca la migración, permite reintentar', async () => {
     const spy = vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
       throw new Error('storage inaccesible');
     });
     try {
       const result = await runLegacyMigration(testDb);
-      expect(result.status).toBe('no-legacy-data');
+      expect(result.status).toBe('storage-unavailable');
+      // A diferencia de 'no-legacy-data': NO se marca legacyMigrationVersion,
+      // así que un arranque posterior (con localStorage ya recuperado)
+      // vuelve a intentar la migración en vez de darla por completada.
+      expect(await testDb.appMeta.get(APP_META_KEYS.legacyMigrationVersion)).toBeUndefined();
+      expect(await allRows(testDb.topicProgress)).toHaveLength(0);
+      expect(await allRows(testDb.flashcardProgress)).toHaveLength(0);
+      expect(await allRows(testDb.quizSessions)).toHaveLength(0);
     } finally {
       spy.mockRestore();
     }
+
+    // localStorage ya responde de nuevo (sin datos legacy reales) — el
+    // siguiente intento debe completarse con normalidad, no seguir varado.
+    const retry = await runLegacyMigration(testDb);
+    expect(retry.status).toBe('no-legacy-data');
+    const version = await testDb.appMeta.get(APP_META_KEYS.legacyMigrationVersion);
+    expect(version?.value).toBe(LEGACY_MIGRATION_VERSION);
   });
 });
 

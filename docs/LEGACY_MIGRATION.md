@@ -64,10 +64,21 @@ adicional para la migración.
   arranque reintenta desde cero. Ver `src/db/legacyMigration.test.ts`,
   bloque "MIGRATION TRANSACTION", que fuerza este caso y comprueba que no
   queda ninguna fila huérfana en ninguna tabla.
-- **`localStorage` inaccesible** (lanza al leer — modo privado estricto,
-  cuota, etc.): se trata igual que "no hay clave" (nada que migrar, se
-  marca como completada) en vez de bloquear la app reintentando contra un
-  storage que nunca va a responder.
+- **`localStorage` inaccesible** (`getItem` lanza — modo privado estricto,
+  cuota, entorno sin storage, etc.): **Fase 3B — corregido.** Antes se
+  trataba igual que "no hay clave" (se marcaba la migración como
+  completada). Eso era incorrecto: "el storage no responde ahora mismo" no
+  es lo mismo que "este usuario no tiene progreso legacy". Desde la Fase
+  3B, `runLegacyMigration()` distingue ambos casos explícitamente
+  (`readRawLegacyBlob()` devuelve `{available: false}` en vez de `null`) y
+  devuelve `{status: 'storage-unavailable'}`: NO se marca
+  `legacyMigrationVersion`, así que se reintenta en el próximo arranque.
+  IndexedDB no se ve afectada y la app sigue siendo usable
+  (`PersistenceGate` lo trata como no fatal, igual que
+  `invalid-legacy-data`/`migration-failed`). Solo "la clave realmente no
+  existe" (`getItem` devuelve `null` sin lanzar) sigue marcándose como
+  completada — ver `src/db/legacyMigration.test.ts`, bloque "STORAGE
+  UNAVAILABLE".
 
 ## Idempotencia
 
@@ -78,6 +89,45 @@ tocar ninguna tabla — así que llamarla en cada arranque de la app (lo que
 hace `PersistenceGate`) es seguro y barato después de la primera vez. Ver
 el bloque "IDEMPOTENCIA" en `src/db/legacyMigration.test.ts`: ejecutarla
 dos veces seguidas produce exactamente las mismas filas la segunda vez.
+
+### Idempotencia bajo concurrencia (Fase 3B)
+
+La comprobación de arriba, por sí sola, **no** es suficiente si dos
+llamadas a `runLegacyMigration()` se solapan (dos pestañas, o dos montajes
+concurrentes de `PersistenceGate` en React StrictMode): ambas podrían leer
+"no migrado" antes de que ninguna haya escrito nada, y las dos ejecutarían
+la migración completa — especialmente grave para `quizHistory`, que hasta
+la Fase 3B generaba un `crypto.randomUUID()` por sesión migrada, así que
+dos ejecuciones habrían creado el DOBLE de filas en `quizSessions`, cada
+una con un id distinto (ninguna de las dos se habría detectado como
+duplicado).
+
+La corrección (Fase 3B, punto 1) vuelve a leer `appMeta.legacyMigrationVersion`
+**dentro** de la propia transacción `readwrite` que hace la migración. Esto
+funciona porque IndexedDB serializa las transacciones `readwrite` que
+comparten al menos un object store: si dos llamadas abren esa transacción
+casi a la vez, la segunda queda en cola hasta que la primera confirma
+(commit) — y cuando por fin entra, la re-lectura ve ya escrito el trabajo
+de la primera y hace no-op (`{status: 'already-migrated'}`) en vez de
+volver a migrar. Como capa adicional, los `id` de las sesiones migradas
+dejaron de ser `crypto.randomUUID()` y pasaron a ser deterministas
+(`legacy-{índice}`, ver más abajo) — así, si esta función se llamara alguna
+vez fuera de su guarda normal, `quizSessions.put` reemplazaría la fila en
+vez de duplicarla. Ver el bloque "CONCURRENCIA" en
+`src/db/legacyMigration.test.ts`, que fuerza el escenario exacto con
+`Promise.all([runLegacyMigration(db), runLegacyMigration(db)])` sobre un
+legacy con 1 tema, 1 flashcard y 2 entradas de `quizHistory`, y comprueba
+que el resultado final es 1/1/2 filas — nunca el doble.
+
+### IDs deterministas para sesiones migradas
+
+Las filas de `quizSessions` creadas por la migración usan `legacy-{índice}`
+(la posición de la entrada dentro del array `quizHistory` de esa
+ejecución) en vez de un UUID aleatorio. El array de `quizHistory` no se
+reordena en ningún punto de este módulo, así que el índice es estable
+dentro de una misma migración. Las sesiones NUEVAS (creadas desde la app,
+no migradas) siguen usando `crypto.randomUUID()` — ver `QuizContext.tsx` —
+así que no hay riesgo de colisión entre ambos espacios de nombres.
 
 ## Fuente legacy: nunca se borra
 
