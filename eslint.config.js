@@ -43,4 +43,16 @@ export default tseslint.config(
       globals: globals.node,
     },
   },
+  {
+    // Scripts de aceptación manual de la Fase 4 (PWA offline): son
+    // scripts de Node (orquestan un build + un servidor + Playwright),
+    // pero el cuerpo de los `page.evaluate(...)` se ejecuta DENTRO del
+    // navegador controlado por Playwright, no en el proceso Node — de
+    // ahí que necesiten también los globals de navegador
+    // (indexedDB/document/navigator/...) además de los de Node.
+    files: ['scripts/pwa-*.mjs'],
+    languageOptions: {
+      globals: { ...globals.node, ...globals.browser },
+    },
+  },
 );
