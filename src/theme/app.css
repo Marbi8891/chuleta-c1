@@ -154,7 +154,7 @@
   border-color: var(--accent);
 }
 .home-card h3 {
-  font-family: 'Fraunces', Georgia, serif;
+  font-family: var(--font-display);
   font-size: 17px;
   margin: 0 0 4px;
   color: var(--ink);

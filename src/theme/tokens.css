@@ -33,6 +33,29 @@
   --radius-card: 20px;
   --radius-chip: 999px;
   --radius-sm: 10px;
+
+  /*
+   * Fase 4, punto 3 (RUNTIME COMPLETAMENTE LOCAL): hasta la Fase 4 estas
+   * tres familias se cargaban vía Google Fonts (fonts.googleapis.com) —
+   * la app no podía renderizar su tipografía real sin red. Se sustituyen
+   * por pilas de fuentes DEL SISTEMA (nunca binarios de fuente de
+   * terceros descargados para esta tarea, tal y como pide la
+   * especificación) elegidas por carácter tipográfico similar, no
+   * idénticas: `--font-display` es una serif con contraste alto/cálido
+   * (como Fraunces) para titulares y el cuerpo de artículo de Estudiar;
+   * `--font-sans` es la sans-serif nativa de cada SO (como IBM Plex
+   * Sans) para el resto de la interfaz; `--font-mono` es la monoespaciada
+   * nativa (como IBM Plex Mono) para cifras/puntuaciones/badges. Único
+   * cambio visual de esta fase — el resto de tokens (color, radios,
+   * sombra) no se toca.
+   */
+  --font-display: Georgia, 'Iowan Old Style', 'Palatino Linotype', 'URW Palladio L', P052, serif;
+  --font-sans:
+    ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+    sans-serif;
+  --font-mono:
+    ui-monospace, 'SF Mono', 'Cascadia Code', 'Roboto Mono', Menlo, Consolas,
+    'Liberation Mono', monospace;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
