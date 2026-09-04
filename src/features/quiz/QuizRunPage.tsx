@@ -86,14 +86,24 @@ export function QuizRunPage() {
         </div>
       </div>
       <div className="quiz-next-row">
+        {state.saveError && (
+          // Fase 3B, SAFE QUIZ COMPLETION: el guardado de la sesión falló.
+          // El botón de abajo cambia a "Reintentar" — volver a pulsarlo
+          // reintenta el mismo guardado (goNext lo detecta por índice) sin
+          // haber perdido ninguna respuesta.
+          <p className="quiz-save-error" role="alert">
+            No se ha podido guardar el resultado del test. Comprueba el almacenamiento del dispositivo e inténtalo de
+            nuevo.
+          </p>
+        )}
         <button
           type="button"
           ref={nextBtnRef}
           className="btn-primary"
-          disabled={!state.answered}
+          disabled={!state.answered || state.saving}
           onClick={goNext}
         >
-          Siguiente
+          {state.saving ? 'Guardando…' : state.saveError ? 'Reintentar' : 'Siguiente'}
         </button>
       </div>
     </>

@@ -20,6 +20,17 @@
 // respuesta con su QuestionId real (nunca el índice del array) para que
 // quizAnswers pueda referenciarlas una a una. `scope` y `sessionId` se
 // fijan al arrancar el test (START) y no cambian durante su desarrollo.
+//
+// Fase 3B (SAFE QUIZ COMPLETION): `completed` ya NO se marca en el mismo
+// tick que se pulsa "Siguiente" en la última pregunta — antes se disparaba
+// `void recordQuizSession(...)` (sin esperar) y se despachaba NEXT en el
+// mismo gesto, así que la navegación a resultados podía ocurrir antes de
+// que Dexie hubiera confirmado el guardado (o incluso si el guardado
+// fallaba silenciosamente). Ahora `completed` solo pasa a `true` tras un
+// `await recordQuizSession(...)` que termina con éxito (ver `saving` más
+// abajo); si falla, el estado del test (sessionId, answers, score...)
+// permanece intacto en memoria y `saveError` queda con el motivo, para que
+// la UI pueda mostrarlo y ofrecer reintentar sin perder la sesión.
 
 import { createContext, useCallback, useContext, useMemo, useReducer, type ReactNode } from 'react';
 import { getQuizBankByTopic } from '../data/index';
@@ -50,8 +61,16 @@ interface QuizState {
   selected: AnswerKey | null;
   wrong: QuestionRef[];
   temaTally: Record<TemaId, TemaTally>;
-  /** true cuando se ha respondido la última pregunta y toca ir a resultados. */
+  /**
+   * true SOLO cuando la sesión ya se ha persistido con éxito (Fase 3B) —
+   * hasta entonces, aunque la última pregunta ya esté respondida, el test
+   * sigue "en curso" a efectos de esta bandera. Ver `saving`/`saveError`.
+   */
   completed: boolean;
+  /** true mientras `recordQuizSession` está en vuelo para la última pregunta (Fase 3B). */
+  saving: boolean;
+  /** Motivo del último intento de guardado fallido, o null si no ha fallado (o aún no se ha reintentado). Fase 3B. */
+  saveError: string | null;
   /** Identidad de la sesión actual (Fase 3) — estable durante todo el test, ver START. */
   sessionId: string;
   startedAt: string;
@@ -71,6 +90,8 @@ const INITIAL_STATE: QuizState = {
   wrong: [],
   temaTally: {},
   completed: false,
+  saving: false,
+  saveError: null,
   sessionId: '',
   startedAt: '',
   scope: [],
@@ -81,7 +102,10 @@ type QuizAction =
   | { type: 'SET_COUNT'; count: number }
   | { type: 'START'; questions: QuestionRef[]; scope: TemaId[] }
   | { type: 'SELECT'; letter: AnswerKey }
-  | { type: 'NEXT' };
+  | { type: 'NEXT' }
+  | { type: 'SAVE_START' }
+  | { type: 'SAVE_SUCCESS' }
+  | { type: 'SAVE_ERROR'; message: string };
 
 function quizReducer(state: QuizState, action: QuizAction): QuizState {
   switch (action.type) {
@@ -98,6 +122,8 @@ function quizReducer(state: QuizState, action: QuizAction): QuizState {
         wrong: [],
         temaTally: {},
         completed: false,
+        saving: false,
+        saveError: null,
         sessionId: crypto.randomUUID(),
         startedAt: new Date().toISOString(),
         scope: action.scope,
@@ -134,11 +160,22 @@ function quizReducer(state: QuizState, action: QuizAction): QuizState {
         answers: [...state.answers, answeredEntry],
       };
     }
-    case 'NEXT': {
-      const isLast = state.index + 1 >= state.questions.length;
-      if (isLast) return { ...state, completed: true };
+    case 'NEXT':
+      // Solo se despacha para preguntas que NO son la última (ver goNext):
+      // la última pregunta pasa por SAVE_START/SAVE_SUCCESS/SAVE_ERROR en
+      // su lugar (Fase 3B, SAFE QUIZ COMPLETION), nunca por aquí.
       return { ...state, index: state.index + 1, answered: false, selected: null };
-    }
+    case 'SAVE_START':
+      return { ...state, saving: true, saveError: null };
+    case 'SAVE_SUCCESS':
+      return { ...state, saving: false, saveError: null, completed: true };
+    case 'SAVE_ERROR':
+      // Deliberado: NO se toca `completed` (sigue en false — el test no se
+      // da por terminado) ni ningún otro campo de la sesión (sessionId,
+      // answers, score...) — así un reintento (nueva llamada a goNext)
+      // dispone de exactamente los mismos datos para volver a intentar el
+      // guardado, sin haber perdido la sesión en memoria.
+      return { ...state, saving: false, saveError: action.message };
     default:
       return state;
   }
@@ -151,10 +188,16 @@ interface QuizContextValue {
   startQuiz: (questions: QuestionRef[], scope: TemaId[]) => void;
   selectAnswer: (letter: AnswerKey) => void;
   /**
-   * Equivalente al click de "Siguiente": si era la última pregunta, persiste
-   * la sesión completa (quizSessions + quizAnswers, ver src/db/quiz.ts, una
-   * sola vez) y marca el test como completado; si no, avanza a la siguiente
-   * pregunta.
+   * Equivalente al click de "Siguiente": si no era la última pregunta,
+   * avanza de inmediato. Si era la última, intenta persistir la sesión
+   * completa (quizSessions + quizAnswers, ver src/db/quiz.ts) y SOLO marca
+   * el test como completado (`state.completed`) si ese guardado tiene
+   * éxito — ver `state.saving`/`state.saveError` y SAFE QUIZ COMPLETION
+   * (Fase 3B). Si ya hay un guardado en curso o el test ya se completó, no
+   * hace nada (evita doble guardado por doble click). Volver a llamarla
+   * tras un fallo reintenta el mismo guardado — recordQuizSession es
+   * idempotente por `sessionId` (Fase 3B, punto 4), así que un reintento
+   * nunca duplica respuestas.
    */
   goNext: () => void;
 }
@@ -173,17 +216,47 @@ export function QuizProvider({ children }: { children: ReactNode }) {
 
   const goNext = useCallback(() => {
     const isLast = state.index + 1 >= state.questions.length;
-    if (isLast && !state.completed) {
-      void recordQuizSession({
-        id: state.sessionId,
-        startedAt: state.startedAt,
-        completedAt: new Date().toISOString(),
-        scope: state.scope,
-        answers: state.answers,
-      });
+    if (!isLast) {
+      dispatch({ type: 'NEXT' });
+      return;
     }
-    dispatch({ type: 'NEXT' });
-  }, [state.index, state.questions.length, state.completed, state.sessionId, state.startedAt, state.scope, state.answers]);
+    // Última pregunta: no avanzar el índice (no hay pregunta "siguiente")
+    // — en su lugar, intentar persistir la sesión y solo entonces marcar
+    // `completed`. Si ya está completada (no debería poder llamarse dos
+    // veces desde la UI, pero por si acaso) o ya hay un guardado en curso,
+    // no hacer nada — evita un guardado duplicado por un doble click.
+    if (state.completed || state.saving) return;
+    dispatch({ type: 'SAVE_START' });
+    void (async () => {
+      try {
+        await recordQuizSession({
+          id: state.sessionId,
+          startedAt: state.startedAt,
+          completedAt: new Date().toISOString(),
+          scope: state.scope,
+          answers: state.answers,
+        });
+        dispatch({ type: 'SAVE_SUCCESS' });
+      } catch (e) {
+        // No fingir que el test se guardó: el estado de la sesión
+        // (sessionId, answers, score...) permanece intacto en `state` —
+        // dispatch no lo toca aquí — así que una nueva llamada a goNext()
+        // (el usuario pulsando "Reintentar") vuelve a intentar el mismo
+        // guardado con los mismos datos.
+        console.error('[QuizContext] no se pudo guardar la sesión de test; se puede reintentar sin perder los datos.', e);
+        dispatch({ type: 'SAVE_ERROR', message: e instanceof Error ? e.message : String(e) });
+      }
+    })();
+  }, [
+    state.index,
+    state.questions.length,
+    state.completed,
+    state.saving,
+    state.sessionId,
+    state.startedAt,
+    state.scope,
+    state.answers,
+  ]);
 
   const value = useMemo<QuizContextValue>(
     () => ({ state, setCount, startQuiz, selectAnswer, goNext }),

@@ -187,7 +187,8 @@ button{font-family:inherit;}
 .q-opt.locked{cursor:default;}
 .q-opt.locked:not(.correct):not(.incorrect){opacity:.55;}
 
-.quiz-next-row{width:100%; max-width:640px; display:flex; justify-content:flex-end;}
+.quiz-next-row{width:100%; max-width:640px; display:flex; align-items:center; justify-content:flex-end; gap:14px; flex-wrap:wrap;}
+.quiz-save-error{margin:0; font-size:13px; color:var(--error); flex:1 1 220px;}
 
 /* Quiz results */
 .results{width:100%; max-width:640px; text-align:center;}

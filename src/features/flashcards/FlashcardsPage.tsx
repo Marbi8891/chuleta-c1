@@ -27,6 +27,7 @@ import type { Flashcard } from '../../types/flashcard';
 import { useScope } from '../../app/ScopeContext';
 import { shuffle } from '../../app/QuizContext';
 import { getKnownFlashcardIds, resetFlashcardsKnown, setFlashcardKnown } from '../../db/flashcardProgress';
+import { reportWriteError } from '../../db/reportWriteError';
 import { renderBold, renderCloze } from './textFormat';
 
 export function FlashcardsPage() {
@@ -98,14 +99,28 @@ export function FlashcardsPage() {
     setFlipped(false);
   }
 
+  // Fire-and-forget deliberado (Fase 3B, punto 5): marcar una flashcard
+  // como sabida/a repasar no debe bloquear el avance a la siguiente
+  // tarjeta — es una escritura de bajo riesgo y reversible (el usuario
+  // puede volver a marcarla). Un fallo real de Dexie sí se captura y se
+  // registra con contexto (reportWriteError) en vez de quedar como
+  // promesa rechazada sin gestionar.
   function handleReview() {
-    void setFlashcardKnown(card.id, false);
+    setFlashcardKnown(card.id, false).catch((e) => reportWriteError('setFlashcardKnown', e));
     advance();
   }
   function handleKnown() {
-    void setFlashcardKnown(card.id, true);
+    setFlashcardKnown(card.id, true).catch((e) => reportWriteError('setFlashcardKnown', e));
     advance();
   }
+  // A diferencia de handleReview/handleKnown, aquí SÍ se espera (Fase 3B,
+  // punto 5: "para acciones especialmente críticas, decidir si conviene
+  // await"): reconstruir la cola (`restart`) leyendo `known` ANTES de que
+  // el borrado se haya confirmado en Dexie mostraría tarjetas que en
+  // realidad ya se han "des-dominado" como si siguieran ocultas — un
+  // resultado visiblemente incorrecto, no solo una escritura perdida. Si
+  // `resetFlashcardsKnown` lanza, el error se propaga tal cual (sin
+  // capturar aquí): la UI no llega a `restart()` con datos a medias.
   async function handleResetKnown() {
     const idsInScope = getFlashcards().filter((c) => scope.has(c.id_tema)).map((c) => c.id);
     await resetFlashcardsKnown(idsInScope);

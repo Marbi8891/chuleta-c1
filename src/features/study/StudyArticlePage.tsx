@@ -18,6 +18,7 @@ import type { Components } from 'react-markdown';
 import { getQuestionsByTopic, getTopicById } from '../../data/index';
 import { BLOQUES, getTemasOrdered } from '../../data/topics';
 import { markTopicStudied, getStudyFsIndex, getStudyFsSteps, setStudyFsIndex } from '../../db/topicProgress';
+import { reportWriteError } from '../../db/reportWriteError';
 import { useScope } from '../../app/ScopeContext';
 import { shuffle, useQuiz } from '../../app/QuizContext';
 
@@ -54,7 +55,12 @@ export function StudyArticlePage() {
   }, []);
 
   useEffect(() => {
-    if (topic) void markTopicStudied(topic.id);
+    // Fire-and-forget deliberado (Fase 3B, punto 5): marcar un tema como
+    // leído no debe bloquear el render del artículo, y es una escritura de
+    // bajo riesgo (reversible: basta con volver a abrir el tema). Pero un
+    // fallo real de Dexie no debe quedar como promesa rechazada sin
+    // gestionar — se captura y se registra con contexto (reportWriteError).
+    if (topic) markTopicStudied(topic.id).catch((e) => reportWriteError('markTopicStudied', e));
     window.scrollTo({ top: 0 });
   }, [topic]);
 
@@ -63,12 +69,14 @@ export function StudyArticlePage() {
   function decreaseFs() {
     setStudyFsIndex(fsIndex - 1)
       .then(() => getStudyFsIndex())
-      .then(setFsIndex);
+      .then(setFsIndex)
+      .catch((e) => reportWriteError('setStudyFsIndex', e));
   }
   function increaseFs() {
     setStudyFsIndex(fsIndex + 1)
       .then(() => getStudyFsIndex())
-      .then(setFsIndex);
+      .then(setFsIndex)
+      .catch((e) => reportWriteError('setStudyFsIndex', e));
   }
 
   if (!topic) {

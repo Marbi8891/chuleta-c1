@@ -6,13 +6,32 @@
 // pulsada, y se compara ese recuento con el marcador final — así se
 // verifica la LÓGICA de puntuación, no un dato de contenido concreto.
 
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { screen, fireEvent } from '@testing-library/react';
 import { Routes, Route } from 'react-router-dom';
 import { renderWithProviders } from '../../test/renderWithProviders';
 import { QuizSetupPage } from './QuizSetupPage';
 import { QuizRunPage } from './QuizRunPage';
 import { QuizResultsPage } from './QuizResultsPage';
+import { recordQuizSession } from '../../db/quiz';
+
+// Fase 3B, SAFE QUIZ COMPLETION: se mockea recordQuizSession (envolviendo
+// la implementación real) para poder forzar un fallo de guardado en un
+// único test sin tocar Dexie/fake-indexeddb — el resto de los tests de
+// este fichero siguen usando el comportamiento real (persisten de verdad).
+vi.mock('../../db/quiz', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('../../db/quiz')>();
+  return { ...actual, recordQuizSession: vi.fn(actual.recordQuizSession) };
+});
+
+beforeEach(() => {
+  // El mock es compartido por todo el fichero (vi.mock es de módulo, no
+  // por test) — sin esto, el recuento de llamadas de un test "arrastra"
+  // las llamadas reales hechas por los tests anteriores de este mismo
+  // fichero (p. ej. "calcula el resultado final correctamente" ya
+  // completa un test entero antes de llegar aquí).
+  vi.mocked(recordQuizSession).mockClear();
+});
 
 function QuizRoutes() {
   return (
@@ -63,5 +82,38 @@ describe('Test', () => {
     expect(
       await screen.findByText(new RegExp(`${expectedScore} de 10 preguntas correctas`)),
     ).toBeInTheDocument();
+  });
+
+  it('SAFE QUIZ COMPLETION (Fase 3B, obligatorio): si falla el guardado, no navega a resultados y permite reintentar sin perder el test', async () => {
+    vi.mocked(recordQuizSession).mockRejectedValueOnce(new Error('fallo simulado de guardado'));
+
+    startTenQuestionQuiz();
+    for (let i = 0; i < 9; i++) {
+      fireEvent.click(document.querySelectorAll('.q-opt')[0]!);
+      fireEvent.click(screen.getByRole('button', { name: 'Siguiente' }));
+    }
+    // Última pregunta: goNext() intenta persistir y el mock rechaza una vez.
+    fireEvent.click(document.querySelectorAll('.q-opt')[0]!);
+    fireEvent.click(screen.getByRole('button', { name: 'Siguiente' }));
+
+    // No se finge que el test se guardó: sigue en la pantalla de preguntas
+    // (no navega a /quiz/results), con un mensaje de error recuperable.
+    expect(await screen.findByText(/no se ha podido guardar el resultado del test/i)).toBeInTheDocument();
+    expect(screen.queryByText(/preguntas correctas/)).not.toBeInTheDocument();
+    expect(recordQuizSession).toHaveBeenCalledTimes(1);
+
+    // El botón pasa a "Reintentar" — la sesión (respuestas, score) sigue
+    // intacta en memoria, así que un segundo intento (sin el mock forzando
+    // el fallo esta vez) completa el test con normalidad.
+    const retryBtn = await screen.findByRole('button', { name: 'Reintentar' });
+    fireEvent.click(retryBtn);
+
+    expect(await screen.findByText(/preguntas correctas/)).toBeInTheDocument();
+    expect(recordQuizSession).toHaveBeenCalledTimes(2);
+    // Mismo sessionId en ambos intentos — recordQuizSession es idempotente
+    // por sessionId (Fase 3B, punto 4), así que reintentar no duplica nada.
+    const [firstCallArgs] = vi.mocked(recordQuizSession).mock.calls[0]!;
+    const [secondCallArgs] = vi.mocked(recordQuizSession).mock.calls[1]!;
+    expect(secondCallArgs.id).toBe(firstCallArgs.id);
   });
 });
