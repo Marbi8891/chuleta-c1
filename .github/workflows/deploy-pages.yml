@@ -1,0 +1,70 @@
+# Despliegue en GitHub Pages (ver docs/adr/0005-github-pages-deployment.md).
+#
+# Construye con `npm ci && npm run build` (base `/chuleta-c1/`, ver
+# vite.config.ts) y publica `dist/` con las Actions oficiales de GitHub
+# Pages en cada push a `main`. La versión de Node se lee de `.nvmrc`
+# (`node-version-file`) para no duplicar el número de versión y no poder
+# quedar desincronizada de él (ver ADR-0003 y Fase 2B punto 5).
+#
+# Este workflow NO ejecuta `npm run check` completo (lint/typecheck/test) —
+# eso es responsabilidad de un workflow de CI aparte (o de ejecutarlo antes
+# de mergear a main). Aquí solo se valida el contenido y se construye, para
+# no bloquear un despliegue por un fallo que ya debería haberse detectado
+# antes de llegar a `main`.
+
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+
+      - name: Install (clean, reproducible)
+        run: npm ci
+
+      - name: Verify academic content integrity
+        run: npm run verify-content
+
+      - name: Build
+        run: npm run build
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
