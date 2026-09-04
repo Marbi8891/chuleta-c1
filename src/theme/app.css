@@ -196,3 +196,23 @@ button:focus-visible,
   white-space: nowrap;
   border: 0;
 }
+
+/* ---------- PersistenceGate (Fase 3) ---------- */
+.persistence-gate-loading,
+.persistence-gate-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 60vh;
+  padding: 40px 24px;
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 14.5px;
+}
+.persistence-gate-error p:first-child {
+  color: var(--ink);
+  font-weight: 600;
+  font-size: 16px;
+}
