@@ -1,12 +1,12 @@
 # REPO_HANDOFF — estado del repositorio
 
 Este documento describe **el proyecto React completo tal y como existe
-hoy** (Fase 2B), no solo la capa de datos original de la Fase 1.5B. Si
+hoy** (Fase 3), no solo la capa de datos original de la Fase 1.5B. Si
 buscas solo el histórico de cómo se migró el contenido académico
 (extracción, validación, IDs estables), esa parte sigue documentada en
 `docs/DATA_INTEGRITY.md` y en `docs/adr/0001`-`0003`; este fichero cubre
-el árbol entero, incluida la app React (Fase 2) y el despliegue estático
-(Fase 2B).
+el árbol entero: la app React (Fase 2), el despliegue estático (Fase 2B)
+y la persistencia de progreso en IndexedDB (Fase 3).
 
 ## Qué es este repositorio
 
@@ -52,9 +52,18 @@ src/
     study/                         Estudiar (listado de temas + artículo).
     quiz/                          Configurar/ejecutar/resultados de test.
     flashcards/                    Flashcards (cola, volteo, dominadas).
-  state/                           Estado persistente de progreso del usuario (localStorage, NO Dexie todavía).
-    appState.ts                    Store externo (known/studied/quizHistory/studyFsIndex) + get/subscribe.
-    useAppState.ts                 Hook useSyncExternalStore sobre appState.ts.
+  state/                           Fuente legacy de progreso, hoy de SOLO LECTURA (ver db/ — Fase 3 la sustituyó como fuente de escritura).
+    appState.ts                    STORAGE_KEY + tipos (AppState, QuizHistoryEntry) de localStorage["chuletaC1_v1"]. Sin store activo: ver ADR-0006.
+  db/                              Persistencia de progreso — IndexedDB vía Dexie (Fase 3, ver ADR-0006).
+    schema.ts                      DB_NAME, LEGACY_MIGRATION_VERSION, interfaces de las 5 tablas.
+    db.ts                          Instancia Dexie (createDb() + `db` compartida) y db.version(1).stores(...).
+    appMeta.ts                     get/set genéricos sobre la tabla appMeta.
+    topicProgress.ts               Progreso de Estudiar + preferencia global de tamaño de letra (useStudiedTopics, useLiveQuery).
+    flashcardProgress.ts           Progreso de Flashcards (known) — lectura siempre fresca, nunca cacheada (ver ADR-0006).
+    quiz.ts                        recordQuizSession() — persiste quizSessions + quizAnswers en una transacción.
+    legacyMigration.ts             Migración única, idempotente y transaccional desde localStorage["chuletaC1_v1"] (ver docs/LEGACY_MIGRATION.md).
+    PersistenceGate.tsx            Espera a que la DB esté abierta y la migración termine antes de montar el resto de la app.
+    *.test.ts                      Tests sobre fake-indexeddb (ver src/setupTests.ts) — instancias Dexie aisladas por test vía createDb(nombre).
   deploy/                          Lógica del despliegue estático en GitHub Pages (ver ADR-0005).
     githubPagesSpaRedirect.ts      encode/decodeRedirectUrl — puras, testeadas.
     githubPagesSpaRedirect.test.ts
@@ -89,12 +98,14 @@ tests/                             Tests Node nativos (node:test) del pipeline d
 docs/
   REPO_HANDOFF.md                  Este fichero.
   DATA_INTEGRITY.md                Contrato de integridad del contenido académico.
+  LEGACY_MIGRATION.md              Mapeo campo a campo localStorage → IndexedDB + casos frontera (Fase 3).
   adr/
     0001-offline-data-bundling.md
     0002-persistence-layer.md
     0003-node-tooling-portability.md
     0004-react-app-architecture.md   Arquitectura de la app React (Fase 2) + deuda de fuentes offline (Fase 2B/4).
     0005-github-pages-deployment.md  Despliegue estático, routing, base/basename (Fase 2B).
+    0006-persistence-dexie.md        Persistencia con Dexie/IndexedDB, nombre de DB, migración legacy (Fase 3).
 
 .github/workflows/
   deploy-pages.yml                 Build + publicación en GitHub Pages (ver ADR-0005).
@@ -147,9 +158,6 @@ versión que `.nvmrc` — ver la nota en el ADR-0004 sobre esto.
 
 ## Qué NO hay todavía (deuda conocida, fases futuras)
 
-- **Persistencia con Dexie/IndexedDB** — Fase 3. Hoy `src/state/appState.ts`
-  sigue usando `localStorage` con la misma clave y forma que la app
-  legacy, a propósito, para no perder el progreso de usuarios existentes.
 - **Capacitor / Android** — Fase 4/5. `import.meta.env.BASE_URL` ya está
   desacoplado del nombre del repo en el código de rutas (ver ADR-0005)
   para que esa fase no tenga que tocar routing.
@@ -157,6 +165,13 @@ versión que `.nvmrc` — ver la nota en el ADR-0004 sobre esto.
   CDN vía `<link>` en `index.html`; para un runtime PWA/Capacitor
   totalmente offline habrá que empaquetarlas localmente o sustituirlas.
   Ver ADR-0004.
+- **SM-2/repetición espaciada para flashcards** — deliberadamente fuera de
+  alcance de la Fase 3 (`flashcardProgress` es solo `{flashcardId,
+  known}`, ver ADR-0006).
+- **Pantalla de historial de tests** — `quizSessions`/`quizAnswers` ya se
+  persisten desde la Fase 3, pero ninguna pantalla los muestra todavía
+  (igual que `quizHistory` en legacy, que tampoco se mostraba en ninguna
+  parte de la UI).
 
 ## Convención de ramas y commits
 
