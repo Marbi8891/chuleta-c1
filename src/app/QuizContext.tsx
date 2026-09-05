@@ -37,6 +37,8 @@ import { getQuizBankByTopic } from '../data/index';
 import type { AnswerKey, QuestionRef } from '../types/quiz';
 import type { TemaId } from '../types/content';
 import { recordQuizSession } from '../db/quiz';
+import { recordStudyEvent } from '../db/studyEvents';
+import { reportWriteError } from '../db/reportWriteError';
 
 export interface TemaTally {
   correct: number;
@@ -100,7 +102,7 @@ const INITIAL_STATE: QuizState = {
 
 type QuizAction =
   | { type: 'SET_COUNT'; count: number }
-  | { type: 'START'; questions: QuestionRef[]; scope: TemaId[] }
+  | { type: 'START'; questions: QuestionRef[]; scope: TemaId[]; sessionId: string; startedAt: string }
   | { type: 'SELECT'; letter: AnswerKey }
   | { type: 'NEXT' }
   | { type: 'SAVE_START' }
@@ -112,6 +114,12 @@ function quizReducer(state: QuizState, action: QuizAction): QuizState {
     case 'SET_COUNT':
       return { ...state, count: action.count };
     case 'START':
+      // Study Intelligence, Fase 1: sessionId/startedAt ahora se generan en
+      // startQuiz() (el callback imperativo, no el reducer) para que
+      // startQuiz pueda emitir el evento QUIZ_STARTED con el MISMO
+      // sessionId que luego usará recordQuizSession al completar el test —
+      // un reducer que genera su propio id "a escondidas" no permite eso
+      // sin duplicar la generación (y arriesgarse a que difieran).
       return {
         ...state,
         questions: action.questions,
@@ -124,8 +132,8 @@ function quizReducer(state: QuizState, action: QuizAction): QuizState {
         completed: false,
         saving: false,
         saveError: null,
-        sessionId: crypto.randomUUID(),
-        startedAt: new Date().toISOString(),
+        sessionId: action.sessionId,
+        startedAt: action.startedAt,
         scope: action.scope,
         answers: [],
       };
@@ -208,10 +216,18 @@ export function QuizProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(quizReducer, INITIAL_STATE);
 
   const setCount = useCallback((count: number) => dispatch({ type: 'SET_COUNT', count }), []);
-  const startQuiz = useCallback(
-    (questions: QuestionRef[], scope: TemaId[]) => dispatch({ type: 'START', questions, scope }),
-    [],
-  );
+  const startQuiz = useCallback((questions: QuestionRef[], scope: TemaId[]) => {
+    const sessionId = crypto.randomUUID();
+    const startedAt = new Date().toISOString();
+    dispatch({ type: 'START', questions, scope, sessionId, startedAt });
+    // Fire-and-forget deliberado (mismo patrón que markTopicStudied en
+    // StudyArticlePage, Fase 3B punto 5): arrancar un test no debe esperar
+    // a que el evento se persista, pero un fallo real tampoco debe quedar
+    // como promesa rechazada sin gestionar.
+    recordStudyEvent({ type: 'QUIZ_STARTED', quizSessionId: sessionId, timestamp: startedAt }).catch((e) =>
+      reportWriteError('recordStudyEvent:QUIZ_STARTED', e),
+    );
+  }, []);
   const selectAnswer = useCallback((letter: AnswerKey) => dispatch({ type: 'SELECT', letter }), []);
 
   // Fase 3C, punto 6 (DOUBLE CLICK SAVE LOCK, opcional): `state.saving` ya

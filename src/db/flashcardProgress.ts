@@ -12,10 +12,31 @@
 
 import type { ChuletaC1DB } from './db';
 import { db as defaultDb } from './db';
+import { recordStudyEvents } from './studyEvents';
+import { reportWriteError } from './reportWriteError';
 
-/** Equivalente a `state.known[cardId] = known; saveState();` en paintFlash() (legacy). */
+/**
+ * Equivalente a `state.known[cardId] = known; saveState();` en paintFlash()
+ * (legacy). Fase 1 de Study Intelligence: además registra FLASHCARD_REVIEWED
+ * (toda revisión, se marque como se marque) y, según el resultado,
+ * FLASHCARD_KNOWN o FLASHCARD_FAILED — igual que en markTopicStudied, el
+ * registro de eventos nunca debe poder impedir guardar el progreso real, así
+ * que va después de la escritura principal y en su propio try/catch.
+ */
 export async function setFlashcardKnown(flashcardId: string, known: boolean, database: ChuletaC1DB = defaultDb): Promise<void> {
   await database.flashcardProgress.put({ flashcardId, known, updatedAt: new Date().toISOString() });
+
+  try {
+    await recordStudyEvents(
+      [
+        { type: 'FLASHCARD_REVIEWED', flashcardId },
+        { type: known ? 'FLASHCARD_KNOWN' : 'FLASHCARD_FAILED', flashcardId },
+      ],
+      database,
+    );
+  } catch (e) {
+    reportWriteError('recordStudyEvent:FLASHCARD_REVIEWED', e);
+  }
 }
 
 /**

@@ -1,5 +1,5 @@
 // src/db/topicProgress.test.ts
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { createDb, type ChuletaC1DB } from './db';
 import { getStudyFsIndex, markTopicStudied, setStudyFsIndex } from './topicProgress';
 
@@ -28,6 +28,27 @@ describe('topicProgress', () => {
     await markTopicStudied('I-T01', testDb);
     const second = await testDb.topicProgress.get('I-T01');
     expect(second?.updatedAt).toBe(first?.updatedAt);
+  });
+
+  it('Study Intelligence Fase 1: cada llamada registra TOPIC_OPENED, incluso si el tema ya estaba marcado como leído', async () => {
+    await markTopicStudied('I-T01', testDb);
+    await markTopicStudied('I-T01', testDb); // ya estaba marcado: topicProgress no cambia, pero es una apertura real
+    const events = await testDb.studyEvents.where('type').equals('TOPIC_OPENED').toArray();
+    expect(events).toHaveLength(2);
+    expect(events.every((e) => e.topicId === 'I-T01')).toBe(true);
+  });
+
+  it('un fallo al registrar TOPIC_OPENED no impide marcar el progreso real (principio de no interferencia)', async () => {
+    vi.spyOn(testDb.studyEvents, 'add').mockRejectedValueOnce(new Error('fallo simulado de studyEvents'));
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    await expect(markTopicStudied('I-T01', testDb)).resolves.toBeUndefined();
+
+    const row = await testDb.topicProgress.get('I-T01');
+    expect(row?.studied).toBe(true);
+    expect(errorSpy).toHaveBeenCalledWith(expect.stringContaining('recordStudyEvent:TOPIC_OPENED'), expect.any(Error));
+
+    errorSpy.mockRestore();
   });
 
   it('getStudyFsIndex por defecto devuelve el índice por defecto (18px)', async () => {

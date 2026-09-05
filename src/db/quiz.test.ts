@@ -1,5 +1,5 @@
 // src/db/quiz.test.ts
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { createDb, type ChuletaC1DB } from './db';
 import { getQuizSessionDetail, listQuizSessions, recordQuizSession } from './quiz';
 
@@ -82,6 +82,65 @@ describe('recordQuizSession', () => {
     const answers = await testDb.quizAnswers.where('sessionId').equals('retry-session').toArray();
     expect(answers).toHaveLength(3);
     expect(answers.map((a) => a.questionId).sort()).toEqual(['I-T01-Q001', 'I-T01-Q002', 'I-T01-Q003']);
+  });
+});
+
+describe('Study Intelligence Fase 1: eventos de actividad emitidos al completar un test', () => {
+  it('registra QUIZ_COMPLETED y un QUESTION_ANSWERED/QUESTION_CORRECT o QUESTION_INCORRECT por cada respuesta, con el answeredAt real', async () => {
+    await recordQuizSession(
+      {
+        id: 'events-session',
+        startedAt: '2026-01-01T00:00:00.000Z',
+        completedAt: '2026-01-01T00:05:00.000Z',
+        scope: ['I-T01'],
+        answers: [
+          { questionId: 'I-T01-Q001', selectedAnswer: 'a', correct: true, answeredAt: '2026-01-01T00:01:00.000Z' },
+          { questionId: 'I-T01-Q002', selectedAnswer: 'b', correct: false, answeredAt: '2026-01-01T00:02:00.000Z' },
+        ],
+      },
+      testDb,
+    );
+
+    const events = await testDb.studyEvents.where('quizSessionId').equals('events-session').toArray();
+    const completed = events.filter((e) => e.type === 'QUIZ_COMPLETED');
+    expect(completed).toHaveLength(1);
+    expect(completed[0]?.timestamp).toBe('2026-01-01T00:05:00.000Z');
+
+    const answered = events.filter((e) => e.type === 'QUESTION_ANSWERED');
+    expect(answered.map((e) => e.questionId).sort()).toEqual(['I-T01-Q001', 'I-T01-Q002']);
+
+    const correct = events.find((e) => e.type === 'QUESTION_CORRECT');
+    expect(correct?.questionId).toBe('I-T01-Q001');
+    expect(correct?.timestamp).toBe('2026-01-01T00:01:00.000Z');
+
+    const incorrect = events.find((e) => e.type === 'QUESTION_INCORRECT');
+    expect(incorrect?.questionId).toBe('I-T01-Q002');
+  });
+
+  it('un fallo al registrar los eventos NO impide que la sesión y las respuestas se guarden (principio de no interferencia)', async () => {
+    vi.spyOn(testDb.studyEvents, 'bulkAdd').mockRejectedValueOnce(new Error('fallo simulado de studyEvents'));
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    await expect(
+      recordQuizSession(
+        {
+          id: 'events-fail-session',
+          startedAt: '2026-01-01T00:00:00.000Z',
+          completedAt: '2026-01-01T00:05:00.000Z',
+          scope: ['I-T01'],
+          answers: [{ questionId: 'I-T01-Q001', selectedAnswer: 'a', correct: true, answeredAt: '2026-01-01T00:01:00.000Z' }],
+        },
+        testDb,
+      ),
+    ).resolves.toBeUndefined();
+
+    const session = await testDb.quizSessions.get('events-fail-session');
+    expect(session?.completed).toBe(true);
+    const answers = await testDb.quizAnswers.where('sessionId').equals('events-fail-session').toArray();
+    expect(answers).toHaveLength(1);
+    expect(errorSpy).toHaveBeenCalledWith(expect.stringContaining('recordStudyEvent:QUIZ_COMPLETED'), expect.any(Error));
+
+    errorSpy.mockRestore();
   });
 });
 

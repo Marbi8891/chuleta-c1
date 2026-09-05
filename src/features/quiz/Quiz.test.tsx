@@ -17,6 +17,7 @@ import { QuizResultsPage } from './QuizResultsPage';
 import { recordQuizSession } from '../../db/quiz';
 import { useQuiz } from '../../app/QuizContext';
 import { getQuestions } from '../../data/index';
+import { db } from '../../db/db';
 
 // Fase 3B, SAFE QUIZ COMPLETION: se mockea recordQuizSession (envolviendo
 // la implementación real) para poder forzar un fallo de guardado en un
@@ -153,6 +154,25 @@ describe('Test', () => {
     const [firstCallArgs] = vi.mocked(recordQuizSession).mock.calls[0]!;
     const [secondCallArgs] = vi.mocked(recordQuizSession).mock.calls[1]!;
     expect(secondCallArgs.id).toBe(firstCallArgs.id);
+  });
+
+  it('Study Intelligence Fase 1: arrancar un test registra QUIZ_STARTED con el mismo sessionId que luego usa recordQuizSession', async () => {
+    startTenQuestionQuiz();
+
+    await vi.waitFor(async () => {
+      expect(await db.studyEvents.where('type').equals('QUIZ_STARTED').count()).toBe(1);
+    });
+    const [started] = await db.studyEvents.where('type').equals('QUIZ_STARTED').toArray();
+    expect(started?.quizSessionId).toBeTruthy();
+
+    for (let i = 0; i < 10; i++) {
+      fireEvent.click(document.querySelectorAll('.q-opt')[0]!);
+      fireEvent.click(screen.getByRole('button', { name: 'Siguiente' }));
+    }
+    await screen.findByText(/preguntas correctas/);
+
+    const [completeArgs] = vi.mocked(recordQuizSession).mock.calls[0]!;
+    expect(completeArgs.id).toBe(started?.quizSessionId);
   });
 
   it('DOUBLE CLICK SAVE LOCK (Fase 3C, punto 6, opcional): dos llamadas a goNext() en el mismo tick solo guardan una vez', async () => {

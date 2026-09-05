@@ -7,6 +7,9 @@
 import type { ChuletaC1DB } from './db';
 import { db as defaultDb } from './db';
 import type { QuizAnswerRecord, QuizSessionRecord } from './schema';
+import type { RecordStudyEventInput } from './studyEvents';
+import { recordStudyEvents } from './studyEvents';
+import { reportWriteError } from './reportWriteError';
 import type { TemaId } from '../types/content';
 
 export interface RecordQuizSessionInput {
@@ -52,6 +55,37 @@ export async function recordQuizSession(
     await database.quizAnswers.where('sessionId').equals(input.id).delete();
     await database.quizAnswers.bulkAdd(input.answers.map((a) => ({ ...a, sessionId: input.id })));
   });
+
+  // Study Intelligence, Fase 1: eventos de actividad DESPUÉS de que la
+  // transacción anterior (la fuente de verdad del resultado del test) haya
+  // tenido éxito, y en su propio try/catch — un fallo aquí nunca debe hacer
+  // pensar a QuizContext que el test no se guardó (ver
+  // docs/STUDY_INTELLIGENCE_ARCHITECTURE.md, sección 2.2). Cada evento usa
+  // el `answeredAt` real de su respuesta, no "ahora", para que la serie
+  // temporal sea fiel a cuándo ocurrió cada cosa de verdad, no a cuándo
+  // Dexie tuvo ocasión de persistirla.
+  try {
+    const events: RecordStudyEventInput[] = [
+      { type: 'QUIZ_COMPLETED', quizSessionId: input.id, timestamp: input.completedAt },
+    ];
+    for (const answer of input.answers) {
+      events.push({
+        type: 'QUESTION_ANSWERED',
+        questionId: answer.questionId,
+        quizSessionId: input.id,
+        timestamp: answer.answeredAt,
+      });
+      events.push({
+        type: answer.correct ? 'QUESTION_CORRECT' : 'QUESTION_INCORRECT',
+        questionId: answer.questionId,
+        quizSessionId: input.id,
+        timestamp: answer.answeredAt,
+      });
+    }
+    await recordStudyEvents(events, database);
+  } catch (e) {
+    reportWriteError('recordStudyEvent:QUIZ_COMPLETED', e);
+  }
 }
 
 /** Tests completados, del más reciente al más antiguo. */

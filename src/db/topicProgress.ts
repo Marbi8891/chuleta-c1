@@ -6,10 +6,29 @@ import type { ChuletaC1DB } from './db';
 import { db as defaultDb } from './db';
 import { getMeta, setMeta } from './appMeta';
 import { APP_META_KEYS } from './schema';
+import { recordStudyEvent } from './studyEvents';
+import { reportWriteError } from './reportWriteError';
 import type { TemaId } from '../types/content';
 
-/** Equivalente a `state.studied[topicId] = true; saveState();` en paintStudyArticle() (legacy). */
+/**
+ * Equivalente a `state.studied[topicId] = true; saveState();` en
+ * paintStudyArticle() (legacy). Fase 1 de Study Intelligence: además
+ * registra un evento TOPIC_OPENED cada vez que se llama (no solo la
+ * primera vez) — a diferencia de `topicProgress` (que es idempotente: solo
+ * importa "¿se ha leído alguna vez?"), TOPIC_OPENED es un registro de
+ * ACTIVIDAD real, necesario para rachas/tiempo de estudio en fases futuras.
+ * Un fallo al registrar el evento nunca debe impedir marcar el progreso
+ * real, así que se aísla en su propio try/catch (mismo principio que
+ * reportWriteError ya aplica a esta función desde su llamante en
+ * StudyArticlePage — ver docs/STUDY_INTELLIGENCE_ARCHITECTURE.md, sección 2.2).
+ */
 export async function markTopicStudied(topicId: TemaId, database: ChuletaC1DB = defaultDb): Promise<void> {
+  try {
+    await recordStudyEvent({ type: 'TOPIC_OPENED', topicId }, database);
+  } catch (e) {
+    reportWriteError('recordStudyEvent:TOPIC_OPENED', e);
+  }
+
   const existing = await database.topicProgress.get(topicId);
   if (existing?.studied) return; // idempotente, igual que el guard de appState.ts
   await database.topicProgress.put({ topicId, studied: true, updatedAt: new Date().toISOString() });
