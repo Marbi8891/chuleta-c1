@@ -4,6 +4,12 @@
   gap: 10px;
 }
 
+.brand-title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .side-menu-trigger,
 .side-menu-close {
   display: inline-flex;
@@ -18,6 +24,13 @@
   color: var(--ink);
   cursor: pointer;
   box-shadow: var(--shadow);
+}
+
+.brand-title-row .side-menu-trigger {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  box-shadow: none;
 }
 
 .side-menu-trigger:hover,
@@ -172,9 +185,13 @@
     margin-left: auto;
   }
 
-  .side-menu-trigger {
-    width: 38px;
-    height: 38px;
+  .brand-title-row {
+    gap: 8px;
+  }
+
+  .brand-title-row .side-menu-trigger {
+    width: 34px;
+    height: 34px;
   }
 }
 
