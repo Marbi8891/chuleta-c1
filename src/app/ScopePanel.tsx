@@ -1,10 +1,9 @@
 // src/app/ScopePanel.tsx
 //
-// Migración de la sección "Alcance" (legacy/index.original.html líneas
-// 372-387) y de renderScope() (líneas 448-489): selector de temas por
-// bloque, con chips por tema, "Alternar" por bloque y "Marcar todo"/"Vaciar"
-// globales. Se oculta en las rutas de Estudiar, igual que
-// `scopeBox.hidden = mode==="study"` en legacy.
+// Selector de temas por bloque para las features que dependen de Alcance
+// (Test y Repaso). En una pantalla móvil el selector completo ocupa gran parte
+// del viewport, así que arranca plegado: el usuario ve inmediatamente el
+// contenido propio de la pestaña y puede desplegar Alcance cuando quiera.
 
 import { useState } from 'react';
 import { BLOQUES, getTemasOrdered } from '../data/topics';
@@ -20,7 +19,7 @@ function ChevronIcon() {
 
 export function ScopePanel({ hidden }: { hidden: boolean }) {
   const { scope, toggleTema, toggleBloque, selectAll, selectNone } = useScope();
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
   const temas = getTemasOrdered();
 
   if (hidden) return null;
