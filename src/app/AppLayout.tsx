@@ -1,13 +1,9 @@
 // src/app/AppLayout.tsx
 //
-// Migración del shell de nivel superior (legacy/index.original.html líneas
-// 345-394: <div class="wrap"> con <header class="topbar">, .stats-strip,
-// .scope, los tres <main class="view">, y el <footer>). El header conserva
-// la marca y el subtítulo; las antiguas .mode-tabs se sustituyen por la
-// bottom-nav mobile-first (ver BottomNav.tsx). El panel de Alcance se oculta
-// en las rutas de Estudiar, igual que `scopeBox.hidden = mode==="study"` en
-// legacy — y también en "Hoy" (/), que es una landing nueva de la Fase 2 sin
-// equivalente en legacy y que tampoco usa el alcance para nada.
+// Shell de nivel superior: cabecera, estadísticas, alcance, contenido de ruta,
+// footer y navegación inferior. El selector de Alcance solo aparece donde
+// modifica realmente la experiencia (Test y Repaso); no se muestra en Hoy,
+// Estudiar ni Más, para que cada destino sea visual y funcionalmente claro.
 
 import { Outlet, useLocation } from 'react-router-dom';
 import { BottomNav } from './BottomNav';
@@ -28,7 +24,10 @@ function BrandMark() {
 
 export function AppLayout() {
   const location = useLocation();
-  const hideScope = location.pathname === '/' || location.pathname.startsWith('/study');
+  const showScope =
+    location.pathname === '/quiz' ||
+    location.pathname.startsWith('/quiz/') ||
+    location.pathname === '/flashcards';
 
   return (
     <div className="wrap app-shell">
@@ -47,7 +46,7 @@ export function AppLayout() {
 
       <UpdateBanner />
       <StatsStrip />
-      <ScopePanel hidden={hideScope} />
+      <ScopePanel hidden={!showScope} />
 
       <main className="app-main view">
         <Outlet />
