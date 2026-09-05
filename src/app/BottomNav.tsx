@@ -1,10 +1,7 @@
 // src/app/BottomNav.tsx
 //
-// Navegación inferior mobile-first (requisito nuevo de la Fase 2 — la app
-// legacy solo tenía las tres pestañas superiores .mode-tabs, ver
-// legacy/index.original.html líneas 358-362). Cinco destinos conceptuales;
-// solo Temario/Test/Repaso están implementados esta fase. "Hoy" es una
-// landing real pero mínima; "Más" es un botón deshabilitado sin ruta propia.
+// Navegación inferior mobile-first. Los cinco destinos son rutas reales:
+// Hoy, Temario, Test, Repaso y Más.
 
 import { NavLink } from 'react-router-dom';
 
@@ -71,10 +68,10 @@ export function BottomNav() {
         <CardsIcon />
         Repaso
       </NavLink>
-      <button type="button" className="bottom-nav-item" aria-disabled="true" title="Próximamente">
+      <NavLink to="/more" className={navLinkClassName}>
         <MoreIcon />
         Más
-      </button>
+      </NavLink>
     </nav>
   );
 }

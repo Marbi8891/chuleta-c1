@@ -1,10 +1,8 @@
-// src/db/quiz.ts — persistencia de tests completados (tablas quizSessions +
-// quizAnswers). Sustituye a pushQuizHistory() (legacy, appState.ts): en vez
-// de un array recortado a 20 entradas {date,total,pct} en localStorage,
-// cada test completado desde esta fase en adelante queda como una sesión
-// con sus respuestas individuales, referenciando preguntas por QuestionId
-// (nunca duplicando su contenido — ver QUESTION REFERENCES en la
-// especificación de Fase 3 y docs/adr/0006).
+// src/db/quiz.ts — persistencia y lectura de tests completados (tablas
+// quizSessions + quizAnswers). Sustituye a pushQuizHistory() (legacy,
+// appState.ts): en vez de un array recortado a 20 entradas {date,total,pct}
+// en localStorage, cada test completado queda como una sesión con sus
+// respuestas individuales, referenciando preguntas por QuestionId.
 
 import type { ChuletaC1DB } from './db';
 import { db as defaultDb } from './db';
@@ -19,24 +17,22 @@ export interface RecordQuizSessionInput {
   answers: readonly Omit<QuizAnswerRecord, 'id' | 'sessionId'>[];
 }
 
+export interface QuizSessionDetail {
+  session: QuizSessionRecord;
+  answers: QuizAnswerRecord[];
+}
+
 /**
  * Persiste una sesión de test completada junto con sus respuestas, en una
- * única transacción Dexie (todo o nada — ver MIGRATION TRANSACTION /
- * DATABASE VERSIONING en la especificación: el mismo principio aplica a
- * cualquier escritura multi-tabla, no solo a la migración).
+ * única transacción Dexie (todo o nada).
  *
- * IDEMPOTENTE por `id` de sesión (Fase 3B, punto 4): `quizSessions.put`
- * sobre la PK ya sustituye la fila sin duplicar, pero `quizAnswers` usa un
- * id autoincremental (no hay PK natural — ver schema.ts), así que un
- * `bulkAdd` ingenuo llamado dos veces con el mismo `input.id` (p. ej. un
- * reintento tras un fallo de red/guardado — ver QuizContext.tsx, SAFE QUIZ
- * COMPLETION) duplicaría todas las respuestas. Por eso, dentro de la misma
- * transacción, se borran primero las respuestas existentes de esa sesión
- * antes de reinsertar: dos llamadas con el mismo `id` dejan siempre
- * exactamente N filas en quizAnswers (nunca 2N), y como es la MISMA
- * transacción que el borrado, sigue siendo todo-o-nada.
+ * IDEMPOTENTE por `id` de sesión: antes de reinsertar las respuestas se
+ * eliminan las existentes para ese sessionId dentro de la misma transacción.
  */
-export async function recordQuizSession(input: RecordQuizSessionInput, database: ChuletaC1DB = defaultDb): Promise<void> {
+export async function recordQuizSession(
+  input: RecordQuizSessionInput,
+  database: ChuletaC1DB = defaultDb,
+): Promise<void> {
   const total = input.answers.length;
   const correct = input.answers.filter((a) => a.correct).length;
   const session: QuizSessionRecord = {
@@ -47,9 +43,6 @@ export async function recordQuizSession(input: RecordQuizSessionInput, database:
     totalQuestions: total,
     correctAnswers: correct,
     incorrectAnswers: total - correct,
-    // La UX actual no permite dejar una pregunta en blanco (hay que
-    // responder para poder avanzar) — ver el comentario de
-    // QuizSessionRecord en schema.ts.
     blankAnswers: 0,
     completed: true,
   };
@@ -59,4 +52,29 @@ export async function recordQuizSession(input: RecordQuizSessionInput, database:
     await database.quizAnswers.where('sessionId').equals(input.id).delete();
     await database.quizAnswers.bulkAdd(input.answers.map((a) => ({ ...a, sessionId: input.id })));
   });
+}
+
+/** Tests completados, del más reciente al más antiguo. */
+export async function listQuizSessions(database: ChuletaC1DB = defaultDb): Promise<QuizSessionRecord[]> {
+  const sessions = await database.quizSessions.toArray();
+  return sessions
+    .filter((session) => session.completed)
+    .sort((a, b) => {
+      const aDate = a.completedAt ?? a.startedAt;
+      const bDate = b.completedAt ?? b.startedAt;
+      return bDate.localeCompare(aDate);
+    });
+}
+
+/** Recupera una sesión y sus respuestas persistidas, en el orden en que se guardaron. */
+export async function getQuizSessionDetail(
+  sessionId: string,
+  database: ChuletaC1DB = defaultDb,
+): Promise<QuizSessionDetail | null> {
+  const session = await database.quizSessions.get(sessionId);
+  if (!session) return null;
+
+  const answers = await database.quizAnswers.where('sessionId').equals(sessionId).toArray();
+  answers.sort((a, b) => (a.id ?? 0) - (b.id ?? 0));
+  return { session, answers };
 }

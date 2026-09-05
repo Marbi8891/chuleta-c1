@@ -1,7 +1,6 @@
 // src/app/App.test.tsx
 //
-// Tests mínimos de Fase 2 para la navegación de la app: la bottom-nav
-// funciona y una ruta inválida cae en la página "no encontrada".
+// Tests de navegación principal: destinos de la bottom-nav y fallback 404.
 
 import { describe, expect, it } from 'vitest';
 import { render, screen, fireEvent, within } from '@testing-library/react';
@@ -29,12 +28,16 @@ describe('Navegación de la app', () => {
 
     const nav = screen.getByRole('navigation', { name: 'Navegación principal' });
     fireEvent.click(within(nav).getByRole('link', { name: /Temario/ }));
-    // Fase 4, punto 9: StudyHomePage se carga con React.lazy (ver
-    // src/app/router.tsx) — tras el click, React pinta primero el
-    // fallback de Suspense ("Cargando…") y resuelve el chunk de forma
-    // asíncrona incluso en test (import() real, aunque ya esté en la
-    // caché de módulos de Vitest). findByText espera a esa resolución.
     expect(await screen.findByText(/Elige un tema para leerlo/)).toBeInTheDocument();
+  });
+
+  it('Más es un destino navegable y muestra el historial de tests', async () => {
+    renderApp('/');
+    const nav = screen.getByRole('navigation', { name: 'Navegación principal' });
+    fireEvent.click(within(nav).getByRole('link', { name: /Más/ }));
+
+    expect(await screen.findByRole('heading', { name: 'Más' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Historial de tests' })).toBeInTheDocument();
   });
 
   it('una ruta inválida muestra la página de "no encontrada"', () => {
