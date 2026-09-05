@@ -6,6 +6,7 @@ const MENU_ITEMS = [
   { to: '/study', label: 'Temario', description: 'Leer y marcar temas' },
   { to: '/quiz', label: 'Test', description: 'Practicar preguntas' },
   { to: '/flashcards', label: 'Repaso', description: 'Trabajar con flashcards' },
+  { to: '/errors', label: 'Errores', description: 'Cuaderno de errores' },
   { to: '/more', label: 'Historial', description: 'Resultados y progreso' },
 ] as const;
 

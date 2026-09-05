@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useQuiz } from '../../app/QuizContext';
 import { getQuestionById, getTopicById } from '../../data/index';
 import { getQuizSessionDetail, listQuizSessions } from '../../db/quiz';
+import { queryErrorRecords } from '../../db/errorRecords';
 import type { QuizAnswerRecord, QuizSessionRecord } from '../../db/schema';
 import type { TemaId } from '../../types/content';
 import type { AnswerKey, QuestionRef } from '../../types/quiz';
@@ -41,6 +42,10 @@ function answerText(question: QuestionRef | undefined, answer: AnswerKey): strin
 
 export function MorePage() {
   const sessions = useLiveQuery(() => listQuizSessions(), []);
+  const pendingErrors = useLiveQuery(async () => {
+    const all = await queryErrorRecords();
+    return all.filter((record) => record.status !== 'MASTERED').length;
+  }, []);
 
   return (
     <section className="more-view">
@@ -89,10 +94,16 @@ export function MorePage() {
       </section>
 
       <div className="more-secondary-grid" aria-label="Funciones adicionales">
-        <div className="more-secondary-card">
-          <strong>Progreso</strong>
-          <span>Resumen detallado por tema en una próxima iteración.</span>
-        </div>
+        <Link className="more-secondary-card" to="/errors">
+          <strong>Cuaderno de errores</strong>
+          <span>
+            {pendingErrors === undefined
+              ? 'Cargando…'
+              : pendingErrors === 0
+                ? 'Ninguna pregunta pendiente de dominar.'
+                : `${pendingErrors} pregunta${pendingErrors === 1 ? '' : 's'} pendiente${pendingErrors === 1 ? '' : 's'} de dominar.`}
+          </span>
+        </Link>
         <div className="more-secondary-card">
           <strong>Ajustes</strong>
           <span>Preferencias adicionales en una próxima iteración.</span>

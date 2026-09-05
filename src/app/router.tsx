@@ -1,7 +1,8 @@
 // src/app/router.tsx
 //
 // Rutas: "/" (Hoy), "/study", "/study/:topicId", "/quiz", "/quiz/run",
-// "/quiz/results", "/flashcards", "/more" y "/more/tests/:sessionId".
+// "/quiz/results", "/flashcards", "/more", "/more/tests/:sessionId" y
+// "/errors" (Cuaderno de errores, Study Intelligence Fase 2).
 //
 // Las features secundarias se cargan con React.lazy para mantener pequeño el
 // bundle inicial. El contenido académico sigue embebido localmente; no hay
@@ -37,6 +38,9 @@ const MorePage = lazy(() =>
 const QuizHistoryDetailPage = lazy(() =>
   import('../features/more/MorePage').then((m) => ({ default: m.QuizHistoryDetailPage })),
 );
+const ErrorNotebookPage = lazy(() =>
+  import('../features/errors/ErrorNotebookPage').then((m) => ({ default: m.ErrorNotebookPage })),
+);
 
 function RouteFallback() {
   return (
@@ -63,6 +67,7 @@ export function AppRouter() {
         <Route path="flashcards" element={lazyRoute(<FlashcardsPage />)} />
         <Route path="more" element={lazyRoute(<MorePage />)} />
         <Route path="more/tests/:sessionId" element={lazyRoute(<QuizHistoryDetailPage />)} />
+        <Route path="errors" element={lazyRoute(<ErrorNotebookPage />)} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>
