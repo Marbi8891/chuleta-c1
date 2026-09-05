@@ -1,6 +1,7 @@
 // src/app/App.test.tsx
 //
-// Tests de navegación principal: destinos de la bottom-nav y fallback 404.
+// Tests de navegación principal: destinos de la bottom-nav, visibilidad del
+// Alcance por ruta y fallback 404.
 
 import { describe, expect, it } from 'vitest';
 import { render, screen, fireEvent, within } from '@testing-library/react';
@@ -31,13 +32,20 @@ describe('Navegación de la app', () => {
     expect(await screen.findByText(/Elige un tema para leerlo/)).toBeInTheDocument();
   });
 
-  it('Más es un destino navegable y muestra el historial de tests', async () => {
+  it('Test muestra su contenido propio y el selector de Alcance arranca plegado', async () => {
+    renderApp('/quiz');
+    expect(await screen.findByRole('heading', { name: 'Configura tu test' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Alcance/ })).toHaveAttribute('aria-expanded', 'false');
+  });
+
+  it('Más es un destino navegable, muestra el historial y no muestra el selector de Alcance', async () => {
     renderApp('/');
     const nav = screen.getByRole('navigation', { name: 'Navegación principal' });
     fireEvent.click(within(nav).getByRole('link', { name: /Más/ }));
 
     expect(await screen.findByRole('heading', { name: 'Más' })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Historial de tests' })).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /Alcance/ })).not.toBeInTheDocument();
   });
 
   it('una ruta inválida muestra la página de "no encontrada"', () => {
