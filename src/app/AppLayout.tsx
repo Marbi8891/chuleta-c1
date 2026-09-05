@@ -1,12 +1,14 @@
 // src/app/AppLayout.tsx
 //
 // Shell de nivel superior: cabecera, estadísticas, alcance, contenido de ruta,
-// footer y navegación inferior. El selector de Alcance solo aparece donde
-// modifica realmente la experiencia (Test y Repaso); no se muestra en Hoy,
-// Estudiar ni Más, para que cada destino sea visual y funcionalmente claro.
+// footer, navegación inferior y menú lateral. El selector de Alcance solo
+// aparece donde modifica realmente la experiencia (Test y Repaso); no se
+// muestra en Hoy, Estudiar ni Más, para que cada destino sea visual y
+// funcionalmente claro.
 
 import { Outlet, useLocation } from 'react-router-dom';
 import { BottomNav } from './BottomNav';
+import { SideMenu } from './SideMenu';
 import { ScopePanel } from './ScopePanel';
 import { StatsStrip } from './StatsStrip';
 import { OfflineIndicator } from '../pwa/OfflineIndicator';
@@ -41,7 +43,10 @@ export function AppLayout() {
             <p className="subtitle">Cuerpo General Administrativo del Estado</p>
           </div>
         </div>
-        <OfflineIndicator />
+        <div className="topbar-actions">
+          <OfflineIndicator />
+          <SideMenu />
+        </div>
       </header>
 
       <UpdateBanner />
