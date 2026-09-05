@@ -1,7 +1,7 @@
 // src/app/App.test.tsx
 //
-// Tests de navegación principal: destinos de la bottom-nav, visibilidad del
-// Alcance por ruta y fallback 404.
+// Tests de navegación principal: destinos de la bottom-nav, menú lateral,
+// visibilidad del Alcance por ruta y fallback 404.
 
 import { describe, expect, it } from 'vitest';
 import { render, screen, fireEvent, within } from '@testing-library/react';
@@ -30,6 +30,32 @@ describe('Navegación de la app', () => {
     const nav = screen.getByRole('navigation', { name: 'Navegación principal' });
     fireEvent.click(within(nav).getByRole('link', { name: /Temario/ }));
     expect(await screen.findByText(/Elige un tema para leerlo/)).toBeInTheDocument();
+  });
+
+  it('el menú lateral abre, navega al historial y se cierra al cambiar de ruta', async () => {
+    renderApp('/');
+
+    const trigger = screen.getByRole('button', { name: 'Abrir menú lateral' });
+    expect(trigger).toHaveAttribute('aria-expanded', 'false');
+
+    fireEvent.click(trigger);
+    expect(screen.getByRole('dialog', { name: 'Menú lateral' })).toBeInTheDocument();
+    expect(trigger).toHaveAttribute('aria-expanded', 'true');
+
+    const menu = screen.getByRole('navigation', { name: 'Menú lateral' });
+    fireEvent.click(within(menu).getByRole('link', { name: /Historial/ }));
+
+    expect(await screen.findByRole('heading', { name: 'Más' })).toBeInTheDocument();
+    expect(screen.queryByRole('dialog', { name: 'Menú lateral' })).not.toBeInTheDocument();
+  });
+
+  it('el menú lateral se puede cerrar con Escape', () => {
+    renderApp('/');
+    fireEvent.click(screen.getByRole('button', { name: 'Abrir menú lateral' }));
+    expect(screen.getByRole('dialog', { name: 'Menú lateral' })).toBeInTheDocument();
+
+    fireEvent.keyDown(document, { key: 'Escape' });
+    expect(screen.queryByRole('dialog', { name: 'Menú lateral' })).not.toBeInTheDocument();
   });
 
   it('Test muestra su contenido propio y el selector de Alcance arranca plegado', async () => {
