@@ -7,7 +7,10 @@ import globals from 'globals';
 
 export default tseslint.config(
   {
-    ignores: ['dist', 'coverage', 'node_modules', 'src/data/*.json'],
+    // `android/` es el proyecto nativo generado/gestionado por Capacitor + Gradle.
+    // Contiene assets web copiados y artefactos de build que no forman parte del
+    // código fuente TS/React y se validan con la toolchain Android, no con ESLint.
+    ignores: ['dist', 'coverage', 'node_modules', 'android/**', 'src/data/*.json'],
   },
   {
     // App React/TypeScript (src/).
