@@ -71,16 +71,31 @@ function writeLegacyAndIntegrity(root, fixture) {
   );
 }
 
+// FORCE_COLOR se fija SIEMPRE al final del objeto de entorno (después de
+// ...process.env y de cualquier extraEnv) para que gane sobre cualquier
+// valor heredado del proceso padre. Es el propio test runner quien debe
+// controlar su entorno, no confiar en el color/configuración del shell que
+// lo lance.
+//
+// Motivo (Fase 4B): en macOS, cuando el proceso padre (terminal, IDE,
+// npm...) hereda o exporta FORCE_COLOR, Node colorea con ANSI los números
+// que console.log() imprime vía util.inspect (p. ej. "\x1B[33m0\x1B[39m"
+// en vez de "0"), incluso con stdout capturado por un pipe (no-TTY). En
+// GitHub Actions ese ANSI no aparecía porque el runner no exportaba
+// FORCE_COLOR, así que el mismo test pasaba en CI (28/28) y fallaba en
+// local — un falso negativo dependiente del entorno, no del contenido.
+const NO_COLOR_ENV = { FORCE_COLOR: '0' };
+
 function runExtract(root, extraEnv = {}) {
   return spawnSync(process.execPath, [EXTRACT_SCRIPT], {
-    env: { ...process.env, CHULETA_TEST_ROOT: root, ...extraEnv },
+    env: { ...process.env, CHULETA_TEST_ROOT: root, ...extraEnv, ...NO_COLOR_ENV },
     encoding: 'utf-8',
   });
 }
 
-function runVerify(root) {
+function runVerify(root, extraEnv = {}) {
   return spawnSync(process.execPath, [VERIFY_SCRIPT], {
-    env: { ...process.env, CHULETA_TEST_ROOT: root },
+    env: { ...process.env, CHULETA_TEST_ROOT: root, ...extraEnv, ...NO_COLOR_ENV },
     encoding: 'utf-8',
   });
 }
@@ -288,6 +303,47 @@ test('TEST EQUIVALENCE NEGATIVE (stem) — legacy intacto, stem alterado en src/
   assert.match(verifyResult.stdout, /CONTENT EQUIVALENCE\nFAIL/);
   assert.match(verifyResult.stdout, /Field:\nstem/);
   assert.match(verifyResult.stdout, /I-T01-Q001/);
+
+  rmSync(root, { recursive: true, force: true });
+});
+
+test('TEST COLOR STABILITY — la salida del CLI es estable en ANSI aunque el proceso padre fuerce color (Fase 4B)', () => {
+  const root = makeTestRoot();
+  const fixture = buildFixtureHtml();
+  writeLegacyAndIntegrity(root, fixture);
+
+  // Simula exactamente el escenario real de macOS: el proceso que lanza el
+  // test (o su shell) tiene FORCE_COLOR activo en su entorno. runExtract()/
+  // runVerify() heredan ese entorno vía ...process.env — lo que demuestra
+  // esta prueba es que, pese a ello, SIGUEN forzando FORCE_COLOR=0 por su
+  // cuenta (ver NO_COLOR_ENV arriba), así que el resultado no cambia.
+  const extractResult = runExtract(root, { FORCE_COLOR: '1' });
+  assert.equal(extractResult.status, 0, `stderr: ${extractResult.stderr}`);
+
+  const quizPath = path.join(root, 'src', 'data', 'quiz_bank.json');
+  const quiz = JSON.parse(readFileSync(quizPath, 'utf-8'));
+  const original = quiz[0].questions[0].answer; // 'a' en el fixture
+  quiz[0].questions[0].answer = 'c'; // clave VÁLIDA (a/b/c/d), distinta de la legacy
+  writeFileSync(quizPath, JSON.stringify(quiz, null, 2) + '\n', 'utf-8');
+
+  const verifyResult = runVerify(root, { FORCE_COLOR: '1' });
+  assert.notEqual(verifyResult.status, 0);
+
+  // eslint-disable-next-line no-control-regex
+  const ansiPattern = /\x1B\[[0-9;]*m/;
+  assert.doesNotMatch(
+    verifyResult.stdout,
+    ansiPattern,
+    'la salida del CLI no debe contener secuencias ANSI aunque el padre fuerce color — el test runner normaliza su propio entorno'
+  );
+  assert.match(verifyResult.stdout, /CONTENT EQUIVALENCE\nFAIL/);
+  assert.match(verifyResult.stdout, /Field:\nanswer/);
+  assert.match(
+    verifyResult.stdout,
+    /INVALID ANSWERS\n0/,
+    'la aserción INVALID ANSWERS = 0 no debe verse afectada por color ANSI en el número'
+  );
+  assert.notEqual(original, 'c');
 
   rmSync(root, { recursive: true, force: true });
 });
