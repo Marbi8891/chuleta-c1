@@ -32,6 +32,8 @@ import type {
   QuizSessionRecord,
   QuizAnswerRecord,
   StudyEventRecord,
+  ErrorRecord,
+  ErrorNotebookProcessedSessionRecord,
 } from './schema';
 
 export interface ChuletaC1DB extends Dexie {
@@ -41,6 +43,8 @@ export interface ChuletaC1DB extends Dexie {
   quizSessions: EntityTable<QuizSessionRecord, 'id'>;
   quizAnswers: EntityTable<QuizAnswerRecord, 'id'>;
   studyEvents: EntityTable<StudyEventRecord, 'id'>;
+  errorRecords: EntityTable<ErrorRecord, 'questionId'>;
+  errorNotebookProcessedSessions: EntityTable<ErrorNotebookProcessedSessionRecord, 'sessionId'>;
 }
 
 export function createDb(name: string = DB_NAME): ChuletaC1DB {
@@ -79,6 +83,29 @@ export function createDb(name: string = DB_NAME): ChuletaC1DB {
     quizSessions: 'id',
     quizAnswers: '++id, sessionId',
     studyEvents: '++id, type, timestamp, topicId, questionId, quizSessionId',
+  });
+
+  // v3 — Study Intelligence, Fase 2 (CUADERNO DE ERRORES). Igual de aditiva
+  // que v2: las seis tablas anteriores se repiten sin cambios y se añaden
+  // dos tablas nuevas y vacías, así que tampoco hace falta ningún
+  // `.upgrade()`. Ver docs/STUDY_INTELLIGENCE_ARCHITECTURE.md, sección 2.1,
+  // y src/db/schema.ts para el razonamiento de cada campo.
+  //
+  // Índices de `errorRecords`: `topicId` (filtrar el cuaderno por tema) y
+  // `status` (pestañas "Pendientes"/"En repaso"/"Dominadas" de la UI) son
+  // las dos únicas formas en que la Fase 2 necesita consultar la tabla
+  // aparte de por su PK (questionId). `errorNotebookProcessedSessions` no
+  // necesita más índice que su PK (sessionId): solo se consulta por
+  // existencia puntual, nunca en lista.
+  db.version(3).stores({
+    appMeta: 'key',
+    topicProgress: 'topicId',
+    flashcardProgress: 'flashcardId',
+    quizSessions: 'id',
+    quizAnswers: '++id, sessionId',
+    studyEvents: '++id, type, timestamp, topicId, questionId, quizSessionId',
+    errorRecords: 'questionId, topicId, status',
+    errorNotebookProcessedSessions: 'sessionId',
   });
 
   return db;

@@ -9,8 +9,22 @@ import { db as defaultDb } from './db';
 import type { QuizAnswerRecord, QuizSessionRecord } from './schema';
 import type { RecordStudyEventInput } from './studyEvents';
 import { recordStudyEvents } from './studyEvents';
+import type { QuizAnswerForErrorNotebook } from './errorRecords';
+import { processQuizAnswersForErrorNotebook } from './errorRecords';
 import { reportWriteError } from './reportWriteError';
 import type { TemaId } from '../types/content';
+
+/**
+ * Deriva el topicId a partir del prefijo de un QuestionId
+ * (`<topicId>-Q<NNN>`) — mismo patrón ya usado como fallback de
+ * visualización en MorePage.tsx (`questionId.split('-Q')[0]`), no un
+ * parser formal (ver la nota correspondiente en src/data/ids.impl.mjs).
+ * Solo se usa para poder filtrar el Cuaderno de errores por tema; nunca
+ * para validar ni reconstruir la identidad de la pregunta.
+ */
+function topicIdFromQuestionId(questionId: string): TemaId {
+  return questionId.split('-Q')[0] ?? questionId;
+}
 
 export interface RecordQuizSessionInput {
   id: string;
@@ -85,6 +99,26 @@ export async function recordQuizSession(
     await recordStudyEvents(events, database);
   } catch (e) {
     reportWriteError('recordStudyEvent:QUIZ_COMPLETED', e);
+  }
+
+  // Study Intelligence, Fase 2 (CUADERNO DE ERRORES): igual que los
+  // eventos de actividad arriba, esto se deriva del resultado del test
+  // pero NUNCA es la fuente de verdad de ese resultado — un fallo aquí no
+  // debe poder hacer pensar a QuizContext que el test no se guardó. Va
+  // DESPUÉS de la transacción principal y en su propio try/catch. A
+  // diferencia de los eventos (donde una entrada duplicada en un reintento
+  // es solo ruido), aquí sí importa la idempotencia real por sessionId —
+  // la aplica processQuizAnswersForErrorNotebook, no esta función.
+  try {
+    const answersForNotebook: QuizAnswerForErrorNotebook[] = input.answers.map((answer) => ({
+      questionId: answer.questionId,
+      topicId: topicIdFromQuestionId(answer.questionId),
+      correct: answer.correct,
+      answeredAt: answer.answeredAt,
+    }));
+    await processQuizAnswersForErrorNotebook(input.id, answersForNotebook, database);
+  } catch (e) {
+    reportWriteError('processQuizAnswersForErrorNotebook', e);
   }
 }
 

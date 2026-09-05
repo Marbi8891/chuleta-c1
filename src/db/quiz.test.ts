@@ -144,6 +144,66 @@ describe('Study Intelligence Fase 1: eventos de actividad emitidos al completar 
   });
 });
 
+describe('Study Intelligence Fase 2: el Cuaderno de errores se actualiza al completar un test', () => {
+  it('una respuesta incorrecta crea un ErrorRecord; una correcta de una pregunta nunca fallada no crea nada', async () => {
+    await recordQuizSession(
+      {
+        id: 'errors-session',
+        startedAt: '2026-01-01T00:00:00.000Z',
+        completedAt: '2026-01-01T00:05:00.000Z',
+        scope: ['I-T01'],
+        answers: [
+          { questionId: 'I-T01-Q001', selectedAnswer: 'a', correct: true, answeredAt: '2026-01-01T00:01:00.000Z' },
+          { questionId: 'I-T01-Q002', selectedAnswer: 'b', correct: false, answeredAt: '2026-01-01T00:02:00.000Z' },
+        ],
+      },
+      testDb,
+    );
+
+    expect(await testDb.errorRecords.get('I-T01-Q001')).toBeUndefined();
+    const failed = await testDb.errorRecords.get('I-T01-Q002');
+    expect(failed).toMatchObject({ questionId: 'I-T01-Q002', topicId: 'I-T01', status: 'NEW', failureCount: 1 });
+  });
+
+  it('reintentar el guardado de la misma sesión (SAFE QUIZ COMPLETION) no duplica el fallo en el cuaderno', async () => {
+    const input = {
+      id: 'retry-errors-session',
+      startedAt: '2026-01-01T00:00:00.000Z',
+      completedAt: '2026-01-01T00:05:00.000Z',
+      scope: ['I-T01'] as const,
+      answers: [{ questionId: 'I-T01-Q001', selectedAnswer: 'a' as const, correct: false, answeredAt: '2026-01-01T00:01:00.000Z' }],
+    };
+    await recordQuizSession(input, testDb);
+    await recordQuizSession(input, testDb);
+
+    expect((await testDb.errorRecords.get('I-T01-Q001'))?.failureCount).toBe(1);
+  });
+
+  it('un fallo al actualizar el cuaderno de errores NO impide que la sesión y las respuestas se guarden (principio de no interferencia)', async () => {
+    vi.spyOn(testDb.errorNotebookProcessedSessions, 'get').mockRejectedValueOnce(new Error('fallo simulado de errorRecords'));
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    await expect(
+      recordQuizSession(
+        {
+          id: 'errors-fail-session',
+          startedAt: '2026-01-01T00:00:00.000Z',
+          completedAt: '2026-01-01T00:05:00.000Z',
+          scope: ['I-T01'],
+          answers: [{ questionId: 'I-T01-Q001', selectedAnswer: 'a', correct: false, answeredAt: '2026-01-01T00:01:00.000Z' }],
+        },
+        testDb,
+      ),
+    ).resolves.toBeUndefined();
+
+    const session = await testDb.quizSessions.get('errors-fail-session');
+    expect(session?.completed).toBe(true);
+    expect(errorSpy).toHaveBeenCalledWith(expect.stringContaining('processQuizAnswersForErrorNotebook'), expect.any(Error));
+
+    errorSpy.mockRestore();
+  });
+});
+
 describe('historial de tests', () => {
   it('lista solo sesiones completadas de más reciente a más antigua', async () => {
     await testDb.quizSessions.bulkPut([

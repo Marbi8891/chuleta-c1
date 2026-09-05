@@ -189,3 +189,59 @@ export interface StudyEventRecord {
   /** Libre pero deliberado: cada emisor documenta explícitamente qué guarda aquí. Nunca texto libre de usuario (eso vive en `notes`, Fase 5). */
   metadata?: Record<string, unknown>;
 }
+
+// ---------------------------------------------------------------------------
+// STUDY INTELLIGENCE — Fase 2 (CUADERNO DE ERRORES).
+//
+// `errorRecords` es metadato de SEGUIMIENTO por pregunta, no contenido: la
+// PK es el propio QuestionId canónico (una pregunta solo puede tener un
+// registro de error — no tiene sentido "duplicarlo"), y en ningún campo se
+// copia el enunciado, las opciones ni la respuesta correcta — eso se sigue
+// resolviendo siempre contra el banco canónico vía getQuestionById()
+// (src/data/index.ts). Si esa pregunta desapareciera del banco actual, el
+// registro de error seguiría siendo válido como dato histórico (igual que
+// QuizAnswerRecord ya tolera esto, ver MorePage.tsx `HistoryAnswer`).
+//
+// Progresión de `status` (ver src/db/errorRecords.ts para la máquina de
+// estados completa):
+//   NEW       — solo se ha fallado una vez, nunca acertada desde entonces.
+//   LEARNING  — ha fallado (una o más veces) y aún no encadena ningún
+//               acierto desde el último fallo (incluye el caso de una
+//               regresión: una pregunta ya MASTERED/REVIEWING que se
+//               vuelve a fallar).
+//   REVIEWING — encadena al menos un acierto desde el último fallo, pero
+//               menos que el umbral de dominio.
+//   MASTERED  — encadena aciertos suficientes desde el último fallo como
+//               para considerarla superada (no se elimina del cuaderno:
+//               "dominada" es un estado visible, no una salida silenciosa).
+export type ErrorStatus = 'NEW' | 'LEARNING' | 'REVIEWING' | 'MASTERED';
+
+export interface ErrorRecord {
+  questionId: QuestionId;
+  topicId: TemaId;
+  firstFailedAt: string;
+  lastFailedAt: string;
+  /** Nº total de veces que se ha fallado esta pregunta, histórico (nunca se reinicia). */
+  failureCount: number;
+  /** Aciertos consecutivos desde el ÚLTIMO fallo (se reinicia a 0 en cada fallo nuevo, incluida una regresión). */
+  correctCountAfterFailure: number;
+  /** Instante del último acierto contabilizado; undefined si aún no se ha acertado tras fallarla. */
+  lastReviewedAt?: string;
+  status: ErrorStatus;
+  /** Derivado de correctCountAfterFailure/ERROR_MASTERY_THRESHOLD, en [0,1] — ver src/db/errorRecords.ts. Redundante con status a propósito: permite ordenar/barra de progreso sin recalcular la lógica de estados en la UI. */
+  masteryScore: number;
+}
+
+/**
+ * Marca de qué sesiones de test ya se han plegado en `errorRecords` — IGUAL
+ * PRINCIPIO que la idempotencia por sessionId de recordQuizSession
+ * (src/db/quiz.ts): si SAFE QUIZ COMPLETION obliga a reintentar el guardado
+ * de una sesión (Fase 3B), sin esto cada reintento re-aplicaría sus
+ * respuestas al cuaderno y falsearía failureCount/correctCountAfterFailure
+ * (a diferencia de studyEvents, que es un log de actividad donde una
+ * entrada duplicada es solo ruido; aquí sería un error real de datos).
+ */
+export interface ErrorNotebookProcessedSessionRecord {
+  sessionId: string;
+  processedAt: string;
+}

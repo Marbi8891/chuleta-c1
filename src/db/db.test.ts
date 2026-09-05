@@ -11,10 +11,19 @@ describe('db', () => {
     expect(db.name).toBe(DB_NAME);
   });
 
-  it('declara explícitamente version(1) con las 5 tablas de Fase 3', () => {
-    const v1 = db.tables.map((t) => t.name).sort();
-    expect(v1).toEqual(
-      ['appMeta', 'flashcardProgress', 'quizAnswers', 'quizSessions', 'topicProgress', 'studyEvents'].sort(),
+  it('declara explícitamente version(1) con las 5 tablas de Fase 3 (más las añadidas por Study Intelligence)', () => {
+    const tableNames = db.tables.map((t) => t.name).sort();
+    expect(tableNames).toEqual(
+      [
+        'appMeta',
+        'flashcardProgress',
+        'quizAnswers',
+        'quizSessions',
+        'topicProgress',
+        'studyEvents',
+        'errorRecords',
+        'errorNotebookProcessedSessions',
+      ].sort(),
     );
   });
 
@@ -22,11 +31,19 @@ describe('db', () => {
     const isolated = createDb(`test-db-v2-${Math.random().toString(36).slice(2)}`);
     try {
       await isolated.open();
-      expect(isolated.verno).toBe(2);
-      const tableNames = isolated.tables.map((t) => t.name).sort();
-      expect(tableNames).toEqual(
-        ['appMeta', 'flashcardProgress', 'quizAnswers', 'quizSessions', 'topicProgress', 'studyEvents'].sort(),
-      );
+      // createDb() declara TODAS las versiones incondicionalmente, así que
+      // abrir una base nueva siempre aterriza en la más reciente (hoy v3,
+      // Fase 2) — no en "2" a secas. Lo que de verdad importa comprobar
+      // aquí no es el número exacto, sino que lo que v2 añadió (studyEvents)
+      // sigue presente y operativo en el schema vigente, sin importar
+      // cuántas versiones más se hayan declarado después.
+      expect(isolated.verno).toBeGreaterThanOrEqual(2);
+      const tableNames = isolated.tables.map((t) => t.name);
+      // Subconjunto, no igualdad exacta — por la misma razón de arriba:
+      // versiones posteriores (Fase 2 en adelante) añaden más tablas.
+      for (const expected of ['appMeta', 'flashcardProgress', 'quizAnswers', 'quizSessions', 'topicProgress', 'studyEvents']) {
+        expect(tableNames).toContain(expected);
+      }
       // Las cinco tablas de v1 siguen siendo perfectamente escribibles y
       // legibles tras la subida de versión (migración puramente aditiva).
       await isolated.topicProgress.put({ topicId: 'I-T01', studied: true, updatedAt: '2026-01-01T00:00:00.000Z' });
@@ -41,6 +58,50 @@ describe('db', () => {
       await isolated.studyEvents.add({ type: 'TOPIC_OPENED', timestamp: '2026-01-01T00:00:00.000Z', topicId: 'I-T01' });
       const byType = await isolated.studyEvents.where('type').equals('TOPIC_OPENED').toArray();
       expect(byType).toHaveLength(1);
+    } finally {
+      isolated.close();
+      await isolated.delete();
+    }
+  });
+
+  it('Study Intelligence Fase 2: version(3) añade errorRecords y errorNotebookProcessedSessions sin tocar las 6 tablas anteriores', async () => {
+    const isolated = createDb(`test-db-v3-${Math.random().toString(36).slice(2)}`);
+    try {
+      await isolated.open();
+      // Mismo razonamiento que en el test de v2: se comprueba que v3 ya
+      // está incluida (>=), no que sea exactamente la última — así este
+      // test no se rompe cuando una fase futura añada version(4).
+      expect(isolated.verno).toBeGreaterThanOrEqual(3);
+      const tableNames = isolated.tables.map((t) => t.name);
+      for (const expected of [
+        'appMeta',
+        'flashcardProgress',
+        'quizAnswers',
+        'quizSessions',
+        'topicProgress',
+        'studyEvents',
+        'errorRecords',
+        'errorNotebookProcessedSessions',
+      ]) {
+        expect(tableNames).toContain(expected);
+      }
+      // studyEvents (añadida en v2) sigue intacta tras subir a v3.
+      await isolated.studyEvents.add({ type: 'TOPIC_OPENED', timestamp: '2026-01-01T00:00:00.000Z', topicId: 'I-T01' });
+      expect(await isolated.studyEvents.count()).toBe(1);
+      // errorRecords existe, vacía, y admite los índices topicId/status desde el primer momento.
+      expect(await isolated.errorRecords.count()).toBe(0);
+      await isolated.errorRecords.add({
+        questionId: 'I-T01-Q001',
+        topicId: 'I-T01',
+        firstFailedAt: '2026-01-01T00:00:00.000Z',
+        lastFailedAt: '2026-01-01T00:00:00.000Z',
+        failureCount: 1,
+        correctCountAfterFailure: 0,
+        status: 'NEW',
+        masteryScore: 0,
+      });
+      expect(await isolated.errorRecords.where('status').equals('NEW').count()).toBe(1);
+      expect(await isolated.errorRecords.where('topicId').equals('I-T01').count()).toBe(1);
     } finally {
       isolated.close();
       await isolated.delete();
