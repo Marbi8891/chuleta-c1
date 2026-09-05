@@ -5,6 +5,7 @@ import { decodeRedirectUrl } from './deploy/githubPagesSpaRedirect';
 import './theme/tokens.css';
 import './theme/global.css';
 import './theme/app.css';
+import './theme/sideMenu.css';
 
 // Si la carga viene de la redirección de 404.html (deep-link o refresco en
 // GitHub Pages — ver src/deploy/githubPagesSpaRedirect.ts), reconstruye la
