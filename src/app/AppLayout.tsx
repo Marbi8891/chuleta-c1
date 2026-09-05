@@ -37,15 +37,17 @@ export function AppLayout() {
         <div className="brand">
           <BrandMark />
           <div>
-            <h1>
-              Chuleta <span className="accent">C1</span>
-            </h1>
+            <div className="brand-title-row">
+              <h1>
+                Chuleta <span className="accent">C1</span>
+              </h1>
+              <SideMenu />
+            </div>
             <p className="subtitle">Cuerpo General Administrativo del Estado</p>
           </div>
         </div>
         <div className="topbar-actions">
           <OfflineIndicator />
-          <SideMenu />
         </div>
       </header>
 
