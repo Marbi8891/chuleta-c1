@@ -129,3 +129,63 @@ export interface QuizAnswerRecord {
   correct: boolean;
   answeredAt: string;
 }
+
+// ---------------------------------------------------------------------------
+// STUDY INTELLIGENCE — Fase 1 (STUDY EVENT FOUNDATION).
+//
+// `studyEvents` es un registro de ACTIVIDAD, append-only: nunca se edita ni
+// se borra desde la UI (salvo el futuro export/import de backup, Fase 24).
+// No sustituye a `quizSessions`/`quizAnswers`/`topicProgress`/
+// `flashcardProgress`, que siguen siendo la fuente de verdad de "qué es
+// cierto ahora mismo" (p. ej. si un tema está leído). `studyEvents` es la
+// fuente de verdad de "qué pasó y cuándo" — la base sobre la que se
+// construyen rachas, tiempo de estudio, dominio de tema y detección de
+// errores en fases posteriores. Un evento SIEMPRE referencia contenido
+// canónico por su id estable (TemaId/QuestionId/flashcardId) — nunca copia
+// el enunciado, el temario ni ningún otro dato académico.
+//
+// Ver docs/STUDY_INTELLIGENCE_ARCHITECTURE.md, sección 2.2, para el
+// razonamiento completo de cada decisión de este tipo.
+export type StudyEventType =
+  | 'TOPIC_OPENED'
+  | 'TOPIC_COMPLETED'
+  | 'QUESTION_ANSWERED'
+  | 'QUESTION_CORRECT'
+  | 'QUESTION_INCORRECT'
+  | 'FLASHCARD_REVIEWED'
+  | 'FLASHCARD_KNOWN'
+  | 'FLASHCARD_FAILED'
+  | 'QUIZ_STARTED'
+  | 'QUIZ_COMPLETED'
+  | 'MOCK_EXAM_STARTED'
+  | 'MOCK_EXAM_COMPLETED'
+  | 'NOTE_CREATED'
+  | 'QUESTION_STARRED'
+  | 'ERROR_REVIEWED'
+  | 'STUDY_SESSION_STARTED'
+  | 'STUDY_SESSION_ENDED';
+
+/**
+ * `id` es autoincremental: un evento no tiene identidad natural propia más
+ * allá de "este tipo de cosa, para esta referencia, en este instante" — a
+ * diferencia de `QuizAnswerRecord` (donde tampoco hay id natural, por la
+ * misma razón). Los campos de referencia son todos opcionales porque cada
+ * `StudyEventType` solo rellena los que le aplican (p. ej. `FLASHCARD_KNOWN`
+ * nunca lleva `questionId`) — se documenta caso por caso en
+ * `src/db/studyEvents.ts`, no aquí con tipos discriminados por ahora
+ * (mantenerlo simple hasta que un consumidor real necesite esa precisión).
+ */
+export interface StudyEventRecord {
+  id?: number;
+  type: StudyEventType;
+  /** ISO 8601 UTC — igual que el resto de fechas del proyecto. Es el instante REAL del evento, no el instante en que se persiste (ver recordStudyEvent). */
+  timestamp: string;
+  topicId?: TemaId;
+  questionId?: QuestionId;
+  flashcardId?: string;
+  quizSessionId?: string;
+  mockExamId?: string;
+  durationMs?: number;
+  /** Libre pero deliberado: cada emisor documenta explícitamente qué guarda aquí. Nunca texto libre de usuario (eso vive en `notes`, Fase 5). */
+  metadata?: Record<string, unknown>;
+}
