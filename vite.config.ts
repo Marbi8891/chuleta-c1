@@ -13,13 +13,14 @@ import { VitePWA } from 'vite-plugin-pwa';
 const GITHUB_PAGES_BASE = '/chuleta-c1/';
 
 // https://vitejs.dev/config/
-export default defineConfig(({ command }) => ({
-  base: command === 'build' ? GITHUB_PAGES_BASE : '/',
+export default defineConfig(({ command, mode }) => ({
+  base: command === 'build' && mode != 'capacitor' ? GITHUB_PAGES_BASE : '/',
   plugins: [
     react(),
     // Fase 4 — PWA OFFLINE FOUNDATION (ver docs/PWA_ARCHITECTURE.md y
     // docs/adr/0007-pwa-vite-plugin-pwa.md para el razonamiento completo).
     VitePWA({
+      disable: mode === 'capacitor',
       // 'generateSW': Workbox genera el service worker completo a partir
       // de esta config declarativa. Se prefiere a 'injectManifest' (que
       // exigiría mantener un SW propio a mano) porque no hay ninguna
